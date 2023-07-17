@@ -1,0 +1,21 @@
+a:link {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:active {
+	text-decoration: line-through;
+	color: blue;
+}
+
+body {
+	background-color: #eeeeee;
+}
+
+td {
+	word-break: break-all;
+	white-space: initial;
+}

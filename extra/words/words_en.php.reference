@@ -1,0 +1,52 @@
+<?php
+$sitename = 'spamdforum';
+
+// header.html
+$indexphp_link_index = 'Index';
+$indexphp_link_account = 'Account';
+
+// --------- login.php ------------------------------
+$loginphp_page_title = "Login";
+$loginphp_h1_title = "Login";
+$loginphp_h2_info = "Login to your account";
+$loginphp_msg_err = [
+	'err_email' => "Enter your email address! \n",
+	'err_password' => "Enter your password! \n",
+	'err_no_email' => "Email does not exist in our database! \n",
+	'err_wrong_auth' => "Wrong password! \n",
+	'err_tryagain' => "Please try again. \n"
+];
+
+$loginphp_form_input = [
+	'email' => "Email",
+	'password' => "Password",
+	'login' => "Login"
+];
+// --------------------------------------------------
+
+// --------- register.php ---------------------------
+$registerphp_page_title = "Register for an account!";
+$registerphp_h1_title = "Registeration";
+$registerphp_h2_info = "Register an account to have more access to website features";
+
+$registerphp_msg_err = [
+	'err_name' => "Enter a valid name! \n",
+	'err_email' => "Enter a valid email! \n",
+	'err_password' => "Enter a valid password! \n",
+	'err_password_mismatch' => "Password does not match! \n",
+	'err_email_existed' => "Email existed in our database. \n",
+	'err_server' => "<h3>You aren't registered because of an system error. Sorry.</h3> \n",
+	'err_tryagain' => "Please try again!"
+];
+
+$registerphp_form_input = [
+	'name' => "Name",
+	'email' => "Email",
+	'password' => "Password",
+	'verify' => "Again",
+	'register' => "Register"
+];
+
+// --------------------------------------------------
+
+?>

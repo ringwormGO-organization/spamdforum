@@ -1,0 +1,35 @@
+<?php
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><?php echo $title; ?></title>
+	<link rel="stylesheet" type="text/css" href="/html/style.css">
+</head>
+
+<body>
+<?php
+	//echo "<p id=\"index.php\"><a href=\"$protocol://$server/index.php\">$link_indexphp_title</a></p>";
+	echo "<table width=\"100%\">
+		<tr>
+	";
+	if (isset($_SESSION['auth'])) {
+		echo "<td style=\"width: 90%\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td> 
+			<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/index.php\">$indexphp_link_account</a></td>";
+	} else {
+		echo "
+		<td style=\"width: 84%\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td> 
+		<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/login.php\">Dang nhap </a></td>
+		<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/register.php\"> Dang ky </a></td>
+		";
+	}
+	echo "
+		</tr>
+	</table>
+	";
+?>
+
