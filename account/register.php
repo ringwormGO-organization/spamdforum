@@ -12,23 +12,23 @@
 		require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 		include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 		$msg = NULL;
-		if (preg_match("/^[[:alnum:]ăâđêôơư.áàảãạắằẳẵặấầẩẫậếềểễệíìỉĩịóòỏõọớờởỡợốồổỗộúùủũụứừửữựýỳỷỹỵ' -_]{4,64}$/i", export_data($_POST['name']))) {
+		if (preg_match("/^[[:alnum:]\x{00C0}-\x{1EF9}' -_]{4,64}$/iu", $_POST['name'])) {
 			$name = escape_data($_POST['name']);
 		} else {
 			$name = FALSE;
 			$msg .= $registerphp['msg']['err_name'];
 		}
 
-		if (preg_match("/^[[:lower:]][a-z0-9_.-]*@[a-z0-9.-]+\.[a-z]{2,8}$/i", export_data($_POST['email']))) {
+		if (filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
 			$email = escape_data($_POST['email']);
 		} else {
 			$email = FALSE;
 			$msg .= $registerphp['msg']['err_email'];
 		}
 
-		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", export_data($_POST['password']))) {
+		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
 			if ($_POST['password'] == $_POST['verify']) {
-				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2I, ['memory_cost' => 65536, 'time_cost' => 8, 'threads' => 2]));
+				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 2]));
 			} else {
 				$password = FALSE;
 				$msg .= $registerphp['msg']['err_password_mismatch'];
