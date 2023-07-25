@@ -28,7 +28,9 @@
 
 		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
 			if ($_POST['password'] == $_POST['verify']) {
-				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 2]));
+				if ($email) {
+					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+				}
 			} else {
 				$password = FALSE;
 				$msg .= $registerphp['msg']['err_password_mismatch'];
