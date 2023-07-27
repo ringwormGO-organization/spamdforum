@@ -1,3 +1,5 @@
 # spamdforum
 
-spamdforum, a forum software with simplicity in posts and complexity in security. Currently alpha, forum isn't worked yet; just an account system
+spamdforum, a forum software with simplicity in posts and complexity in security. Currently alpha, forum isn't worked yet; just an account system.
+
+Please read CONTRIBUTE.md
