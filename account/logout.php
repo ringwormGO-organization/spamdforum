@@ -1,4 +1,7 @@
 <?php
+	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+?>
+<?php
 	if (isset($_SESSION['auth'])) {
 		$_SESSION = array();
 		session_destroy();
