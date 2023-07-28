@@ -1,7 +1,6 @@
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
-
 <?php
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 	$msg = NULL;
@@ -51,11 +50,9 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		}
 	}
 ?>
-
 <?php
         include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
-
 
 <h1><?=$loginphp['h1_title']; ?></h1>
 <h2><?=$loginphp['h2_info']; ?></h2>
