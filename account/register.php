@@ -1,8 +1,6 @@
 <?php
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
-
-<!-- BAT DAU NOI DUNG TRANG -->
 <?php
 	if (isset($_SESSION['auth'])) {
 		header("Location: $protocol://$server/index.php");
@@ -68,8 +66,7 @@
 
 <?php                                 
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
-?>                                    
-                                                                        
+?>                                                                      
 <h1><?=$registerphp['h1_title']; ?></h1>
 <h2><?=$registerphp['h2_info']; ?></h2>
 <?php
