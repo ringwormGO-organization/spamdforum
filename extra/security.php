@@ -8,15 +8,11 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		$result = mysqli_query($dbc, $query);
 		if (mysqli_num_rows($result) == 1) {
 			$user = mysqli_fetch_assoc($result);
-			$secure = false;
-			if ($protocol == "https" && !empty($_SERVER['HTTPS'])) {
-				// prefer setting cookies over secure connections
-				$secure = true;
-			}
 			foreach ($user as $key => $value) {
 				// these cookies are for easier code writting :)
 				// they are really secure, the server does not care about user-provided cookies
-				setcookie($key, $value, 0, '/', '', $secure, true);
+				$_SESSION[$key] = $value;
+				$_SESSION['ready'] = TRUE;
 			}
 		}
 	} else {
