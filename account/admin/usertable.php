@@ -11,24 +11,31 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			if (isset($_POST['delete_email'])) {
 				foreach ($_POST['delete_email'] as $key => $email) {
 					$email = escape_data($email);
-					$query = "SELECT powerlevel FROM forum_user WHERE email='$email'";
-					$result = @mysqli_query($dbc, $query);
+					$query = "SELECT powerlevel FROM forum_user WHERE email=?";
+					$result = mysqli_execute_query($dbc, $query, [$email]);
 					if (mysqli_num_rows($result) == 1) {
 						$assoc = mysqli_fetch_assoc($result);
 						if ($assoc['powerlevel'] < $mypowerlevel) {
-							$query = "DELETE FROM forum_user WHERE email='$email' LIMIT 1";
-							$result = @mysqli_query($dbc, $query);
-							if (mysqli_affected_rows($dbc) == 1) {
-								$msg .= "{$usertablephp['msg']['delete_success']} $email ({$assoc['powerlevel']}) \n";
+							$delete_list[] = $email;
+							if (!isset($target_num)) {
+								$target_num = 1;
 							} else {
-								$msg .= "{$usertablephp['msg']['delete_failed']} $email ({$assoc['powerlevel']}) ! \n";
+								$target_num++;
 							}
+							$msg .= "{$usertablephp['msg']['added_to_list']} $email ({$assoc['powerlevel']}) \n";
 						} else {
 							$msg .= $usertablephp['msg']['err_priv_unmet'];
 						}
 					} else {
 						$msg .= $usertablephp['msg']['err_not_found'];
 					}
+				}
+				if (isset($target_num)) {
+					$placeholder_email = "?" . str_repeat(",?", $target_num - 1);
+					$query = "DELETE FROM forum_user WHERE email IN ($placeholder_email) LIMIT $target_num";
+					$result = mysqli_execute_query($dbc, $query, $delete_list);
+					$delete_num = $target_num - mysqli_affected_rows($dbc);
+					$msg .= "{$usertablephp['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
 				}
 			}
 		} else {
