@@ -1,0 +1,64 @@
+<?php
+DEFINE ('DB_ID', 'forum');
+DEFINE ('DB_PW', 'spamdforum');
+DEFINE ('DB_HOST', 'p:localhost');
+DEFINE ('DB_NAME', 'spamdforum');
+
+$dbc = mysqli_init();
+
+if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
+	die("Khong the thiet lap ket noi den co so du lieu!");
+}
+
+/*
+// Uncomment to use with PHP < 8.2
+// This function isn't complete, expect thing to break.
+// credit: phpdelusions.net
+function mysqli_execute_query($mysqli, $query, $params=null)
+{
+	$types = str_repeat("s", count($params));
+	$stmt = mysqli_prepare($mysqli, $query);
+	if ($params) {
+		mysqli_stmt_bind_param($stmt, $types, ...$params);
+	}
+	mysqli_stmt_execute($stmt);
+	if (!mysqli_stmt_field_count($stmt)) {
+		return $stmt;
+	} else {
+		return mysqli_stmt_get_result($stmt);
+	}
+}
+*/
+
+function check_email($email, $dbc) {
+	$query = "SELECT user_id FROM forum_user WHERE email='$email'";
+	$result = @mysqli_query($dbc, $query);
+
+	if (mysqli_num_rows($result) == 0) {
+		return FALSE;
+		mysqli_free_result($dbc, $result);
+	} else {
+		return TRUE;
+		mysqli_free_result($dbc, $result);
+	}
+}
+
+function escape_data($data, $trim=TRUE) {
+	global $dbc;
+
+	if ($trim=FALSE) {
+		return mysqli_real_escape_string($dbc, htmlspecialchars($data));
+	} else 
+
+	return mysqli_real_escape_string($dbc, htmlspecialchars(trim($data)));
+}
+
+function export_data($data, $trim=TRUE) {
+	if ($trim=FALSE) {
+		return stripslashes($data);
+	} else 
+
+	return stripslashes(trim($data));
+}
+
+?>
