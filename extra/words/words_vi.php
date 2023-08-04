@@ -62,8 +62,9 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
 	$usertablephp['h1_title'] = "Quan ly nguoi dung";
 	$usertablephp['p_red_notice'] = "Luu y: Thao tac xoa nguoi dung la KHONG THE HOAN TAC!";
 	$usertablephp['msg'] = [
-		'delete_success' => "Da xoa",
-		'delete_failed' => "Khong the xoa",
+		'added_to_list' => "Them vao danh sach xoa:",
+		'delete_request' => "Yeu cau xoa:",
+		'delete_failed' => "Chua xoa duoc:",
 		'err_priv_unmet' => "Vai tro cua ban chua du quyen de thuc hien tac vu nay. \n",
 		'err_not_found' => "Khong tim thay nguoi dung! \n",
 		'err_nopriv' => "Vai tro cua ban khong cho phep thuc hien hanh dong nay! \n"
