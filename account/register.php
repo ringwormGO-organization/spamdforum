@@ -26,9 +26,7 @@
 
 		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
 			if ($_POST['password'] == $_POST['verify']) {
-				if ($email) {
-					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
-				}
+				$password = TRUE;
 			} else {
 				$password = FALSE;
 				$msg .= $registerphp['msg']['err_password_mismatch'];
@@ -42,9 +40,9 @@
 			$exist['email'] = check_email($email, $dbc);
 
 			if ($exist['email'] == FALSE) {
-				$query = "INSERT INTO forum_user (name, email, password, reg_date, last_visit) VALUES ('$name', '$email', '$password', NOW(), NOW());";
-				$result = @mysqli_query($dbc, $query);
-				if ($result) {
+				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+				$query = "INSERT INTO forum_user (name, email, password, reg_date, last_visit) VALUES (?, ?, ?, NOW(), NOW());";
+				if (mysqli_execute_query($dbc, $query, [$name, $email, $password])) {
 					$_SESSION['auth'] = $password;
 					header("Location: $protocol://$server/index.php");
 					exit();
