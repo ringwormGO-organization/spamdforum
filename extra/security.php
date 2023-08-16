@@ -1,10 +1,10 @@
 <?php
 
 function security_validateupdateinfo($dbc, $auth=NULL) {
-	global $server, $protocol;
+	global $server, $protocol, $table;
 	// this function checks if the $_SESSION['auth'] matches the PASSWORD in the database table.
 	if (isset($auth)) {
-		$query = "SELECT user_id, email, name, powerlevel FROM forum_user WHERE password='$auth'";
+		$query = "SELECT user_id, email, name, powerlevel FROM $table WHERE password='$auth'";
 		$result = mysqli_query($dbc, $query);
 		if (mysqli_num_rows($result) == 1) {
 			$user = mysqli_fetch_assoc($result);
@@ -31,7 +31,8 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 	
 function security_authlastvisit($dbc, $auth, $ip) {
 	// insert last visit into database
-	$query = "UPDATE forum_user SET last_visit=NOW(), last_ip='$ip' WHERE password = '$auth'";
+	global $table;
+	$query = "UPDATE $table SET last_visit=NOW(), last_ip='$ip' WHERE password = '$auth'";
 	$result = mysqli_query($dbc, $query);
 	if ($result) {
 		return true;
