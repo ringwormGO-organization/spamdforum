@@ -6,12 +6,12 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 	$msg = NULL;
 	if (isset($_POST['delete'])) {
-		$mypowerlevel = $_COOKIE['powerlevel'];
+		$mypowerlevel = $_SESSION['powerlevel'];
 		if ($mypowerlevel >= 100) {
 			if (isset($_POST['delete_email'])) {
 				foreach ($_POST['delete_email'] as $key => $email) {
 					$email = escape_data($email);
-					$query = "SELECT powerlevel FROM forum_user WHERE email=?";
+					$query = "SELECT powerlevel FROM $table WHERE email=?";
 					$result = mysqli_execute_query($dbc, $query, [$email]);
 					if (mysqli_num_rows($result) == 1) {
 						$assoc = mysqli_fetch_assoc($result);
@@ -32,7 +32,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 				}
 				if (isset($target_num)) {
 					$placeholder_email = "?" . str_repeat(",?", $target_num - 1);
-					$query = "DELETE FROM forum_user WHERE email IN ($placeholder_email) LIMIT $target_num";
+					$query = "DELETE FROM $table WHERE email IN ($placeholder_email) LIMIT $target_num";
 					$result = mysqli_execute_query($dbc, $query, $delete_list);
 					$delete_num = $target_num - mysqli_affected_rows($dbc);
 					$msg .= "{$usertablephp['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
@@ -59,7 +59,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		echo "<p style=\"color: red;\">$msg</p>";
 	}
 
-	$query = "SELECT user_id, name, email, reg_date, last_visit FROM forum_user ORDER BY reg_date DESC";
+	$query = "SELECT user_id, name, email, reg_date, last_visit FROM $table ORDER BY reg_date DESC";
 	$result = @mysqli_query($dbc, $query);
 	$num = mysqli_num_rows($result);
 
