@@ -27,7 +27,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		}
 
 		if ($email && $password) {
-			$query = "SELECT password, powerlevel FROM forum_user WHERE email=?";
+			$query = "SELECT password, powerlevel FROM $table WHERE email=?";
 			$result = mysqli_execute_query($dbc, $query, [$email]);
 			$assoc = mysqli_fetch_assoc($result);
 			if ($assoc) {
