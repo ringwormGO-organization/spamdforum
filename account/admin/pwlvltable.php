@@ -15,8 +15,8 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			$email = escape_data($email);
 			$powerlevel = intval(escape_data($powerlevel));
 			if ($powerlevel <= $mypowerlevel) {
-				$query = "SELECT powerlevel FROM $table WHERE email='$email'";
-				$result = mysqli_query($dbc, $query);
+				$query = "SELECT powerlevel FROM $table WHERE email=?";
+				$result = mysqli_execute_query($dbc, $query, [$email]);
 				if (mysqli_num_rows($result) == 1) {
 					$row = mysqli_fetch_row($result);
 					if ($row[0] < $mypowerlevel) {
@@ -56,8 +56,8 @@ if (isset($msg)) {
 ?>
 
 <?php
-	$query = "SELECT user_id, email, powerlevel FROM $table WHERE powerlevel != 1";
-	$result = @mysqli_query($dbc, $query);
+	$query = "SELECT user_id, email, powerlevel FROM $table WHERE powerlevel != ?";
+	$result = @mysqli_execute_query($dbc, $query, [1]);
 	$num = mysqli_num_rows($result);
 
 	if ($num > 0) {
