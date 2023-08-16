@@ -10,13 +10,13 @@
 // striping all tags except allowed ones, addslashes if needed
 // replace addslashes() with mysqli_real_escape_string when use with databases
 function escape_data_in($data) {
-	$data = str_replace("&amp;", "&", addslashes(htmlspecialchars(trim($data))));
+	$data = addslashes(trim($data));
 	return $data;
 }
 
 // just to strip backslashes
 function escape_data_out($data) {
-	$data = stripslashes(trim($data));
+	$data = str_replace("&amp;", "&", htmlspecialchars(stripslashes(trim($data)), $flag = ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401));
 	return $data;
 }
 
@@ -29,8 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 
 	if (!empty($_POST['content'])) {
-		if (preg_match("/^[[:alnum:]\x{00C0}-\x{1EF9}' -_]{64,24576}$/ius/", $_POST['content'])) {
-			$content = nl2br(preg_replace("/((http{1}s?):\/\/)([[:alnum:]-])(\.)+([[:alnum:]-]){2,4}([[:alnum:]/+=\%&_.~?-]*)/ius", '<a href="\\0">\\0</a>', escape_data_in($_POST['content'])));
+		if (preg_match("/[\x20-\x7F\x{00C0}-\x{1EF9}]{1,24576}/iu", $_POST['content'])) {
+			/* We may use \\0 or \\3, \\3 is for full domain name */
+			$urlregex = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,4}" . "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.~?@\-\/]*)";
+			/*
+			http:// (one time) - hostname. (hostname "dot", 1+ time/char) - com (net, info, 4 characters) - :port (integer, 2-5 character, may exist) - path (not limited)
+			*/
+			$content = nl2br(preg_replace("/$urlregex/ium", '<a href="\\0">\\0</a>', escape_data_out($_POST['content'])));
 		} else {
 			$msg .= "Contain unacceptable characters.";
 		}
@@ -40,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 	if ($title && $content) {
 		echo "<h1>$title </h1><br />";
-		echo escape_data_out($content);
+		echo $content;
 	}
 
 	if (isset($msg)) {
