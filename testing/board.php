@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if (preg_match("/^[[:alnum:]\x{00C0}-\x{1EF9}' -_]{64,24576}$/ius/", $_POST['content'])) {
 			$content = nl2br(preg_replace("/((http{1}s?):\/\/)([[:alnum:]-])(\.)+([[:alnum:]-]){2,4}([[:alnum:]/+=\%&_.~?-]*)/ius", '<a href="\\0">\\0</a>', escape_data_in($_POST['content'])));
 		} else {
-			$msg .= "Contain unacceptable characters."
+			$msg .= "Contain unacceptable characters.";
 		}
 	} else {
 		$msg .= "Content is required!\n";
