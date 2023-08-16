@@ -3,6 +3,7 @@ DEFINE ('DB_ID', 'forum');
 DEFINE ('DB_PW', 'spamdforum');
 DEFINE ('DB_HOST', 'p:localhost');
 DEFINE ('DB_NAME', 'spamdforum');
+$table = 'forum_user';
 
 $dbc = mysqli_init();
 
@@ -10,15 +11,15 @@ if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 	die("Khong the thiet lap ket noi den co so du lieu!");
 }
 
-/*
 // Uncomment to use with PHP < 8.2
 // This function isn't complete, expect thing to break.
 // credit: phpdelusions.net
+/*
 function mysqli_execute_query($mysqli, $query, $params=null)
 {
 	$types = str_repeat("s", count($params));
 	$stmt = mysqli_prepare($mysqli, $query);
-	if ($params) {
+	if (is_array($params)) {
 		mysqli_stmt_bind_param($stmt, $types, ...$params);
 	}
 	mysqli_stmt_execute($stmt);
@@ -31,8 +32,9 @@ function mysqli_execute_query($mysqli, $query, $params=null)
 */
 
 function check_email($email, $dbc) {
-	$query = "SELECT user_id FROM forum_user WHERE email='$email'";
-	$result = @mysqli_query($dbc, $query);
+	global $table;
+	$query = "SELECT user_id FROM $table WHERE email=?";
+	$result = @mysqli_execute_query($dbc, $query, [$email]);
 
 	if (mysqli_num_rows($result) == 0) {
 		return FALSE;
@@ -50,15 +52,14 @@ function escape_data($data, $trim=TRUE) {
 		return mysqli_real_escape_string($dbc, htmlspecialchars($data));
 	} else 
 
-	return mysqli_real_escape_string($dbc, htmlspecialchars(trim($data)));
+	return mysqli_real_escape_string($dbc, trim($data));
 }
 
 function export_data($data, $trim=TRUE) {
 	if ($trim=FALSE) {
-		return stripslashes($data);
+		return htmlspecialchars(stripslashes($data));
 	} else 
 
-	return stripslashes(trim($data));
+	return htmlspecialchars(stripslashes(trim($data)));
 }
-
 ?>
