@@ -60,7 +60,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 	}
 
 	$query = "SELECT user_id, name, email, reg_date, last_visit FROM $table ORDER BY reg_date DESC";
-	$result = @mysqli_query($dbc, $query);
+	$result = mysqli_execute_query($dbc, $query);
 	$num = mysqli_num_rows($result);
 
 	if ($num > 0) {
