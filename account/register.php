@@ -10,7 +10,7 @@
 		require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 		include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 		$msg = NULL;
-		if (preg_match("/^[[:alnum:]\x{00C0}-\x{1EF9}' -_]{4,64}$/iu", $_POST['name'])) {
+		if (preg_match("/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,64}$/iu", $_POST['name'])) {
 			$name = escape_data($_POST['name']);
 		} else {
 			$name = FALSE;
@@ -41,8 +41,8 @@
 
 			if ($exist['email'] == FALSE) {
 				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
-				$query = "INSERT INTO forum_user (name, email, password, reg_date, last_visit) VALUES (?, ?, ?, NOW(), NOW());";
-				if (mysqli_execute_query($dbc, $query, [$name, $email, $password])) {
+				$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
+				if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
 					$_SESSION['auth'] = $password;
 					header("Location: $protocol://$server/index.php");
 					exit();
