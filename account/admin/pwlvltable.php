@@ -6,7 +6,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 	$need_msg = FALSE;
 	$msg = NULL;
 
-	$mypowerlevel = $_COOKIE['powerlevel']; 
+	$mypowerlevel = $_SESSION['powerlevel']; 
 
 	if (isset($_POST['update_power']) && isset($_POST['powerlevel'])) {
 		$need_msg = TRUE;
@@ -15,13 +15,13 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			$email = escape_data($email);
 			$powerlevel = intval(escape_data($powerlevel));
 			if ($powerlevel <= $mypowerlevel) {
-				$query = "SELECT powerlevel FROM forum_user WHERE email='$email'";
+				$query = "SELECT powerlevel FROM $table WHERE email='$email'";
 				$result = mysqli_query($dbc, $query);
 				if (mysqli_num_rows($result) == 1) {
 					$row = mysqli_fetch_row($result);
 					if ($row[0] < $mypowerlevel) {
 						if ($row[0] != $powerlevel) {
-							$query = "UPDATE forum_user SET powerlevel='$powerlevel' WHERE email='$email'";
+							$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email='$email'";
 							$result = mysqli_query($dbc, $query);
 							if (mysqli_affected_rows($dbc) == 1) {
 								$msg .= get_msg('update_success', $email, $row[0], $powerlevel);
@@ -56,7 +56,7 @@ if (isset($msg)) {
 ?>
 
 <?php
-	$query = "SELECT user_id, email, powerlevel FROM forum_user WHERE powerlevel != 1";
+	$query = "SELECT user_id, email, powerlevel FROM $table WHERE powerlevel != 1";
 	$result = @mysqli_query($dbc, $query);
 	$num = mysqli_num_rows($result);
 
