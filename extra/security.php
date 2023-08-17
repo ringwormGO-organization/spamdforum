@@ -4,14 +4,14 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 	global $server, $protocol, $table;
 	// this function checks if the $_SESSION['auth'] matches the PASSWORD in the database table.
 	if (isset($auth)) {
-		$query = "SELECT user_id, email, name, powerlevel FROM $table WHERE password='$auth'";
-		$result = mysqli_query($dbc, $query);
+		$query = "SELECT user_id, email, name, powerlevel FROM $table WHERE password=?";
+		$result = mysqli_execute_query($dbc, $query, [$auth]);
 		if (mysqli_num_rows($result) == 1) {
 			$user = mysqli_fetch_assoc($result);
 			foreach ($user as $key => $value) {
 				// these cookies are for easier code writting :)
 				// they are really secure, the server does not care about user-provided cookies
-				$_SESSION[$key] = $value;
+				$_SESSION[$key] = export_data($value);
 				$_SESSION['ready'] = TRUE;
 			}
 		}
