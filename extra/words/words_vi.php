@@ -88,33 +88,40 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
 
 // --------- pwlvltable.php --------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pwlvltable.php') {
-	$title = "Quan ly vai tro";
-	$pwlvltablephp['h1_title'] = "Quan ly vai tro";
-	function get_msg($msg_key, $email = NULL, $dbrole = NULL, $powerlevel = NULL) {
-		global $pwlvltablephp;
-		$pwlvltablephp['msg'] = [
-			'update_success' => "Da cap nhat vai tro cua $email tu $dbrole thanh $powerlevel \n",
-			'update_failed' => "Khong the cap nhat vai tro cua $email tu $dbrole thanh $powerlevel \n"
-		];
-
-		return $pwlvltablephp['msg'][$msg_key];
-	}
-	$pwlvltablephp['msg'] = [
-		'err_priv_unmet' => "Vai tro cua ban la chua du de thuc hien tac vu nay. \n",
-		'err_not_found' => "Khong tim thay nguoi dung. \n"
+	$title = "Quan ly quyen han";
+	$pwlvltablephp['h1_title'] = "Quan ly quyen han";
+	$pwlvltablephp['msg'] = [                                                                        
+		'err_priv_unmet' => "Quyen han cua ban la chua du de thuc hien tac vu nay. \n",
+		'err_not_found' => "Khong tim thay nguoi dung. \n"                             
 	];
-	$pwlvltablephp['user_num_msg'] = [
-		0 => "So nguoi dung co vai tro dac biet (!= 1):",
-		1 => "Co ve nhu chua ai co vai tro dac biet."
+	$pwlvltablephp['input'] = [
+		'update_power' => "Cap nhat quyen han"
 	];
 	$pwlvltablephp['th_pwlvltable'] = [
 		'id' => "ID",
 		'email' => "Thu dien tu",
-		'powerlevel' => "Vai tro"
+		'powerlevel' => "Quyen han"
 	];
-	$pwlvltablephp['input'] = [
-		'update_power' => "Cap nhat vai tro"
-	];
+	$pwlvltablephp['user_num_msg'][1] = "Hien chua co nguoi dung nao co quyen han dac biet (!= 0).";
+
+	function get_msg($id, $word, $param=NULL) {
+		global $pwlvltablephp;
+		if (isset($param)) {
+			if ($id == 'msg') {
+				$pwlvltablephp['msg'] = [
+					'update_success' => "Da cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n",
+					'update_failed' => "Khong the cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n"
+				];
+			}
+			if ($id == 'user_num_msg') {
+				$pwlvltablephp['user_num_msg'] = [
+					0 => "Co {$param['user_num']} quyen han dac biet (!= 0)",
+				];
+			}
+		}
+		return $pwlvltablephp[$id][$word];
+	}
+
 }
 // ---------------------------------------------------
 
