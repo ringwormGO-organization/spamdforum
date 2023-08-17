@@ -72,25 +72,23 @@ if (isset($msg)) {
 		</tr>
 		";
 		while ($row = mysqli_fetch_row($result)) {
-			if ($row[2] >= $mypowerlevel) {
-				echo "
-				<tr>
-					<td style=\"width: 0.2%;\">&nbsp;</td>
-					<td style=\"width: 1.5%;\">$row[0]</td>
-					<td style=\"width: 5%;\"><a href=\"/profiles.php/{$row[1]}\">$row[1]</a></td>
-					<td style=\"width: 5%;\">$row[2]</td>
-				</tr>
-				\n";
-			} else {
-				echo "
-				<tr>
-					<td style=\"width: 0.2%;\">&nbsp;</td>
-					<td style=\"width: 1.5%;\">$row[0]</td>
-					<td style=\"width: 5%;\"><a href=\"/profiles.php?email={$row[1]}\">$row[1]</a></td>
-					<td style=\"width: 5%;\"><input type=\"text\" name=\"powerlevel[{$row[1]}]\" value=\"{$row[2]}\" size=\"1\" maxlength=\"3\"></td>
-				</tr>
-				\n";
+			foreach ($row as $key => $value) {
+				$row[$key] = export_data($value);
 			}
+			echo "
+			<tr>
+				<td style=\"width: 0.2%;\">&nbsp;</td>
+				<td style=\"width: 1.5%;\">$row[0]</td>
+				<td style=\"width: 5%;\"><a href=\"/profiles.php/{$row[1]}\">$row[1]</a></td>
+			";
+			if ($row[2] >= $mypowerlevel) {
+				echo "<td style=\"width: 5%;\">$row[2]</td>";
+			} else {
+				echo "<td style=\"width: 5%;\"><input type=\"text\" name=\"powerlevel[{$row[1]}]\" value=\"{$row[2]}\" size=\"1\" maxlength=\"3\"></td>";
+			}
+			echo "
+			</tr>
+			\n";
 		}
 		echo '</table>';
 		echo "<br><div style=\"text-align:center;\"><input type=\"submit\" name=\"update_power\" value=\"{$pwlvltablephp['input']['update_power']}\"></div>";
