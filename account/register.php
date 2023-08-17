@@ -6,58 +6,65 @@
 		header("Location: $protocol://$server/index.php");
 		exit();
 	}
-	if (isset($_POST['register'])) {
-		require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
-		include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-		$msg = NULL;
-		if (preg_match("/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,64}$/iu", $_POST['name'])) {
-			$name = escape_data($_POST['name']);
-		} else {
-			$name = FALSE;
-			$msg .= $registerphp['msg']['err_name'];
-		}
+	if (!$registration_status) {
+		include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+		echo "<h1>{$registerphp['reg_disabled']}</h1>";
+		include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
+		exit();
+	} else {
+		if (isset($_POST['register'])) {
+			require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
+			include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+			$msg = NULL;
+			if (preg_match("/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,64}$/iu", $_POST['name'])) {
+				$name = escape_data($_POST['name']);
+			} else {
+				$name = FALSE;
+				$msg .= $registerphp['msg']['err_name'];
+			}
 
-		if (filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
-			$email = escape_data($_POST['email']);
-		} else {
-			$email = FALSE;
-			$msg .= $registerphp['msg']['err_email'];
-		}
+			if (filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
+				$email = escape_data($_POST['email']);
+			} else {
+				$email = FALSE;
+				$msg .= $registerphp['msg']['err_email'];
+			}
 
-		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
-			if ($_POST['password'] == $_POST['verify']) {
-				$password = TRUE;
+			if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
+				if ($_POST['password'] == $_POST['verify']) {
+					$password = TRUE;
+				} else {
+					$password = FALSE;
+					$msg .= $registerphp['msg']['err_password_mismatch'];
+				}
 			} else {
 				$password = FALSE;
-				$msg .= $registerphp['msg']['err_password_mismatch'];
+				$msg .= $registerphp['msg']['err_password'];
 			}
-		} else {
-			$password = FALSE;
-			$msg .= $registerphp['msg']['err_password'];
-		}
 
-		if ($name && $email && $password) {
-			$exist['email'] = check_email($email, $dbc);
+			if ($name && $email && $password) {
+				$exist['email'] = check_email($email, $dbc);
 
-			if ($exist['email'] == FALSE) {
-				$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
-				$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
-				if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
-					$_SESSION['auth'] = $password;
-					header("Location: $protocol://$server/index.php");
-					exit();
+				if ($exist['email'] == FALSE) {
+					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+					$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
+					if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
+						$_SESSION['auth'] = $password;
+						header("Location: $protocol://$server/index.php");
+						exit();
+					} else {
+						$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
+					}
 				} else {
-					$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
+					if ($exist['email'] == TRUE) {
+						$msg .= $registerphp['msg']['err_email_existed'];
+					}
 				}
-			} else {
-				if ($exist['email'] == TRUE) {
-					$msg .= $registerphp['msg']['err_email_existed'];
-				}
-			}
-			mysqli_close($dbc);
+				mysqli_close($dbc);
 
-		} else {
-			$msg .= $registerphp['msg']['err_tryagain'];
+			} else {
+				$msg .= $registerphp['msg']['err_tryagain'];
+			}
 		}
 	}
 ?>
