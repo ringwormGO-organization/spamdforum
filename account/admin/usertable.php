@@ -77,6 +77,9 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			</tr>
 			\n";
 		while ($row = mysqli_fetch_row($result)) {
+			foreach ($row as $key => $value) {
+				$row[$key] = export_data($value);
+			}
 			echo "
 			<tr>
 				<td style=\"width: 0.2%; text-align: left;\">&nbsp;</td>
