@@ -4,7 +4,7 @@
 
 $anonymous_access = true;
 $anonymous_page = '';
-
+$registration_status = true;
 
 // --------- Scripts --------------------------------------------------
 
