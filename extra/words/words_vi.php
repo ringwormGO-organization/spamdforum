@@ -33,6 +33,7 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/register.php') {
 	$title = "Dang ky tai khoan!";
 	$registerphp['h1_title'] = "Dang ky tai khoan";
 	$registerphp['h2_info'] = "Dang ky tai khoan de co nhieu quyen truy cap hon vao cac tinh nang cua website";
+	$registerphp['reg_disabled'] = "Trang nay hien khong cho phep dang ky.";
 
 	$registerphp['msg'] = [
 		'err_name' => "Vui long nhap ten hop le! \n",
