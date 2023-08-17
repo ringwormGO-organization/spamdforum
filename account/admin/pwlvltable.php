@@ -21,12 +21,12 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 					$row = mysqli_fetch_row($result);
 					if ($row[0] < $mypowerlevel) {
 						if ($row[0] != $powerlevel) {
-							$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email='$email'";
-							$result = mysqli_query($dbc, $query);
+							$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email=?";
+							$result = mysqli_execute_query($dbc, $query, [$email]);
 							if (mysqli_affected_rows($dbc) == 1) {
-								$msg .= get_msg('update_success', $email, $row[0], $powerlevel);
+								$msg .= get_msg('msg', 'update_success', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
 							} else {
-								$msg .= get_msg('update_failed', $email, $row[0], $powerlevel);
+								$msg .= get_msg('msg', 'update_failed', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
 							}
 						}
 					} else {
@@ -57,13 +57,13 @@ if (isset($msg)) {
 
 <?php
 	$query = "SELECT user_id, email, powerlevel FROM $table WHERE powerlevel != ?";
-	$result = @mysqli_execute_query($dbc, $query, [1]);
+	$result = mysqli_execute_query($dbc, $query, [0]);
 	$num = mysqli_num_rows($result);
 
 	if ($num > 0) {
-		echo "<h3>{$pwlvltablephp['user_num_msg'][0]} $num</h3>";
-		echo "<form name=\"pwlvltable\" action=\"{$_SERVER['PHP_SELF']}\" method=\"POST\">";
-		echo "<table style=\"text-align:center; padding: 2px;\">
+		echo "<h3>" . get_msg('user_num_msg', 0, ['user_num' => $num]) . "</h3>" .
+		"<form name=\"pwlvltable\" action=\"{$_SERVER['PHP_SELF']}\" method=\"POST\">" .
+		"<table style=\"text-align:center; padding: 2px;\">
 		<tr>
 			<th style=\"width: 0.2%;\">&nbsp;</td>
 			<th style=\"width: 1.5%;\">{$pwlvltablephp['th_pwlvltable']['id']}</td>
