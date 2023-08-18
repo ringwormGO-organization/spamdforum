@@ -31,7 +31,7 @@ function mysqli_execute_query($mysqli, $query, $params=null)
 }
 */
 
-function check_email($email, $dbc) {
+function check_exist_email($email, $dbc) {
 	global $table;
 	$query = "SELECT user_id FROM $table WHERE email=?";
 	$result = @mysqli_execute_query($dbc, $query, [$email]);
