@@ -80,11 +80,11 @@ if (isset($msg)) {
 <table style="text-align: center; margin-left:auto; margin-right:auto; border-width:0; width:100%;">
 	<tr>
 		<th style="width:30%;"><?php echo $registerphp['form_input']['name']; ?>:</th> 
-		<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?php if(isset($_POST['name'])) {echo stripslashes($_POST['name']);} ?>"></label></td>
+		<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?php if(isset($_POST['name'])) {echo export_data($_POST['name']);} ?>"></label></td>
 	</tr>
 	<tr>	
 		<th style="width:30%;"><?php echo $registerphp['form_input']['email']; ?>:</th> 
-		<td><label for="email"><input id="email" type="text" name="email" size="64" maxlength="96" value="<?php if(isset($_POST['email'])) {echo stripslashes($_POST['email']);} ?>"></label></td>
+		<td><label for="email"><input id="email" type="text" name="email" size="64" maxlength="96" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></label></td>
 	</tr>
 	<tr>
 		<th style="width:30%;"><?php echo $registerphp['form_input']['password']; ?>:</th> 
