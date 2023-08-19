@@ -5,6 +5,15 @@ $sitename = 'spamdforum';
 $indexphp_link_index = 'Trang chu';
 $indexphp_link_account = 'Tai khoan';
 
+// --------- profiles.php ---------------------------
+if ($_SERVER['SCRIPT_NAME'] == '/profiles.php') {
+	$title = "Ho so nguoi dung";
+	$profilesphp['reg_date'] = "Ngay dang ky";
+	$profilesphp['last_visit'] = "Truy cap lan cuoi";
+	$profilesphp['err_not_found'] = "Khong tim thay nguoi dung!";
+}
+// --------------------------------------------------
+
 // --------- login.php ------------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/login.php') {
 	$title = "Dang nhap";
@@ -56,6 +65,30 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/register.php') {
 
 // --------------------------------------------------
 
+// --------- settings.php ---------------------------
+if ($_SERVER['SCRIPT_NAME'] == '/account/settings.php') {
+	$title = "Cai dat tai khoan";
+	$settingsphp['h1_title'] = "Cai dat tai khoan";
+	$settingsphp['msg'] = [
+		'err_name' => "Vui long nhap ten hop le! \n",
+		'err_email' => "Vui long nhap dia chi thu dien tu hop le! \n",
+		'err_password' => "Vui long nhap mat khau hop le! \n",
+		'err_password_mismatch' => "Mat khau khong khop voi xac nhan! \n",
+		'err_email_existed' => "Dia chi thu dien tu da duoc su dung. \n",
+		'err_server' => "<h3>Ban khong the dang ky do mot loi he thong. Chung toi xin loi vi su co nay.</h3> \n",
+		'err_tryagain' => "Vui long thu lai!"
+];
+
+        $settingsphp['form_input'] = [
+		'auth' => "Mat khau hien tai",
+		'name' => "Ten",
+		'email' => "Thu dien tu",
+		'password' => "Mat khau",
+		'verify' => "Xac nhan",
+		'update_info' => "Cap nhat thong tin"
+];
+}
+// --------------------------------------------------
 
 // --------- usertable.php --------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
