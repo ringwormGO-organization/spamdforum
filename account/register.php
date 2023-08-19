@@ -6,60 +6,58 @@
 		header("Location: $protocol://$server/index.php");
 		exit();
 	}
-	if (isset($_POST['register'])) {
-		require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
-		include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-		$msg = NULL;
-		if (preg_match("/^[[:alnum:]\x{00C0}-\x{1EF9}' -_]{4,64}$/iu", $_POST['name'])) {
-			$name = escape_data($_POST['name']);
-		} else {
-			$name = FALSE;
-			$msg .= $registerphp['msg']['err_name'];
-		}
+	if (!$registration_status) {
+		include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+		echo "<h1>{$registerphp['reg_disabled']}</h1>";
+		include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
+		exit();
+	} else {
+		if (isset($_POST['register'])) {
+			require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
+			include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+			$msg = NULL;
+			$name = $email = $password = false;
+			if (preg_match("/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,64}$/iu", $_POST['name'])) {
+				$name = escape_data($_POST['name']);
+			} else {
+				$msg .= $registerphp['msg']['err_name'];
+			}
 
-		if (filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
-			$email = escape_data($_POST['email']);
-		} else {
-			$email = FALSE;
-			$msg .= $registerphp['msg']['err_email'];
-		}
+			if (filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL), FILTER_VALIDATE_EMAIL)) {
+				$email = escape_data($_POST['email']);
+			} else {
+				$msg .= $registerphp['msg']['err_email'];
+			}
 
-		if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
 			if ($_POST['password'] == $_POST['verify']) {
-				if ($email) {
-					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+				if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
+					$password = TRUE;
+				} else {
+					$msg .= $registerphp['msg']['err_password'];
 				}
 			} else {
-				$password = FALSE;
 				$msg .= $registerphp['msg']['err_password_mismatch'];
 			}
-		} else {
-			$password = FALSE;
-			$msg .= $registerphp['msg']['err_password'];
-		}
 
-		if ($name && $email && $password) {
-			$exist['email'] = check_email($email, $dbc);
-
-			if ($exist['email'] == FALSE) {
-				$query = "INSERT INTO forum_user (name, email, password, reg_date, last_visit) VALUES ('$name', '$email', '$password', NOW(), NOW());";
-				$result = @mysqli_query($dbc, $query);
-				if ($result) {
-					$_SESSION['auth'] = $password;
-					header("Location: $protocol://$server/index.php");
-					exit();
+			if ($name && $email && $password) {
+				if (!check_exist_email($email, $dbc)) {
+					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+					$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
+					if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
+						$_SESSION['auth'] = $password;
+						header("Location: $protocol://$server/index.php");
+						exit();
+					} else {
+						$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
+					}
 				} else {
-					$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
-				}
-			} else {
-				if ($exist['email'] == TRUE) {
 					$msg .= $registerphp['msg']['err_email_existed'];
 				}
-			}
-			mysqli_close($dbc);
+				mysqli_close($dbc);
 
-		} else {
-			$msg .= $registerphp['msg']['err_tryagain'];
+			} else {
+				$msg .= $registerphp['msg']['err_tryagain'];
+			}
 		}
 	}
 ?>
@@ -82,11 +80,11 @@ if (isset($msg)) {
 <table style="text-align: center; margin-left:auto; margin-right:auto; border-width:0; width:100%;">
 	<tr>
 		<th style="width:30%;"><?php echo $registerphp['form_input']['name']; ?>:</th> 
-		<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?php if(isset($_POST['name'])) {echo stripslashes($_POST['name']);} ?>"></label></td>
+		<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?php if(isset($_POST['name'])) {echo export_data($_POST['name']);} ?>"></label></td>
 	</tr>
 	<tr>	
 		<th style="width:30%;"><?php echo $registerphp['form_input']['email']; ?>:</th> 
-		<td><label for="email"><input id="email" type="text" name="email" size="64" maxlength="96" value="<?php if(isset($_POST['email'])) {echo stripslashes($_POST['email']);} ?>"></label></td>
+		<td><label for="email"><input id="email" type="text" name="email" size="64" maxlength="96" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></label></td>
 	</tr>
 	<tr>
 		<th style="width:30%;"><?php echo $registerphp['form_input']['password']; ?>:</th> 

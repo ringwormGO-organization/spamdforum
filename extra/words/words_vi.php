@@ -5,6 +5,15 @@ $sitename = 'spamdforum';
 $indexphp_link_index = 'Trang chu';
 $indexphp_link_account = 'Tai khoan';
 
+// --------- profiles.php ---------------------------
+if ($_SERVER['SCRIPT_NAME'] == '/profiles.php') {
+	$title = "Ho so nguoi dung";
+	$profilesphp['reg_date'] = "Ngay dang ky";
+	$profilesphp['last_visit'] = "Truy cap lan cuoi";
+	$profilesphp['err_not_found'] = "Khong tim thay nguoi dung!";
+}
+// --------------------------------------------------
+
 // --------- login.php ------------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/login.php') {
 	$title = "Dang nhap";
@@ -33,6 +42,7 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/register.php') {
 	$title = "Dang ky tai khoan!";
 	$registerphp['h1_title'] = "Dang ky tai khoan";
 	$registerphp['h2_info'] = "Dang ky tai khoan de co nhieu quyen truy cap hon vao cac tinh nang cua website";
+	$registerphp['reg_disabled'] = "Trang nay hien khong cho phep dang ky.";
 
 	$registerphp['msg'] = [
 		'err_name' => "Vui long nhap ten hop le! \n",
@@ -55,6 +65,30 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/register.php') {
 
 // --------------------------------------------------
 
+// --------- settings.php ---------------------------
+if ($_SERVER['SCRIPT_NAME'] == '/account/settings.php') {
+	$title = "Cai dat tai khoan";
+	$settingsphp['h1_title'] = "Cai dat tai khoan";
+	$settingsphp['msg'] = [
+		'err_name' => "Vui long nhap ten hop le! \n",
+		'err_email' => "Vui long nhap dia chi thu dien tu hop le! \n",
+		'err_password' => "Vui long nhap mat khau hop le! \n",
+		'err_password_mismatch' => "Mat khau khong khop voi xac nhan! \n",
+		'err_email_existed' => "Dia chi thu dien tu da duoc su dung. \n",
+		'err_server' => "<h3>Ban khong the dang ky do mot loi he thong. Chung toi xin loi vi su co nay.</h3> \n",
+		'err_tryagain' => "Vui long thu lai!"
+];
+
+        $settingsphp['form_input'] = [
+		'auth' => "Mat khau hien tai",
+		'name' => "Ten",
+		'email' => "Thu dien tu",
+		'password' => "Mat khau",
+		'verify' => "Xac nhan",
+		'update_info' => "Cap nhat thong tin"
+];
+}
+// --------------------------------------------------
 
 // --------- usertable.php --------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
@@ -62,8 +96,9 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
 	$usertablephp['h1_title'] = "Quan ly nguoi dung";
 	$usertablephp['p_red_notice'] = "Luu y: Thao tac xoa nguoi dung la KHONG THE HOAN TAC!";
 	$usertablephp['msg'] = [
-		'delete_success' => "Da xoa",
-		'delete_failed' => "Khong the xoa",
+		'added_to_list' => "Them vao danh sach xoa:",
+		'delete_request' => "Yeu cau xoa:",
+		'delete_failed' => "Chua xoa duoc:",
 		'err_priv_unmet' => "Vai tro cua ban chua du quyen de thuc hien tac vu nay. \n",
 		'err_not_found' => "Khong tim thay nguoi dung! \n",
 		'err_nopriv' => "Vai tro cua ban khong cho phep thuc hien hanh dong nay! \n"
@@ -87,33 +122,40 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
 
 // --------- pwlvltable.php --------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pwlvltable.php') {
-	$title = "Quan ly vai tro";
-	$pwlvltablephp['h1_title'] = "Quan ly vai tro";
-	function get_msg($msg_key, $email = NULL, $dbrole = NULL, $powerlevel = NULL) {
-		global $pwlvltablephp;
-		$pwlvltablephp['msg'] = [
-			'update_success' => "Da cap nhat vai tro cua $email tu $dbrole thanh $powerlevel \n",
-			'update_failed' => "Khong the cap nhat vai tro cua $email tu $dbrole thanh $powerlevel \n"
-		];
-
-		return $pwlvltablephp['msg'][$msg_key];
-	}
-	$pwlvltablephp['msg'] = [
-		'err_priv_unmet' => "Vai tro cua ban la chua du de thuc hien tac vu nay. \n",
-		'err_not_found' => "Khong tim thay nguoi dung. \n"
+	$title = "Quan ly quyen han";
+	$pwlvltablephp['h1_title'] = "Quan ly quyen han";
+	$pwlvltablephp['msg'] = [                                                                        
+		'err_priv_unmet' => "Quyen han cua ban la chua du de thuc hien tac vu nay. \n",
+		'err_not_found' => "Khong tim thay nguoi dung. \n"                             
 	];
-	$pwlvltablephp['user_num_msg'] = [
-		0 => "So nguoi dung co vai tro dac biet (!= 1):",
-		1 => "Co ve nhu chua ai co vai tro dac biet."
+	$pwlvltablephp['input'] = [
+		'update_power' => "Cap nhat quyen han"
 	];
 	$pwlvltablephp['th_pwlvltable'] = [
 		'id' => "ID",
 		'email' => "Thu dien tu",
-		'powerlevel' => "Vai tro"
+		'powerlevel' => "Quyen han"
 	];
-	$pwlvltablephp['input'] = [
-		'update_power' => "Cap nhat vai tro"
-	];
+	$pwlvltablephp['user_num_msg'][1] = "Hien chua co nguoi dung nao co quyen han dac biet (!= 0).";
+
+	function get_msg($id, $word, $param=NULL) {
+		global $pwlvltablephp;
+		if (isset($param)) {
+			if ($id == 'msg') {
+				$pwlvltablephp['msg'] = [
+					'update_success' => "Da cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n",
+					'update_failed' => "Khong the cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n"
+				];
+			}
+			if ($id == 'user_num_msg') {
+				$pwlvltablephp['user_num_msg'] = [
+					0 => "Co {$param['user_num']} quyen han dac biet (!= 0)",
+				];
+			}
+		}
+		return $pwlvltablephp[$id][$word];
+	}
+
 }
 // ---------------------------------------------------
 

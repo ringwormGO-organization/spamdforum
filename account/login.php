@@ -27,11 +27,11 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		}
 
 		if ($email && $password) {
-			$query = "SELECT password, powerlevel FROM forum_user WHERE email='$email'";
-			$result = @mysqli_query($dbc, $query);
+			$query = "SELECT password, powerlevel FROM $table WHERE email=?";
+			$result = mysqli_execute_query($dbc, $query, [$email]);
 			$assoc = mysqli_fetch_assoc($result);
 			if ($assoc) {
-				if ($assoc['powerlevel'] >= 0 && password_verify($password, base64_decode($assoc['password']))) {
+				if (password_verify($password, base64_decode($assoc['password']))) {
 					$_SESSION['auth'] = $assoc['password'];
 					header("Location: $protocol://$server/index.php");
 					exit;

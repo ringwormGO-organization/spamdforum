@@ -6,29 +6,36 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 	$msg = NULL;
 	if (isset($_POST['delete'])) {
-		$mypowerlevel = $_COOKIE['powerlevel'];
+		$mypowerlevel = $_SESSION['powerlevel'];
 		if ($mypowerlevel >= 100) {
 			if (isset($_POST['delete_email'])) {
 				foreach ($_POST['delete_email'] as $key => $email) {
 					$email = escape_data($email);
-					$query = "SELECT powerlevel FROM forum_user WHERE email='$email'";
-					$result = @mysqli_query($dbc, $query);
+					$query = "SELECT powerlevel FROM $table WHERE email=?";
+					$result = mysqli_execute_query($dbc, $query, [$email]);
 					if (mysqli_num_rows($result) == 1) {
 						$assoc = mysqli_fetch_assoc($result);
 						if ($assoc['powerlevel'] < $mypowerlevel) {
-							$query = "DELETE FROM forum_user WHERE email='$email' LIMIT 1";
-							$result = @mysqli_query($dbc, $query);
-							if (mysqli_affected_rows($dbc) == 1) {
-								$msg .= "{$usertablephp['msg']['delete_success']} $email ({$assoc['powerlevel']}) \n";
+							$delete_list[] = $email;
+							if (!isset($target_num)) {
+								$target_num = 1;
 							} else {
-								$msg .= "{$usertablephp['msg']['delete_failed']} $email ({$assoc['powerlevel']}) ! \n";
+								$target_num++;
 							}
+							$msg .= "{$usertablephp['msg']['added_to_list']} $email ({$assoc['powerlevel']}) \n";
 						} else {
 							$msg .= $usertablephp['msg']['err_priv_unmet'];
 						}
 					} else {
 						$msg .= $usertablephp['msg']['err_not_found'];
 					}
+				}
+				if (isset($target_num)) {
+					$placeholder_email = "?" . str_repeat(",?", $target_num - 1);
+					$query = "DELETE FROM $table WHERE email IN ($placeholder_email) LIMIT $target_num";
+					$result = mysqli_execute_query($dbc, $query, $delete_list);
+					$delete_num = $target_num - mysqli_affected_rows($dbc);
+					$msg .= "{$usertablephp['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
 				}
 			}
 		} else {
@@ -48,12 +55,12 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 
 <?php
 	if (isset($msg)) {
-		$msg = nl2br($msg);
+		$msg = nl2br($msg, false);
 		echo "<p style=\"color: red;\">$msg</p>";
 	}
 
-	$query = "SELECT user_id, name, email, reg_date, last_visit FROM forum_user ORDER BY reg_date DESC";
-	$result = @mysqli_query($dbc, $query);
+	$query = "SELECT user_id, name, email, reg_date, last_visit FROM $table ORDER BY reg_date DESC";
+	$result = mysqli_execute_query($dbc, $query);
 	$num = mysqli_num_rows($result);
 
 	if ($num > 0) {
@@ -70,11 +77,14 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			</tr>
 			\n";
 		while ($row = mysqli_fetch_row($result)) {
+			foreach ($row as $key => $value) {
+				$row[$key] = export_data($value);
+			}
 			echo "
 			<tr>
 				<td style=\"width: 0.2%; text-align: left;\">&nbsp;</td>
 				<td style=\"width: 1.5%; text-align: left;\"><input type=\"checkbox\" name=\"delete_email[]\" value=\"$row[2]\">$row[0]</td>
-                                <td style=\"width: 3.4%; text-align: left;\"><a href=\"http://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
+                                <td style=\"width: 3.4%; text-align: left;\"><a href=\"$protocol://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
                                 <td style=\"width: 4.6%; text-align: left;\"><a href=\"mailto:$row[2]\">$row[2]</a></td>
                                 <td style=\"width: 2.2; text-align: left;\">$row[3]</td>
                                 <td style=\"width: 2.5%; text-align: left;\">$row[4]</td>
