@@ -55,7 +55,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 
 <?php
 	if (isset($msg)) {
-		$msg = nl2br($msg);
+		$msg = nl2br($msg, false);
 		echo "<p style=\"color: red;\">$msg</p>";
 	}
 
