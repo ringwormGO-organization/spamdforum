@@ -50,7 +50,7 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 
 <?php
 if (isset($msg)) {
-	$msg = nl2br($msg);
+	$msg = nl2br($msg, false);
 	echo "<p style=\"color:red;\">$msg</p>";
         }
 ?>
@@ -65,10 +65,10 @@ if (isset($msg)) {
 		"<form name=\"pwlvltable\" action=\"{$_SERVER['PHP_SELF']}\" method=\"POST\">" .
 		"<table style=\"text-align:center; padding: 2px;\">
 		<tr>
-			<th style=\"width: 0.2%;\">&nbsp;</td>
-			<th style=\"width: 1.5%;\">{$pwlvltablephp['th_pwlvltable']['id']}</td>
-			<th style=\"width: 5%;\">{$pwlvltablephp['th_pwlvltable']['email']}</td>
-			<th style=\"width: 5%;\">{$pwlvltablephp['th_pwlvltable']['powerlevel']}</td>
+			<th style=\"width: 0.2%;\">&nbsp;</th>
+			<th style=\"width: 1.5%;\">{$pwlvltablephp['th_pwlvltable']['id']}</th>
+			<th style=\"width: 5%;\">{$pwlvltablephp['th_pwlvltable']['email']}</th>
+			<th style=\"width: 5%;\">{$pwlvltablephp['th_pwlvltable']['powerlevel']}</th>
 		</tr>
 		";
 		while ($row = mysqli_fetch_row($result)) {
@@ -91,7 +91,7 @@ if (isset($msg)) {
 			\n";
 		}
 		echo '</table>';
-		echo "<br><div style=\"text-align:center;\"><input type=\"submit\" name=\"update_power\" value=\"{$pwlvltablephp['input']['update_power']}\"></div>";
+		echo "<div style=\"text-align:center;\"><input type=\"submit\" name=\"update_power\" value=\"{$pwlvltablephp['input']['update_power']}\"></div>";
 		echo '</form>';
 		mysqli_free_result($result);
 	} else {
