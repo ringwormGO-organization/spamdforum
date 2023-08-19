@@ -1,14 +1,14 @@
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-$title = "Tai khoan";
-include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+?>
 ?>
 
 <?php
-	if ($_SESSION['ready'] === TRUE) {
-		echo "<p>Chao mung, {$_SESSION['name']}!</p>";
-		echo "<p><a href=\"$protocol://$server/account/logout.php\">Dang xuat?</a></p>";
+	if ($_SESSION['auth']) {
+		header("Location: $protocol://$server/account/settings.php");
+		exit;
 	} else {
+		include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 		echo "<p>Ban chua dang nhap.</p>";
 		echo "<p><a href=\"$protocol://$server/account/login.php\">Dang nhap tai khoan</a> ";
 		echo "<a href=\"$protocol://$server/account/register.php\">Dang ky tai khoan</a></p>";
