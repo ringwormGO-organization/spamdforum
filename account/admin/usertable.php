@@ -84,7 +84,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			<tr>
 				<td style=\"width: 0.2%; text-align: left;\">&nbsp;</td>
 				<td style=\"width: 1.5%; text-align: left;\"><input type=\"checkbox\" name=\"delete_email[]\" value=\"$row[2]\">$row[0]</td>
-                                <td style=\"width: 3.4%; text-align: left;\"><a href=\"http://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
+                                <td style=\"width: 3.4%; text-align: left;\"><a href=\"$protocol://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
                                 <td style=\"width: 4.6%; text-align: left;\"><a href=\"mailto:$row[2]\">$row[2]</a></td>
                                 <td style=\"width: 2.2; text-align: left;\">$row[3]</td>
                                 <td style=\"width: 2.5%; text-align: left;\">$row[4]</td>
