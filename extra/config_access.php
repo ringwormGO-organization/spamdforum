@@ -23,7 +23,7 @@ if (!in_array($_SERVER['SCRIPT_NAME'], $skip_scripts)) {
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/security.php");
 	$auth = NULL;
 	if (isset($_SESSION['auth'])) {
-		$auth = $_SESSION['auth'];
+		$auth = &$_SESSION['auth'];
 	}
 	security_validateupdateinfo($dbc, $auth);
 	security_authlastvisit($dbc, $auth, $_SERVER['REMOTE_ADDR']);
