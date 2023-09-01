@@ -25,7 +25,7 @@
 			if (!empty($_POST['password']) && $_POST['password'] != $_SESSION['auth']) {
 				if ($_POST['password'] == $_POST['verify']) {
 					if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $_POST['password'])) {
-						$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+						$password = secure_hash(escape_data($_POST['password']), PASSWORD_BCRYPT);
 						$query = "UPDATE $table SET password=? WHERE password='$auth'";
 						if (mysqli_execute_query($dbc, $query, [$password])) {
 							$_SESSION['auth'] = $password;
