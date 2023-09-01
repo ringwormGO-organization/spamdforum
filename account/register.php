@@ -41,7 +41,7 @@
 
 			if ($name && $email && $password) {
 				if (!check_exist_email($email, $dbc)) {
-					$password = base64_encode(password_hash(hash("sha384", escape_data($_POST['password'])), PASSWORD_ARGON2ID, ['memory_cost' => 262144, 'time_cost' => 6, 'threads' => 1]));
+					$password = secure_hash(escape_data($_POST['password']), PASSWORD_BCRYPT);
 					$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
 					if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
 						$_SESSION['auth'] = $password;
