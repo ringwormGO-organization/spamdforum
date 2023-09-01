@@ -1,4 +1,3 @@
-
 <?php
 function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	switch ($algo) {
@@ -7,9 +6,10 @@ function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	case PASSWORD_ARGON2I:
 		$options = ['memory_cost' => 131072, 'time_cost' => 5, 'threads' => 1];
 	default:
-		$options = ['cost' => 12];
+		$options = ['cost' => 14];
 
 	$pwhash = password_hash($password, $algo, $options);
+	return $pwhash;
 }
 
 }
