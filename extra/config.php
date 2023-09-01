@@ -11,5 +11,5 @@ session_set_cookie_params(['lifetime' => time() + 2592000, 'path' => '/', 'domai
 session_start();
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/variables.php");
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config_access.php");
-
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/functions.php");
 ?>
