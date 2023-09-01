@@ -19,7 +19,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		}
 
 		if (!empty($_POST['password'])) {
-			$password = hash("sha384", escape_data($_POST['password']));
+			$password = escape_data($_POST['password']);
 
 		} else {
 			$password = FALSE;
@@ -31,7 +31,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 			$result = mysqli_execute_query($dbc, $query, [$email]);
 			$assoc = mysqli_fetch_assoc($result);
 			if ($assoc) {
-				if (password_verify($password, base64_decode($assoc['password']))) {
+				if (password_verify($password, $assoc['password'])) {
 					$_SESSION['auth'] = $assoc['password'];
 					header("Location: $protocol://$server/index.php");
 					exit;
