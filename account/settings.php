@@ -10,7 +10,7 @@
 		require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 		include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 		$msg = NULL;
-		if (!empty($_POST['auth']) && password_verify(escape_data($_POST['auth'])), $_SESSION['auth'])) {
+		if (!empty($_POST['auth']) && password_verify(escape_data($_POST['auth']), $_SESSION['auth'])) {
 			if (!empty($_POST['name']) && $_POST['name'] != $_SESSION['name']) {
 				if (preg_match("/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,64}$/iu", $_POST['name'])) {
 					$name = escape_data($_POST['name']);
