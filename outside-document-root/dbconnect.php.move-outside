@@ -11,9 +11,13 @@ if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 	die("Khong the thiet lap ket noi den co so du lieu!");
 }
 
-// Uncomment to use with PHP < 8.2
-// This function isn't complete, expect thing to break.
-// credit: phpdelusions.net
+/*
+* Uncomment to use with PHP < 8.2
+* This function isn't complete, expect thing to break.
+* This is a function built on the helper function
+* provided on: phpdelusions.net
+* Copyright 2023 phpdelusions.net
+*/
 /*
 function mysqli_execute_query($mysqli, $query, $params=null)
 {
