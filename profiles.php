@@ -10,7 +10,8 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 if (!empty($_GET['email'])) {
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 	$email = escape_data($_GET['email']);
-	$query = "SELECT user_id, name, password powerlevel, reg_date, last_visit FROM forum_user WHERE email=?";
+	$query = "SELECT user_id, name, password, powerlevel, 
+		reg_date, last_visit FROM forum_user WHERE email=?";
 	$result = mysqli_execute_query($dbc, $query, [$email]);
 	if (mysqli_num_rows($result) == 1) {
 		$userdata = mysqli_fetch_row($result);
