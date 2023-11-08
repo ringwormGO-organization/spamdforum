@@ -23,8 +23,8 @@ if (!empty($_GET['email'])) {
 		} else {
 			echo "<h2 id=\"banneduser\"><a href=\"$protocol://$server/profiles.php?email=$email\">$userdata[1] ($userdata[3])</a> <a href=\"mailto:$email\">&lt;$email&gt</a></h2>";
 		}
-		echo "<h3>{$profilesphp['reg_date']}: {$userdata[3]}</h3>";
-		echo "<p>{$profilesphp['last_visit']}: {$userdata[4]}</p>";
+		echo "<h3>{$profilesphp['reg_date']}: {$userdata[4]}</h3>";
+		echo "<p>{$profilesphp['last_visit']}: {$userdata[5]}</p>";
 	} else {
 		echo "<h3>{$profilesphp['err_not_found']}</h3>";
 	}
