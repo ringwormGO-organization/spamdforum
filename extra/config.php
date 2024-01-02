@@ -1,4 +1,8 @@
 <?php
+/* See file LICENSE for permissions and conditions to use the file. */
+?>
+
+<?php
 $sitename = 'spamdforum';
 $protocol = 'http';
 $server = $_SERVER['HTTP_HOST'];

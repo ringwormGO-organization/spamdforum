@@ -1,4 +1,8 @@
 <?php
+/* See file LICENSE for permissions and conditions to use the file. */
+?>
+
+<?php
 
 function security_validateupdateinfo($dbc, $auth=NULL) {
 	global $server, $protocol, $table;

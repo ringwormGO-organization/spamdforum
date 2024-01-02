@@ -1,4 +1,8 @@
 <?php
+/* See file LICENSE for permissions and conditions to use the file. */
+?>
+
+<?php
 function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	switch ($algo) {
 	case PASSWORD_ARGON2ID:
