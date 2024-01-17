@@ -1,4 +1,5 @@
-spamdforum, a forum software with simplicity in posts and complexity in security. Currently alpha, forum isn't worked yet; just an account system.
+spamdforum, a forum software with simplicity in posts and complexity in
+security. Currently alpha, forum isn't worked yet; just an account system.
 
 Contributions:
 
@@ -8,8 +9,10 @@ Account system is almost completed.
 Refer to: https://github.com/hahahahacker2009/www for old code to move
 Needs:
 - Code checking for inconsistent use of spaces, convert them to tab (tabstop=8)
-- pwlvltable.php: If you have an idea about reusing the "update powerlevel" checks for adding specially powered user, please contribute
+- pwlvltable.php: If you have an idea about reusing the "update powerlevel"
+checks for adding specially powered user, please contribute
 - LANGUAGE! There isn't words_en.php!!!
 
 Forum designing isn't open right now. Will implement it soon.
-Should we have markdown support? maybe no, it suck. Asterisk, underscore broke the text. 
+Should we have markdown support? maybe no, it suck. Asterisks, underscores
+broke the whole text.
