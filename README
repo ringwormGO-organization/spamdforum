@@ -1,5 +1,7 @@
-spamdforum - simple & sane forum for the World Wide Web.
+spamdforum - PHP & MySQL/MariaDB simple & sane forum for the World Wide Web.
 Currently alpha, forum isn't worked yet; just an account system.
+Future: BCHS? (BSD, C, httpd, SQLite). PHP version will be compat & maintained,
+because people will want to host it on PHP & MySQL hosting provider.
 
 Contributions:
 
