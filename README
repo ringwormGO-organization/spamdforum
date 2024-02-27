@@ -9,12 +9,23 @@ spamdforum is currently ALPHA stage!
 
 Account system is almost completed.
 Refer to: https://github.com/hahahahacker2009/www for old code to move
-Needs:
-- Code checking for inconsistent use of spaces, convert them to tab (tabstop=8)
-- pwlvltable.php: If you have an idea about reusing the "update powerlevel"
-checks for adding specially powered user, please contribute
-- LANGUAGE! There isn't words_en.php!!!
+TODO:
+o Code checking for inconsistent use of spaces, convert them to tab
+o pwlvltable.php: If you have an idea about reusing the "update powerlevel"
+  checks for adding powered user, please contribute
+o LANGUAGE! There isn't words_en.php!!!
+o Configuration in the JSON format: We are currently using PHP scripts to
+  store configuration. JSON configuration allows having web interface for
+  configuration, which most web applications need.
+o What is the maximum privileges?
+o Scripts to install database and tables
 
 Forum designing isn't open right now. Will implement it soon.
+Threads (article, ...) = posts (comments) = msg. Stored in the same table.
+Inspired by email and IM. A "post" is a msg with the relate_id of another
+msg.
+- How a thread should be identified?
+  o relate_id=id (a msg with id=800 and relate_id=800)
+  o relate_id=0
 Should we have markdown support? maybe no, it suck. Asterisks, underscores
 broke the whole text.
