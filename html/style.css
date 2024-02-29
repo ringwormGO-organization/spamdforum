@@ -11,10 +11,6 @@ a:active {
 	color: blue;
 }
 
-#banneduser {
-	text-decoration: line-through;
-}
-
 body {
 	background-color: #eeeeee;
 }
