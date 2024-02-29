@@ -1,14 +1,13 @@
 <?php
 /* See file LICENSE for permissions and conditions to use the file. */
 ?>
-
 <?php
 $sitename = 'spamdforum';
 $protocol = 'http';
 $server = $_SERVER['HTTP_HOST'];
-//$server = 'hostname.com';
+/* $server = 'hostname.com'; */
 $secure = false;
-if ($protocol == 'https' && $_SERVER['HTTPS']) {
+if ($protocol == 'https' || $_SERVER['HTTPS']) {
 	$secure = true;
 }
 session_set_cookie_params(['lifetime' => time() + 2592000, 'path' => '/', 'domain' => '', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Lax']);
