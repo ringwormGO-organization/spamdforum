@@ -1,56 +1,54 @@
 <?php
 /* See file LICENSE for permissions and conditions to use the file. */
 ?>
-
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-?>
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 
-<?php
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-	$msg = NULL;
-	if (isset($_POST['delete'])) {
-		$mypowerlevel = $_SESSION['powerlevel'];
-		if ($mypowerlevel >= 100) {
-			if (isset($_POST['delete_email'])) {
-				foreach ($_POST['delete_email'] as $key => $email) {
-					$email = escape_data($email);
-					$query = "SELECT powerlevel FROM $table WHERE email=?";
-					$result = mysqli_execute_query($dbc, $query, [$email]);
-					if (mysqli_num_rows($result) == 1) {
-						$assoc = mysqli_fetch_assoc($result);
-						if ($assoc['powerlevel'] < $mypowerlevel) {
-							$delete_list[] = $email;
-							if (!isset($target_num)) {
-								$target_num = 1;
-							} else {
-								$target_num++;
-							}
-							$msg .= "{$usertablephp['msg']['added_to_list']} $email ({$assoc['powerlevel']}) \n";
-						} else {
-							$msg .= $usertablephp['msg']['err_priv_unmet'];
-						}
-					} else {
-						$msg .= $usertablephp['msg']['err_not_found'];
-					}
-				}
-				if (isset($target_num)) {
-					$placeholder_email = "?" . str_repeat(",?", $target_num - 1);
-					$query = "DELETE FROM $table WHERE email IN ($placeholder_email) LIMIT $target_num";
-					$result = mysqli_execute_query($dbc, $query, $delete_list);
-					$delete_num = $target_num - mysqli_affected_rows($dbc);
-					$msg .= "{$usertablephp['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
-				}
-			}
-		} else {
-			$msg .= $usertablephp['msg']['err_nopriv'];
-		}
+$msg = NULL;
+$ok = FALSE;
+if (isset($_POST['delete'])) {
+	$mypwlvl = $_SESSION['powerlevel'];
+	if (!$mypwlvl >= 100) {
+		$msg .= $usertablephp['msg']['err_nopriv'];
+		goto stop;
 	}
+	if (!isset($_POST['delete_email'])) {
+		goto stop;
+	}
+	foreach ($_POST['delete_email'] as $key => $email) {
+		$email = escape_data($email);
+		$query = "SELECT powerlevel FROM $table WHERE email=?";
+		$result = mysqli_execute_query($dbc, $query, [$email]);
+		if (mysqli_num_rows($result) < 1) {
+			$msg .= $usertablephp['msg']['err_not_found'];
+			goto stop;
+		}
+		$assoc = mysqli_fetch_assoc($result);
+		if ($assoc['powerlevel'] < $mypwlvl) {
+			$msg .= $usertablephp['msg']['err_priv_unmet'];
+			goto stop;
+		}
+		$delete_list[] = $email;
+		if (!isset($target_num)) {
+			$target_num = 1;
+		} else {
+			$target_num++;
+		}
+		$msg .= "{$usertablephp['msg']['added_to_list']} $email ({$assoc['powerlevel']}) \n";
+	}
+	if (isset($target_num)) {
+		$placeholder_email = "?" . str_repeat(",?", $target_num - 1);
+		$query = "DELETE FROM $table WHERE email IN ($placeholder_email) LIMIT $target_num";
+		$result = mysqli_execute_query($dbc, $query, $delete_list);
+		$delete_num = $target_num - mysqli_affected_rows($dbc);
+		$msg .= "{$usertablephp['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
+	}
+}
 
 ?>
-
-
 <?php
+	stop:
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 
