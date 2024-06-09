@@ -94,8 +94,8 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/settings.php') {
 }
 // --------------------------------------------------
 
-// --------- usertable.php --------------------------
-if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
+// --------- user.php -------------------------------
+if ($_SERVER['SCRIPT_NAME'] == '/account/admin/user.php') {
 	$title = 'Quan ly nguoi dung';
 	$usertablephp['h1_title'] = "Quan ly nguoi dung";
 	$usertablephp['p_red_notice'] = "Luu y: Thao tac xoa nguoi dung la KHONG THE HOAN TAC!";
@@ -125,7 +125,7 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/usertable.php') {
 // ---------------------------------------------------
 
 // --------- pwlvltable.php --------------------------
-if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pwlvltable.php') {
+if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pw.php') {
 	$title = "Quan ly quyen han";
 	$pwlvltablephp['h1_title'] = "Quan ly quyen han";
 	$pwlvltablephp['msg'] = [                                                                        
