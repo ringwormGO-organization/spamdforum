@@ -9,7 +9,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 	$need_msg = FALSE;
 	$msg = NULL;
 
-	$mypowerlevel = $_SESSION['powerlevel']; 
+	$mypwlvl = $_SESSION['powerlevel'];
 
 	if (isset($_POST['update_power']) && isset($_POST['powerlevel'])) {
 		$need_msg = TRUE;
@@ -17,40 +17,39 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 		foreach($_POST['powerlevel'] as $email => $powerlevel) {
 			$email = escape_data($email);
 			$powerlevel = intval(escape_data($powerlevel));
-			if ($powerlevel <= $mypowerlevel) {
-				$query = "SELECT powerlevel FROM $table WHERE email=?";
-				$result = mysqli_execute_query($dbc, $query, [$email]);
-				if (mysqli_num_rows($result) == 1) {
-					$row = mysqli_fetch_row($result);
-					if ($row[0] < $mypowerlevel) {
-						if ($row[0] != $powerlevel) {
-							$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email=?";
-							$result = mysqli_execute_query($dbc, $query, [$email]);
-							if (mysqli_affected_rows($dbc) == 1) {
-								$msg .= get_msg('msg', 'update_success', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
-							} else {
-								$msg .= get_msg('msg', 'update_failed', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
-							}
-						}
-					} else {
-						$msg .= $pwlvltablephp['msg']['err_priv_unmet'];
-					}
-				} else {
-					$msg .= $pwlvltablephp['msg']['err_not_found'];
-				}
-			} else {
+			if (! ($powerlevel <= $mypwlvl)) {
 				$msg .= $pwlvltablephp['msg']['err_priv_unmet'];
+				goto stop;
+			}
+			$query = "SELECT powerlevel FROM $table WHERE email=?";
+			$result = mysqli_execute_query($dbc, $query, [$email]);
+			if (mysqli_num_rows($result) < 1) {
+				$msg .= $pwlvltablephp['msg']['err_not_found'];
+				goto stop;
+			}
+			$row = mysqli_fetch_row($result);
+			if ($row[0] >= $mypwlvl) {
+				$msg .= $pwlvltablephp['msg']['err_priv_unmet'];
+				goto stop;
+			}
+			if ($row[0] != $powerlevel) {
+				$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email=?";
+				$result = mysqli_execute_query($dbc, $query, [$email]);
+				if (mysqli_affected_rows($dbc) == 1) {
+					$msg .= get_msg('msg', 'update_success', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
+				} else {
+					$msg .= get_msg('msg', 'update_failed', ['email' => $email, 'old_pwlvl' => $row[0], 'new_pwlvl' => $powerlevel]);
+				}
 			}
 		}
 	}
 ?>
 
 <?php
+stop:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
-
 <h1><?=$pwlvltablephp['h1_title']; ?></h1>
-
 <?php
 if (isset($msg)) {
 	$msg = nl2br($msg, false);
@@ -84,7 +83,7 @@ if (isset($msg)) {
 				<td style=\"width: 1.5%;\">$row[0]</td>
 				<td style=\"width: 5%;\"><a href=\"/profiles.php/{$row[1]}\">$row[1]</a></td>
 			";
-			if ($row[2] >= $mypowerlevel) {
+			if ($row[2] >= $mypwlvl) {
 				echo "<td style=\"width: 5%;\">$row[2]</td>";
 			} else {
 				echo "<td style=\"width: 5%;\"><input type=\"text\" name=\"powerlevel[{$row[1]}]\" value=\"{$row[2]}\" size=\"1\" maxlength=\"3\"></td>";
