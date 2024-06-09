@@ -8,15 +8,18 @@ Contributions:
 spamdforum is currently ALPHA stage!
 
 Account system is almost completed.
-Refer to: https://github.com/hahahahacker2009/www for old code to move
 TODO:
 o Code checking for inconsistent use of spaces, convert them to tab
-o pwlvltable.php: If you have an idea about reusing the "update powerlevel"
+o Code quality improvement.
+o pw.php: If you have an idea about reusing the "update powerlevel"
   checks for adding powered user, please contribute
+o Replace the use of "echo" to "printf", because using a function to get
+  the message is dumb.
 o LANGUAGE! There isn't words_en.php!!!
 o Configuration in the JSON format: We are currently using PHP scripts to
   store configuration. JSON configuration allows having web interface for
   configuration, which most web applications need.
+  And it is much safer than using a PHP script!!!
 o What is the maximum privileges?
 o Scripts to install database and tables
 
