@@ -17,29 +17,30 @@ if (!empty($_GET['email'])) {
 	$query = "SELECT user_id, name, password, powerlevel, 
 		reg_date, last_visit FROM forum_user WHERE email=?";
 	$result = mysqli_execute_query($dbc, $query, [$email]);
-	if (mysqli_num_rows($result) == 1) {
-		$uinfo = mysqli_fetch_row($result);
-		foreach ($uinfo as $key => $value) {
-			$uinfo[$key] = export_data($value);
-		}
-		if (!empty($uinfo[2])) {
-			echo "<h2><a href=\"$protocol://$server/profiles.php" .
-			    "?email=$email\">$uinfo[1]</a> ($uinfo[3]) " .
-			    "<a href=\"mailto:$email\">&lt;$email&gt;</a></h2>";
-		} else {
-			echo "<h2><del><a href=\"$protocol://$server/" .
-			    "profiles.php?email=$email\">$uinfo[1]</a>" .
-			    "</del> ($uinfo[3]) <a href=\"mailto:$email\">" .
-			    "&lt;$email&gt;</a></h2>";
-		}
-		echo "<h3>{$profilesphp['reg_date']}: {$uinfo[4]}</h3>";
-		echo "<p>{$profilesphp['last_visit']}: {$uinfo[5]}</p>";
-	} else {
+	if (mysqli_num_rows($result) < 1) {
 		echo "<h3>{$profilesphp['err_not_found']}</h3>";
+		goto stop;
 	}
+	$uinfo = mysqli_fetch_row($result);
+	foreach ($uinfo as $key => $value) {
+		$uinfo[$key] = export_data($value);
+	}
+	if (!empty($uinfo[2])) {
+		echo "<h2><a href=\"$protocol://$server/profiles.php" .
+		    "?email=$email\">$uinfo[1]</a> ($uinfo[3]) " .
+		    "<a href=\"mailto:$email\">&lt;$email&gt;</a></h2>";
+	} else {
+		echo "<h2><del><a href=\"$protocol://$server/" .
+		    "profiles.php?email=$email\">$uinfo[1]</a>" .
+		    "</del> ($uinfo[3]) <a href=\"mailto:$email\">" .
+		    "&lt;$email&gt;</a></h2>";
+	}
+	echo "<h3>{$profilesphp['reg_date']}: {$uinfo[4]}</h3>";
+	echo "<p>{$profilesphp['last_visit']}: {$uinfo[5]}</p>";
 }
 ?>
 
 <?php
+stop:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
