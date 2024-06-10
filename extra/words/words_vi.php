@@ -124,41 +124,30 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/user.php') {
 }
 // ---------------------------------------------------
 
-// --------- pwlvltable.php --------------------------
+// --------- pw.php ----------------------------------
 if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pw.php') {
 	$title = "Quan ly quyen han";
-	$pwlvltablephp['h1_title'] = "Quan ly quyen han";
-	$pwlvltablephp['msg'] = [                                                                        
+	$pwphp['h1_title'] = "Quan ly quyen han";
+	$pwphp['msg'] = [                                                                        
 		'err_priv_unmet' => "Quyen han cua ban la chua du de thuc hien tac vu nay. \n",
 		'err_not_found' => "Khong tim thay nguoi dung. \n"                             
 	];
-	$pwlvltablephp['input'] = [
+	$pwphp['input'] = [
 		'update_power' => "Cap nhat quyen han"
 	];
-	$pwlvltablephp['th_pwlvltable'] = [
+	$pwphp['th_pwlvltable'] = [
 		'id' => "ID",
 		'email' => "Thu dien tu",
 		'powerlevel' => "Quyen han"
 	];
-	$pwlvltablephp['user_num_msg'][1] = "Hien chua co nguoi dung nao co quyen han dac biet (!= 0).";
-
-	function get_msg($id, $word, $param=NULL) {
-		global $pwlvltablephp;
-		if (isset($param)) {
-			if ($id == 'msg') {
-				$pwlvltablephp['msg'] = [
-					'update_success' => "Da cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n",
-					'update_failed' => "Khong the cap nhat vai tro cua {$param['email']} tu {$param['old_pwlvl']} thanh {$param['new_pwlvl']} \n"
-				];
-			}
-			if ($id == 'user_num_msg') {
-				$pwlvltablephp['user_num_msg'] = [
-					0 => "Co {$param['user_num']} quyen han dac biet (!= 0)",
-				];
-			}
-		}
-		return $pwlvltablephp[$id][$word];
-	}
+	$pwphp['user_num_msg'][1] = "Hien chua co nguoi dung nao co quyen han dac biet (!= 0).";
+	$pwphp['msg'] = [
+		'update_success' => "Da cap nhat vai tro cua %s tu %d thanh %d",
+		'update_failed' => "Khong the cap nhat vai tro cua %s tu %d thanh %d \n"
+	];
+	$pwphp['user_num_msg'] = [
+		0 => "Co %d quyen han dac biet (!= 0)"
+	];
 
 }
 // ---------------------------------------------------
