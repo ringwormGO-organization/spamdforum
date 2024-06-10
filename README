@@ -3,6 +3,8 @@ Currently alpha, forum isn't worked yet; just an account system.
 Future: BCHS? (BSD, C, httpd, SQLite). PHP version will be compat & maintained,
 because people will want to host it on PHP & MySQL hosting provider.
 
+git: https://repo.or.cz/spamdforum.git
+mirrored at codeberg: https://codeberg.org/ringwormGO/spamdforum.git
 mailing list: spamdforum@googlegroups.com
 
 Contributions:
