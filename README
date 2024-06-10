@@ -8,6 +8,10 @@ mirrored at codeberg: https://codeberg.org/ringwormGO/spamdforum.git
 mailing list: spamdforum@googlegroups.com
 
 Contributions:
+o You may send patches to the mailing list. I prefer inline patches,
+  but attachments are accepted.
+o You may create a mob.YOURNAME fork at repo.or.cz and request me to pull.
+o You may fork the project at codeberg and open a pull request.
 
 spamdforum is currently ALPHA stage!
 
