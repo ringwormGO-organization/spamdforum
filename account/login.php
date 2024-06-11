@@ -1,7 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 ?>
-
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
@@ -71,19 +70,19 @@ if (isset($msg)) {
 <table style="text-align: center; border-width:0; width:100%;">
 <tr>
 	<td style="width:10%;">&nbsp;</td>
-	<td style="width:30%;"><b><?php echo $loginphp['form_input']['email']; ?>:</b></td> <td><label for="email"><input id="email" type="text" name="email" size="32" maxlength="32" value="<?php if(isset($_POST['email'])) {echo stripslashes($_POST['email']);} ?>"></label></td>
+	<td style="width:30%;"><b><?php echo $loginphp['form_input']['email']; ?></b>:</td>
+	<td><input id="email" type="text" name="email" size="32" maxlength="127" value="<?php if(isset($_POST['email'])) {echo stripslashes(htmlspecialchars($_POST['email']));} ?>"></td>
 	<tr>
 		<td style="width:10%;">&nbsp;</td>
-		<td style="width:30%;"><b><?php echo $loginphp['form_input']['password']; ?>:</b></td> <td><label for="password"><input id="password" type="password" name="password" size="32" maxlength="64"></label></td>
+		<td style="width:30%;"><b><?php echo $loginphp['form_input']['password']; ?>:</b></td> <td><input id="password" type="password" name="password" size="32" maxlength="64"></td>
 	</tr>
 	<tr>
 		<td style="width:10%;">&nbsp;</td>
-		<td style="width:30%;"><label for="login"><input id="login" type="submit" name="login" value="<?php echo $loginphp['form_input']['login']; ?>!"></label></td>
+		<td style="width:30%;"><input id="login" type="submit" name="login" value="<?php echo $loginphp['form_input']['login']; ?>!"></td>
 	</tr>
 </table>
 </fieldset>
 </form>
-
 <?php
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
