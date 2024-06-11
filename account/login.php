@@ -71,7 +71,7 @@ if (isset($msg)) {
 <tr>
 	<td style="width:10%;">&nbsp;</td>
 	<td style="width:30%;"><b><?php echo $loginphp['form_input']['email']; ?></b>:</td>
-	<td><input id="email" type="text" name="email" size="32" maxlength="127" value="<?php if(isset($_POST['email'])) {echo stripslashes(htmlspecialchars($_POST['email']));} ?>"></td>
+	<td><input id="email" type="text" name="email" size="32" maxlength="127" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></td>
 	<tr>
 		<td style="width:10%;">&nbsp;</td>
 		<td style="width:30%;"><b><?php echo $loginphp['form_input']['password']; ?>:</b></td> <td><input id="password" type="password" name="password" size="32" maxlength="64"></td>
