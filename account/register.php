@@ -92,8 +92,10 @@ if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">{$msg}</p>";
 }
+if (!$registration_status) {
+	echo "<h2>{$registerphp['reg_disabled']}</h2>";
+} else {
 ?>
-
 <form name="register" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 <fieldset>
 <legend><b>Nhap vao thong tin cua ban</b></legend>
@@ -124,5 +126,6 @@ if (isset($msg)) {
 </form>
 <!-- KET THUC NOI DUNG TRANG -->
 <?php
+}
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
