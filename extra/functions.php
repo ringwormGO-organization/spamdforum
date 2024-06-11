@@ -1,7 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 ?>
-
 <?php
 function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	switch ($algo) {
