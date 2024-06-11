@@ -116,7 +116,7 @@ if (isset($msg)) {
 	<td><input id="verify" type="password" name="verify" size="64" maxlength="64"></td>
 </tr>
 <tr>
-	<td style="width:30%;"><label for="register"><input id="register" type="submit" name="register" value="<?php echo $registerphp['form_input']['register']; ?>!"></label></td>
+	<td style="width:30%;"><input id="register" type="submit" name="register" value="<?php echo $registerphp['form_input']['register']; ?>!"></td>
 </tr>
 </table>
 </fieldset>
