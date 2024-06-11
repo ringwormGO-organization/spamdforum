@@ -1,7 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 ?>
-
 <?php
 $sitename = 'spamdforum';
 
@@ -151,5 +150,4 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/admin/pw.php') {
 
 }
 // ---------------------------------------------------
-
 ?>
