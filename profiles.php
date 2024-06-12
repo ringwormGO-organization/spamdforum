@@ -1,15 +1,12 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 ?>
-
 <?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
-
 <?php
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
-
 <?php
 if (!empty($_GET['email'])) {
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
@@ -39,7 +36,6 @@ if (!empty($_GET['email'])) {
 	echo "<p>{$profilesphp['last_visit']}: {$uinfo[5]}</p>";
 }
 ?>
-
 <?php
 stop:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
