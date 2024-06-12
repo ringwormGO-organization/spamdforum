@@ -32,10 +32,10 @@ function escape_data($data, $trim=TRUE) {
 	global $dbc;
 
 	if ($trim=FALSE) {
-		return mysqli_real_escape_string($dbc, htmlspecialchars($data));
+		return htmlspecialchars($data);
 	} else 
 
-	return mysqli_real_escape_string($dbc, trim($data));
+	return htmlspecialchars(trim($data));
 }
 
 function export_data($data, $trim=TRUE) {
