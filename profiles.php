@@ -25,12 +25,12 @@ if (!empty($_GET['email'])) {
 	if ($uinfo[2] >= 0) {
 		echo "<h2><a href=\"$protocol://$server/profiles.php" .
 		    "?email=$email\">$uinfo[1]</a> ($uinfo[2]) " .
-		    "<a href=\"mailto:$email\">&lt;$email&gt;</a></h2>";
+		    "&lt;<a href=\"mailto:$email\">$email</a>&gt;</h2>";
 	} else {
 		echo "<h2><del><a href=\"$protocol://$server/" .
 		    "profiles.php?email=$email\">$uinfo[1]</a>" .
-		    "</del> ($uinfo[2]) <a href=\"mailto:$email\">" .
-		    "&lt;$email&gt;</a></h2>";
+		    "</del> ($uinfo[2]) &lt;<a href=\"mailto:$email\">" .
+		    "$email</a>&gt;</h2>";
 	}
 	echo "<h3>{$profilesphp['reg_date']}: {$uinfo[3]}</h3>";
 	echo "<p>{$profilesphp['last_visit']}: {$uinfo[4]}</p>";
