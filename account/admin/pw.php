@@ -11,41 +11,42 @@ $msg = NULL;
 
 $mypwlvl = $_SESSION['powerlevel'];
 
-if (isset($_POST['update_power']) && isset($_POST['powerlevel'])) {
-	$need_msg = TRUE;
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-	foreach($_POST['powerlevel'] as $email => $powerlevel) {
-		$email = escape_data($email);
-		$powerlevel = intval(escape_data($powerlevel));
-		if (! ($powerlevel <= $mypwlvl)) {
-			$msg .= $pwphp['msg']['err_priv_unmet'];
-			goto stop;
-		}
-		$query = "SELECT powerlevel FROM $table WHERE email=?";
+if (! (isset($_POST['update_power']) && isset($_POST['powerlevel']))) {
+	goto html;
+}
+$need_msg = TRUE;
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+foreach($_POST['powerlevel'] as $email => $powerlevel) {
+	$email = escape_data($email);
+	$powerlevel = intval(escape_data($powerlevel));
+	if (! ($powerlevel <= $mypwlvl)) {
+		$msg .= $pwphp['msg']['err_priv_unmet'];
+		goto html;
+	}
+	$query = "SELECT powerlevel FROM $table WHERE email=?";
+	$result = mysqli_execute_query($dbc, $query, [$email]);
+	if (mysqli_num_rows($result) < 1) {
+		$msg .= $pwphp['msg']['err_not_found'];
+		goto html;
+	}
+	$row = mysqli_fetch_row($result);
+	if ($row[0] >= $mypwlvl) {
+		$msg .= $pwphp['msg']['err_priv_unmet'];
+		goto html;
+	}
+	if ($row[0] != $powerlevel) {
+		$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email=?";
 		$result = mysqli_execute_query($dbc, $query, [$email]);
-		if (mysqli_num_rows($result) < 1) {
-			$msg .= $pwphp['msg']['err_not_found'];
-			goto stop;
-		}
-		$row = mysqli_fetch_row($result);
-		if ($row[0] >= $mypwlvl) {
-			$msg .= $pwphp['msg']['err_priv_unmet'];
-			goto stop;
-		}
-		if ($row[0] != $powerlevel) {
-			$query = "UPDATE $table SET powerlevel='$powerlevel' WHERE email=?";
-			$result = mysqli_execute_query($dbc, $query, [$email]);
-			if (mysqli_affected_rows($dbc) == 1) {
-				$msg .= sprintf($pwphp['msg']['update_success'], $email, $row[0], $powerlevel);
-			} else {
-				$msg .= sprintf($pwphp['msg']['update_failed'], $email, $row[0], $powerlevel);
-			}
+		if (mysqli_affected_rows($dbc) == 1) {
+			$msg .= sprintf($pwphp['msg']['update_success'], $email, $row[0], $powerlevel);
+		} else {
+			$msg .= sprintf($pwphp['msg']['update_failed'], $email, $row[0], $powerlevel);
 		}
 	}
 }
 ?>
 <?php
-stop:
+html:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$pwphp['h1_title']; ?></h1>
