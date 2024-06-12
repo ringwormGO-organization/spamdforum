@@ -14,23 +14,23 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 
 <body>
 <?php
-	//echo "<p id=\"index.php\"><a href=\"$protocol://$server/index.php\">$link_indexphp_title</a></p>";
-	echo "<table width=\"100%\">
-		<tr>
+//echo "<p id=\"index.php\"><a href=\"$protocol://$server/index.php\">$link_indexphp_title</a></p>";
+echo "<table width=\"100%\">
+<tr>
+";
+if (isset($_SESSION['auth'])) {
+	echo "<td style=\"width: 10%;\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td>
+	<td><a href=\"$protocol://$server/board.php\">Viet tin nhan</a></td>
+	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/index.php\">$indexphp_link_account</a></td>";
+} else {
+	echo "<td style=\"width: 84%;\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td>
+	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/login.php\">Dang nhap </a></td>
+	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/register.php\"> Dang ky </a></td>
 	";
-	if (isset($_SESSION['auth'])) {
-		echo "<td style=\"width: 90%\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td> 
-			<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/index.php\">$indexphp_link_account</a></td>";
-	} else {
-		echo "
-		<td style=\"width: 84%\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td> 
-		<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/login.php\">Dang nhap </a></td>
-		<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/register.php\"> Dang ky </a></td>
-		";
-	}
-	echo "
-		</tr>
-	</table>
-	";
+}
+echo "
+</tr>
+</table>
+";
 ?>
 
