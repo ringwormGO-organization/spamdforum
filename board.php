@@ -13,6 +13,7 @@ if (!isset($_POST['send'])) {
 	goto html;
 }
 $good_chars = "/[\x20-\x7F\x{00C0}-\x{1EF9}]/iu";
+/* Alphanumeric plus Vietnamese characters plus some other character idk */
 if (!empty($_POST['to'])) {
 	$to = escape_data($_POST['to']);
 } else {
@@ -33,15 +34,21 @@ if (!empty($_POST['body']) && strlen($_POST['body']) < 32768 &&
 	$body = FALSE;
 	$msg .= "Tin nhan khong hop le.\n";
 }
+/* "Muted" users can view any msg, but not write */
 $r_pwlvl = -1;
 $w_pwlvl = 0;
 if (!empty($_POST['r_pwlvl'])) {
 	if (($r_pwlvl = intval($_POST['r_pwlvl'])) > $_SESSION['powerlevel']) {
+		/*
+		 * Creating msgs that the author can't even access
+		 * is disallowed.
+		 */
 		$r_pwlvl = $_SESSION['powerlevel'];
 	}
 }
 if (!empty($_POST['w_pwlvl'])) {
 	if (($w_pwlvl = intval($_POST['w_pwlvl'])) > $_SESSION['powerlevel']) {
+		/* As well as msgs that author can't write to. */
 		$w_pwlvl = $_SESSION['powerlevel'];
 	}
 }
@@ -54,6 +61,7 @@ $query = "INSERT INTO $msgtable (subject, body, from_addr, to_addr, "
 	. "r_pwlvl, w_pwlvl, last_edit) VALUES (?, ?, ?, ?, ?, ?, NOW())";
 if (mysqli_execute_query($dbc, $query, [$subject, $body, $from, $to,
 			 $r_pwlvl, $w_pwlvl])) {
+	/* Redirect to the new msg if success */
 	$id = mysqli_insert_id($dbc);
 	header("Location: $protocol://$server/view.php?id=$id");
 	exit;

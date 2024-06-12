@@ -12,12 +12,21 @@ if (empty($_GET['id'])) {
 $id = $_GET['id'];
 $assoc = mysqli_fetch_assoc(mysqli_execute_query($dbc, "SELECT * FROM $msgtable WHERE msg_id=?", [$id]));
 if ($assoc['r_pwlvl'] > 0 && !isset($_SESSION['auth'])) {
+	/* unreadable for "normal" also unreadable for anonymous users */
 	header("Location: $protocol://$server/account/login.php");
 	exit;
 }
 foreach ($assoc as $k => $value) {
 	$assoc[$k] = export_data($value);
 }
+/*
+ * Groups are separated extensively so admins can config how they want
+ * links to displays.
+ * \\0 full url for sure.
+ * \\3 for hostname
+ * \\9 for path
+ * \\2 for the protocol, \\1 for protocol with ://
+ */
 $urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,6}"
 . "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.~?@\-\/]*)";
 
@@ -29,7 +38,8 @@ $author = mysqli_fetch_assoc(mysqli_execute_query($dbc, "SELECT name, powerlevel
 <?php
 $title = $assoc['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
-if (!isset($_SESSION['auth']) || $assoc['r_pwlvl'] <= $_SESSION['powerlevel']) {
+if (!isset($_SESSION['auth']) || $assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
+{
 ?>
 <h1><?=$assoc['subject']; ?></h1>
 <p><?php echo "Boi " . 
