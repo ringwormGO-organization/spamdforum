@@ -56,6 +56,7 @@ if (isset($_POST['update_info'])) {
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$settingsphp['h1_title']; ?></h1>
+<p><a href="<?php echo "$protocol://$server/account/logout.php"; ?>">Dang xuat</a></p>
 <?php
 if (isset($msg)) {
 	$msg = nl2br($msg);
