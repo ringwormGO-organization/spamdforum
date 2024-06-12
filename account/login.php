@@ -5,51 +5,52 @@
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
 <?php
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
-	$msg = NULL;
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-	if (isset($_SESSION['auth'])) {
-		header("Location: protocol://$server/index.php");
-		exit();
-	}
+require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
+$msg = NULL;
+include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+if (isset($_SESSION['auth'])) {
+	header("Location: protocol://$server/index.php");
+	exit();
+}
 
-	if (isset($_POST['login'])) {
-		if (!empty($_POST['email'])) {
-			$email = escape_data($_POST['email']);
-		} else {
-			$email = FALSE;
-			$msg .= $loginphp['msg']['err_email'];
-		}
+if (!isset($_POST['login'])) {
+	goto html;
+}
+if (!empty($_POST['email'])) {
+	$email = escape_data($_POST['email']);
+} else {
+	$email = FALSE;
+	$msg .= $loginphp['msg']['err_email'];
+}
 
-		if (!empty($_POST['password'])) {
-			$password = escape_data($_POST['password']);
+if (!empty($_POST['password'])) {
+	$password = escape_data($_POST['password']);
 
-		} else {
-			$password = FALSE;
-			$msg .= $loginphp['msg']['err_password'];
-		}
+} else {
+	$password = FALSE;
+	$msg .= $loginphp['msg']['err_password'];
+}
 
-		if (! ($email && $password)) {
-			$msg .= $loginphp['msg']['err_tryagain'];
-			goto html;
-		}
-		$query = "SELECT password, powerlevel FROM $table WHERE email=?";
-		$result = mysqli_execute_query($dbc, $query, [$email]);
-		$assoc = mysqli_fetch_assoc($result);
-		if (!$assoc) {
-			$msg .= $loginphp['msg']['err_no_email'];
-			goto html;
-		}
-		if (password_verify($password, $assoc['password'])) {
-			$msg .= $loginphp['msg']['err_wrong_auth'];
-			goto html;
-		}
-		$_SESSION['auth'] = $assoc['password'];
-		header("Location: $protocol://$server/index.php");
-		exit;
-		mysqli_free_result($result);
-		mysqli_close($dbc);
-	}
+if (! ($email && $password)) {
+	$msg .= $loginphp['msg']['err_tryagain'];
+	goto html;
+}
+$query = "SELECT password, powerlevel FROM $table WHERE email=?";
+$result = mysqli_execute_query($dbc, $query, [$email]);
+$assoc = mysqli_fetch_assoc($result);
+if (!$assoc) {
+	$msg .= $loginphp['msg']['err_no_email'];
+	goto html;
+}
+if (password_verify($password, $assoc['password'])) {
+	$msg .= $loginphp['msg']['err_wrong_auth'];
+	goto html;
+}
+$_SESSION['auth'] = $assoc['password'];
+header("Location: $protocol://$server/index.php");
+exit;
+mysqli_free_result($result);
+mysqli_close($dbc);
 ?>
 <?php
 	html:
@@ -72,14 +73,15 @@ if (isset($msg)) {
 	<td style="width:10%;">&nbsp;</td>
 	<td style="width:30%;"><b><?php echo $loginphp['form_input']['email']; ?></b>:</td>
 	<td><input id="email" type="text" name="email" size="32" maxlength="127" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></td>
-	<tr>
-		<td style="width:10%;">&nbsp;</td>
-		<td style="width:30%;"><b><?php echo $loginphp['form_input']['password']; ?>:</b></td> <td><input id="password" type="password" name="password" size="32" maxlength="64"></td>
-	</tr>
-	<tr>
-		<td style="width:10%;">&nbsp;</td>
-		<td style="width:30%;"><input id="login" type="submit" name="login" value="<?php echo $loginphp['form_input']['login']; ?>!"></td>
-	</tr>
+</tr>
+<tr>
+	<td style="width:10%;">&nbsp;</td>
+	<td style="width:30%;"><b><?php echo $loginphp['form_input']['password']; ?>:</b></td> <td><input id="password" type="password" name="password" size="32" maxlength="64"></td>
+</tr>
+<tr>
+	<td style="width:10%;">&nbsp;</td>
+	<td style="width:30%;"><input id="login" type="submit" name="login" value="<?php echo $loginphp['form_input']['login']; ?>!"></td>
+</tr>
 </table>
 </fieldset>
 </form>
