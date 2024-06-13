@@ -48,8 +48,14 @@ if (!isset($_SESSION['auth']) || $assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
 "&lt;<a href=\"mailto:{$assoc['from_addr']}\">{$assoc['from_addr']}</a>&gt; ";
 ?></p>
 <p>chinh sua lan cuoi: <?=$assoc['last_edit'];?></p>
-<p><a href="<?php echo "$protocol://$server/board.php?relate_to=$id"; ?>">Viet tra loi</a></p>
-<p><?=$body;?></p>
+<?php
+if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
+echo "
+<p><a href=\"$protocol://$server/board.php?relate_to=$id\">Viet tra loi</a></p>
+";
+}
+?>
+<p><br><?=$body;?></p>
 <hr>
 <h3>Tra loi</h3>
 <?php
