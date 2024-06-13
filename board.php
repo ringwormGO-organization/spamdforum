@@ -16,12 +16,15 @@ if ($_SESSION['powerlevel'] < 0) {
 	$msg .= "Ban hien khong co quyen viet bai.\n";
 	goto html;
 }
+$rid = 0;
+if (!empty($_GET['relate_to'])) {
+	$rid = intval($_GET['relate_to']);
+}
+if (!empty($_POST['relate_id'])) {
+	$rid = intval($_POST['relate_id']);
+}
 if (!isset($_POST['send'])) {
 	goto html;
-}
-$relate_id = 0;
-if (!empty($_POST['relate_id'])) {
-	$relate_id = intval($_POST['relate_id']);
 }
 
 /* Spam fighting framework! */
@@ -36,7 +39,7 @@ $limit_query = $rq . " UNION ALL " . $aq;
 unset($rq);
 unset($aq);
 unset($timecond);
-$result = mysqli_execute_query($dbc, $limit_query, [$relate_id]);
+$result = mysqli_execute_query($dbc, $limit_query, [$rid]);
 $msg_count = mysqli_fetch_all($result, MYSQLI_NUM);
 if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 	/*
@@ -51,9 +54,9 @@ if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 unset($limit_query);
 mysqli_free_result($result);
 
-if ($relate_id != 0) {
+if ($rid != 0) {
 	$find_r = mysqli_execute_query($dbc, "SELECT w_pwlvl " .
-		  "FROM $msgtable WHERE msg_id=$relate_id");
+		  "FROM $msgtable WHERE msg_id=$rid");
 	if (mysqli_num_rows($find_r) != 1) {
 		$msg .= "Khong tim thay bai viet ban dang de cap!\n";
 		goto html;
@@ -112,7 +115,7 @@ if (! ($to && $subject && $body)) {
 $from = $_SESSION['email'];
 $query = "INSERT INTO $msgtable (relate_to, subject, body, from_addr, to_addr, "
 	. "r_pwlvl, w_pwlvl, last_edit) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
-if (mysqli_execute_query($dbc, $query, [$relate_id, $subject, $body, $from, $to,
+if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
 			 $r_pwlvl, $w_pwlvl])) {
 	/* Redirect to the new msg if success */
 	$id = mysqli_insert_id($dbc);
@@ -129,6 +132,23 @@ html:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
+$rto_addr = '';
+$rr_pwlvl = -1;
+$rw_pwlvl = 0;
+if ($rid) {
+	$q = "SELECT to_addr, r_pwlvl, w_pwlvl FROM $msgtable WHERE msg_id=?";
+	$r_result = mysqli_execute_query($dbc, $q, [$rid]);
+	if (mysqli_num_rows($r_result) != 1) {
+		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
+	} else {
+		$rmsg = mysqli_fetch_assoc($r_result);
+		$rto_addr = export_data($rmsg['to_addr']);
+		$rr_pwlvl = $rmsg['r_pwlvl'];
+		$rw_pwlvl = $rmsg['w_pwlvl'];
+	}
+}
+?>
+<?php
 if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">$msg</p>";
@@ -141,7 +161,8 @@ if (!$noform) {
 <table style="border-width:0; width:100%;">
 <tr>
 	<td><b>To:</b></td>
-	<td><input type="text" name="to" size="64" maxlength="128"></td>
+	<td><input type="text" name="to" size="64" maxlength="128"
+	    value="<?=$rto_addr; ?>"></td>
 </tr>
 <tr>
 	<td><b>Subject:</b></td>
@@ -149,12 +170,14 @@ if (!$noform) {
 </tr>
 <tr>
 	<td><b>R/W level:</b></td>
-	<td><input type="text" name="r_pwlvl" size="3" maxlength="3" value="-1">
-	<input type="text" name="w_pwlvl" size="3" maxlength="3" value="0"></td>
+	<td><input type="text" name="r_pwlvl" size="3" maxlength="3"
+	     value="<?=$rr_pwlvl;?>">
+	<input type="text" name="w_pwlvl" size="3" maxlength="3"
+	 value="<?=$rw_pwlvl;?>"></td>
 </tr>
 <tr>
 	<td><b>Relate to:</b></td>
-	<td><input type="text" name="relate_id" size="15" value="<?php if (isset($_GET['relate_to'])) {echo intval($_GET['relate_to']);} else {echo 0;} ?>"></td>
+	<td><input type="text" name="relate_id" size="15" value="<?=$rid; ?>"></td>
 </tr>
 </table>
 <p><br><textarea id="body" name="body" rows="30" cols="90"></textarea></p>
