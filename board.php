@@ -9,9 +9,62 @@ if (!isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/account/login.php");
 	exit;
 }
+$msg = NULL;
+$noform = FALSE;
+if ($_SESSION['powerlevel'] < 0) {
+	$noform = TRUE;
+	$msg .= "Ban hien khong co quyen viet bai.\n";
+	goto html;
+}
 if (!isset($_POST['send'])) {
 	goto html;
 }
+$relate_id = 0;
+if (!empty($_POST['relate_id'])) {
+	$relate_id = intval($_POST['relate_id']);
+}
+
+/* Spam fighting framework! */
+$timecond = "last_edit > SUBDATE(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)";
+/* Count msg that have the current related_id the user sent in an hour */
+$rq = "SELECT COUNT(*) FROM msgtable WHERE from_addr='{$_SESSION['email']}' " .
+      "AND relate_to=? AND $timecond";
+/* Count msg that the user sent in an hour */
+$aq = "SELECT COUNT(*) FROM msgtable WHERE from_addr='{$_SESSION['email']}' " .
+      "AND $timecond";
+$limit_query = $rq . " UNION ALL " . $aq;
+unset($rq);
+unset($aq);
+unset($timecond);
+$result = mysqli_execute_query($dbc, $limit_query, [$relate_id]);
+$msg_count = mysqli_fetch_all($result, MYSQLI_NUM);
+if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
+	/*
+	 * User is restricted to 4 msg with the same relate_id
+	 * and 40 msg per hour.
+	 */
+	$msg .= "Ban dang gui qua nhieu bai viet so voi muc quy dinh.\n";
+	$noform = TRUE;
+	/* Log or send mail code */
+	goto html;
+}
+unset($limit_query);
+mysqli_free_result($result);
+
+if ($relate_id != 0) {
+	$find_r = mysqli_execute_query($dbc, "SELECT w_pwlvl " .
+		  "FROM $msgtable WHERE msg_id=$relate_id");
+	if (mysqli_num_rows($find_r) != 1) {
+		$msg .= "Khong tim thay bai viet ban dang de cap!\n";
+		goto html;
+	}
+	$r_info = mysqli_fetch_assoc($find_r);
+	if ($r_info['w_pwlvl'] > $_SESSION['powerlevel']) {
+		$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
+		goto html;
+	}
+}
+
 $good_chars = "/[\x20-\x7F\x{00C0}-\x{1EF9}]/iu";
 /* Alphanumeric plus Vietnamese characters plus some other character idk */
 if (!empty($_POST['to'])) {
@@ -57,9 +110,9 @@ if (! ($to && $subject && $body)) {
 	goto html;
 }
 $from = $_SESSION['email'];
-$query = "INSERT INTO $msgtable (subject, body, from_addr, to_addr, "
-	. "r_pwlvl, w_pwlvl, last_edit) VALUES (?, ?, ?, ?, ?, ?, NOW())";
-if (mysqli_execute_query($dbc, $query, [$subject, $body, $from, $to,
+$query = "INSERT INTO $msgtable (relate_to, subject, body, from_addr, to_addr, "
+	. "r_pwlvl, w_pwlvl, last_edit) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+if (mysqli_execute_query($dbc, $query, [$relate_id, $subject, $body, $from, $to,
 			 $r_pwlvl, $w_pwlvl])) {
 	/* Redirect to the new msg if success */
 	$id = mysqli_insert_id($dbc);
@@ -80,6 +133,7 @@ if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">$msg</p>";
 }
+if (!$noform) {
 ?>
 <fieldset>
 <legend><b>Viet tin nhan</b></legend>
@@ -100,7 +154,7 @@ if (isset($msg)) {
 </tr>
 <tr>
 	<td><b>Relate to:</b></td>
-	<td><input type="text" name="relate_to" size="15" value="<?php if (isset($_GET['relate_to'])) {echo intval($_GET['relate_to']);} else {echo 0;} ?>"></td>
+	<td><input type="text" name="relate_id" size="15" value="<?php if (isset($_GET['relate_to'])) {echo intval($_GET['relate_to']);} else {echo 0;} ?>"></td>
 </tr>
 </table>
 <p><br><textarea id="body" name="body" rows="30" cols="90"></textarea></p>
@@ -108,5 +162,6 @@ if (isset($msg)) {
 </form>
 </fieldset>
 <?php
+}
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
