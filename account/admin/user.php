@@ -69,29 +69,29 @@ if (isset($_POST['delete'])) {
 		echo "<h3>{$usertablephp['user_num_msg'][0]} $num</h3>";
 		echo "<form action=\"{$_SERVER['PHP_SELF']}\" method=\"post\">\n";
 		echo "<table style=\"text-align:center; padding: 2px; \">
-			<tr>
-				<th style=\"width: 0.2%; text-align: left;\">&nbsp;</th>
-				<th style=\"width: 1.5%; text-align: left;\">{$usertablephp['th_usertable']['id']}</th>
-				<th style=\"width: 3.4%; text-align: left;\">{$usertablephp['th_usertable']['name']}</th>
-				<th style=\"width: 4.6%; text-align: left;\">{$usertablephp['th_usertable']['email']}</th>
-				<th style=\"width: 2.2%; text-align: left;\">{$usertablephp['th_usertable']['reg_date']}</th>
-				<th style=\"width: 2.5%; text-align: left;\">{$usertablephp['th_usertable']['last_visit']}</th>
-			</tr>
-			\n";
+<tr>
+	<th style=\"width: 0.2%; text-align: left;\">&nbsp;</th>
+	<th style=\"width: 1.5%; text-align: left;\">{$usertablephp['th_usertable']['id']}</th>
+	<th style=\"width: 3.4%; text-align: left;\">{$usertablephp['th_usertable']['name']}</th>
+	<th style=\"width: 4.6%; text-align: left;\">{$usertablephp['th_usertable']['email']}</th>
+	<th style=\"width: 2.2%; text-align: left;\">{$usertablephp['th_usertable']['reg_date']}</th>
+	<th style=\"width: 2.5%; text-align: left;\">{$usertablephp['th_usertable']['last_visit']}</th>
+</tr>
+\n";
 		while ($row = mysqli_fetch_row($result)) {
 			foreach ($row as $key => $value) {
 				$row[$key] = export_data($value);
 			}
 			echo "
-			<tr>
-				<td style=\"width: 0.2%; text-align: left;\">&nbsp;</td>
-				<td style=\"width: 1.5%; text-align: left;\"><input type=\"checkbox\" name=\"delete_email[]\" value=\"$row[2]\">$row[0]</td>
-                                <td style=\"width: 3.4%; text-align: left;\"><a href=\"$protocol://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
-                                <td style=\"width: 4.6%; text-align: left;\"><a href=\"mailto:$row[2]\">$row[2]</a></td>
-                                <td style=\"width: 2.2; text-align: left;\">$row[3]</td>
-                                <td style=\"width: 2.5%; text-align: left;\">$row[4]</td>
-			</tr>
-			";
+<tr>
+	<td style=\"width: 0.2%; text-align: left;\">&nbsp;</td>
+	<td style=\"width: 1.5%; text-align: left;\"><input type=\"checkbox\" name=\"delete_email[]\" value=\"$row[2]\">$row[0]</td>
+	<td style=\"width: 3.4%; text-align: left;\"><a href=\"$protocol://$server/profiles.php?email=$row[2]\">$row[1]</a></td>
+	<td style=\"width: 4.6%; text-align: left;\"><a href=\"mailto:$row[2]\">$row[2]</a></td>
+	<td style=\"width: 2.2; text-align: left;\">$row[3]</td>
+	<td style=\"width: 2.5%; text-align: left;\">$row[4]</td>
+</tr>
+";
 		}
 		echo '</table>';
 		echo "<div style=\"text-align: center;\"><input type=\"submit\" name=\"delete\" value=\"{$usertablephp['input']['delete']}\"></div>";
