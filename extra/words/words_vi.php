@@ -27,7 +27,7 @@ if ($_SERVER['SCRIPT_NAME'] == '/account/login.php') {
 		'err_email' => "Nhap vao dia chi thu dien tu cua ban! \n",
 		'err_password' => "Nhap vao mat khau cua ban! \n",
 		'err_no_email' => "Dia chi thu dien tu khong co trong CSDL! \n",
-		'err_wrong_auth' => "Mat khau sai, hoac tai khoan cua ban da bi vo hieu hoa! \n",
+		'err_wrong_auth' => "Mat khau sai. \n",
 		'err_tryagain' => "Hay thu lai. \n"
 	];
 
