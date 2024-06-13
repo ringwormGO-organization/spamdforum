@@ -9,7 +9,7 @@ $msg = NULL;
 $ok = FALSE;
 if (isset($_POST['delete'])) {
 	$mypwlvl = $_SESSION['powerlevel'];
-	if (!$mypwlvl >= 100) {
+	if ($mypwlvl < 100) {
 		$msg .= $usertablephp['msg']['err_nopriv'];
 		goto stop;
 	}
