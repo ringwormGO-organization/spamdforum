@@ -12,14 +12,13 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		if (mysqli_num_rows($result) == 1) {
 			$user = mysqli_fetch_assoc($result);
 			foreach ($user as $key => $value) {
-				// these cookies are for easier code writting :)
-				// they are really secure, the server does not care about user-provided cookies
 				$_SESSION[$key] = export_data($value);
 				$_SESSION['ready'] = TRUE;
 			}
 		}
 	} else {
 		$_SESSION = array();
+		$_SESSION['powerlevel'] = 0;
 		global $anonymous_access, $anonymous_page;
 		if ($anonymous_access == false) {
 			if (empty($anonymous_page)) {
