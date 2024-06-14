@@ -58,7 +58,7 @@ if ($assoc['relate_to'] != 0) {
 	echo "<p><a href=\"$protocol://$server/view.php?id={$assoc['relate_to']}\">Tin nhan truoc</a></p>";
 }
 ?>
-<p>chinh sua lan cuoi: <?=$assoc['last_edit'];?></p>
+<pre><a href="<?php echo "$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['last_edit'];?></a></pre>
 <?php
 if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
 echo "
@@ -71,15 +71,18 @@ echo "
 <?php
 $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
-	     . "AND to_addr='{$assoc['to_addr']}'", [$id]);
+	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>Tra loi ($rmsg_count)</h3>";
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
-		echo "<h4><a href=\"$protocol://$server/view.php?" .
-		     "id={$rmsg['msg_id']}\">{$rmsg['subject']}</a></h4>";
+		echo "<h4>{$rmsg['subject']}</h4>";
 		echo "<p>Boi {$rmsg['from_addr']}<br></p>";
-		echo "<p>{$rmsg['body']}<br><br></p>";
+		echo "<p>{$rmsg['body']}</p>";
+		echo "<pre><a href=\"$protocol://$server/view.php?" .
+		     "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a>
+
+</pre>";
 	}
 }
 ?>
