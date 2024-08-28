@@ -34,7 +34,7 @@ foreach ($assoc as $k => $value) {
  * \\2 for the protocol, \\1 for protocol with ://
  */
 $urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,6}"
-. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.~?@\-\/]*)";
+. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.~?@\-\/]*)?";
 
 $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 	      str_replace("&amp;", "&", $assoc['body'])), false);
