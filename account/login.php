@@ -42,7 +42,7 @@ if (!$assoc) {
 	$msg .= $loginphp['msg']['err_no_email'];
 	goto html;
 }
-if (password_verify($password, $assoc['password'])) {
+if (!password_verify($password, $assoc['password'])) {
 	$msg .= $loginphp['msg']['err_wrong_auth'];
 	goto html;
 }
