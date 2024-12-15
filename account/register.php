@@ -1,10 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-?>
-<?php
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 function valid_name($name)
 {
 	$pattern = "/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,127}$/iu";
@@ -29,8 +25,7 @@ function valid_passwd($passwd)
 	}
 	return false;
 }
-?>
-<?php
+
 if (isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/index.php");
 	exit();
@@ -70,7 +65,7 @@ if (isset($_POST['register'])) {
 		goto html;
 	}
 	$password = secure_hash($passwd, PASSWORD_BCRYPT);
-	$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?);";
+	$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?)";
 	if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
 		$_SESSION['auth'] = $password;
 		header("Location: $protocol://$server/index.php");
@@ -82,8 +77,8 @@ if (isset($_POST['register'])) {
 }
 ?>
 <?php                                 
-	html:
-	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+html:
+include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>                                                                      
 <h1><?=$registerphp['h1_title']; ?></h1>
 <h2><?=$registerphp['h2_info']; ?></h2>
