@@ -1,10 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-?>
-<?php
 if (!isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/account/login.php");
 	exit;
@@ -30,10 +26,10 @@ if (!isset($_POST['send'])) {
 /* Spam fighting framework! */
 $timecond = "last_edit > SUBDATE(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)";
 /* Count msg that have the current related_id the user sent in an hour */
-$rq = "SELECT COUNT(*) FROM msgtable WHERE from_addr='{$_SESSION['email']}' " .
+$rq = "SELECT COUNT(*) FROM $msgtable WHERE from_addr='{$_SESSION['email']}' ".
       "AND relate_to=? AND $timecond";
 /* Count msg that the user sent in an hour */
-$aq = "SELECT COUNT(*) FROM msgtable WHERE from_addr='{$_SESSION['email']}' " .
+$aq = "SELECT COUNT(*) FROM $msgtable WHERE from_addr='{$_SESSION['email']}' ".
       "AND $timecond";
 $limit_query = $rq . " UNION ALL " . $aq;
 unset($rq);
@@ -95,10 +91,7 @@ $r_pwlvl = -1;
 $w_pwlvl = 0;
 if (!empty($_POST['r_pwlvl'])) {
 	if (($r_pwlvl = intval($_POST['r_pwlvl'])) > $_SESSION['powerlevel']) {
-		/*
-		 * Creating msgs that the author can't even access
-		 * is disallowed.
-		 */
+		/* Disallow creating msgs that the author can't even access */
 		$r_pwlvl = $_SESSION['powerlevel'];
 	}
 }
@@ -127,8 +120,8 @@ if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
 mysqli_close($dbc);
 ?>
 <?php
-$title = "Viet tin nhan";
 html:
+$title = "Viet tin nhan";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
