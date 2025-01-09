@@ -4,7 +4,7 @@ DEFINE ('DB_PW', 'spamdforum');
 DEFINE ('DB_HOST', 'p:127.0.0.1');
 DEFINE ('DB_NAME', 'spamdforum');
 $table = 'forum_user';
-$msgtable = 'msgtable';
+$msgtable = 'forum_msg';
 
 $dbc = mysqli_init();
 
