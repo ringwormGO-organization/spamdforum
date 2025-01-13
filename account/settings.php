@@ -82,8 +82,8 @@ if (isset($msg)) {
 	<td><label for="password"><input id="auth" type="password" name="auth" size="64" maxlength="64"></label></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?=$settingsphp['form_input']['name']; ?>:</th>
-	<td><label for="name"><input id="email_readonly" type="text" name="email_readonly" size="64" maxlength="64" value="<?=export_data($userdata['email']); ?>" readonly="readonly"></label></td>
+	<th style="width:30%;"><?=$settingsphp['form_input']['email']; ?>:</th>
+	<td><label for="email_readonly"><input id="email_readonly" type="text" name="email_readonly" size="64" maxlength="64" value="<?=export_data($userdata['email']); ?>" readonly="readonly"></label></td>
 </tr>
 <tr>
 	<th style="width:30%;"><?=$settingsphp['form_input']['name']; ?>:</th>
