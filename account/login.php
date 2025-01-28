@@ -35,18 +35,16 @@ if (! ($email && $password)) {
 	$msg .= $loginphp['msg']['err_tryagain'];
 	goto html;
 }
-$query = "SELECT password, powerlevel FROM $table WHERE email=?";
-$result = mysqli_execute_query($dbc, $query, [$email]);
-$assoc = mysqli_fetch_assoc($result);
-if (!$assoc) {
+$uinfo = get_user_info("WHERE email=?", "password, powerlevel", [$email]);
+if (!$uinfo) {
 	$msg .= $loginphp['msg']['err_no_email'];
 	goto html;
 }
-if (!password_verify($password, $assoc['password'])) {
+if (!password_verify($password, $uinfo['password'])) {
 	$msg .= $loginphp['msg']['err_wrong_auth'];
 	goto html;
 }
-$_SESSION['auth'] = $assoc['password'];
+$_SESSION['auth'] = $uinfo['password'];
 header("Location: $protocol://$server/index.php");
 exit;
 mysqli_free_result($result);

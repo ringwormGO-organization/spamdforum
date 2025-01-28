@@ -7,11 +7,10 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 	global $server, $protocol, $table;
 	// this function checks if the $_SESSION['auth'] matches the PASSWORD in the database table.
 	if (isset($auth)) {
-		$query = "SELECT user_id, email, name, powerlevel FROM $table WHERE password=?";
-		$result = mysqli_execute_query($dbc, $query, [$auth]);
-		if (mysqli_num_rows($result) == 1) {
-			$user = mysqli_fetch_assoc($result);
-			foreach ($user as $key => $value) {
+		$uinfo = get_user_info("WHERE password=?", "user_id, email, "
+				     . "name, powerlevel", [$auth]);
+		if ($uinfo) {
+			foreach ($uinfo as $key => $value) {
 				$_SESSION[$key] = export_data($value);
 				$_SESSION['ready'] = TRUE;
 			}

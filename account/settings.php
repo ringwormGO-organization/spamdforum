@@ -65,13 +65,7 @@ if (isset($msg)) {
 <?php
 	/* Fetch current data */
 	$query = "SELECT email, name FROM $table WHERE password=?";
-	/*
-	 * Maybe, because $auth is safe: base64 encoded of password (hashed!!)
-	 * and stored in $_SESSION
-	 */
-	/* $query = "SELECT * FROM $table WHERE password=$auth"; */
-	/* $userdata = mysqli_fetch_assoc(mysqli_query($query, $dbc)); */
-	$userdata = mysqli_fetch_assoc(mysqli_execute_query($dbc, $query, [$auth]));
+	$uinfo = get_user_info("WHERE password=?", "*", [$auth]);
 ?>
 <form name="register" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 <fieldset>
@@ -83,11 +77,11 @@ if (isset($msg)) {
 </tr>
 <tr>
 	<th style="width:30%;"><?=$settingsphp['form_input']['email']; ?>:</th>
-	<td><label for="email_readonly"><input id="email_readonly" type="text" name="email_readonly" size="64" maxlength="64" value="<?=export_data($userdata['email']); ?>" readonly="readonly"></label></td>
+	<td><label for="email_readonly"><input id="email_readonly" type="text" name="email_readonly" size="64" maxlength="64" value="<?=export_data($uinfo['email']); ?>" readonly="readonly"></label></td>
 </tr>
 <tr>
 	<th style="width:30%;"><?=$settingsphp['form_input']['name']; ?>:</th>
-	<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?=export_data($userdata['name']); ?>"></label></td>
+	<td><label for="name"><input id="name" type="text" name="name" size="64" maxlength="64" value="<?=export_data($uinfo['name']); ?>"></label></td>
 </tr>
 <tr>
 	<th style="width:30%;"><?=$settingsphp['form_input']['password']; ?>:</th>

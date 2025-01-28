@@ -39,7 +39,8 @@ $urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,6}"
 $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 	      str_replace("&amp;", "&", $assoc['body'])), false);
 
-$author = mysqli_fetch_assoc(mysqli_execute_query($dbc, "SELECT name, powerlevel FROM $table WHERE email='{$assoc['from_addr']}'"));
+$author = get_user_info("WHERE email=?", "name, powerlevel",
+			[$assoc['from_addr']]);
 ?>
 <?php
 $title = $assoc['subject'];
