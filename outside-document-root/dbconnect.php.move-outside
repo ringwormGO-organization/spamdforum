@@ -13,7 +13,7 @@ if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 }
 
 function 
-check_exist_email($email, $dbc) 
+email_exists($email, $dbc) 
 {
 	global $table;
 	$query = "SELECT user_id FROM $table WHERE email=?";
