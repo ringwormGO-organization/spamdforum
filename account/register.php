@@ -60,7 +60,7 @@ if (isset($_POST['register'])) {
 		$msg .= $registerphp['msg']['err_tryagain'];
 		goto html;
 	}
-	if (check_exist_email($email, $dbc)) {
+	if (email_exists($email, $dbc)) {
 		$msg .= $registerphp['msg']['err_email_existed'];
 		goto html;
 	}
