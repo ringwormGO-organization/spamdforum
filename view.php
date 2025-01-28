@@ -28,7 +28,7 @@ foreach ($assoc as $k => $value) {
 /*
  * Groups are separated extensively so admins can config how they want
  * links to displays.
- * \\0 full url for sure.
+ * \\0 full url.
  * \\3 for hostname
  * \\9 for path
  * \\2 for the protocol, \\1 for protocol with ://
@@ -43,6 +43,7 @@ $author = get_user_info("WHERE email=?", "name, powerlevel",
 			[$assoc['from_addr']]);
 ?>
 <?php
+$assoc['subject'] = str_replace("&amp;", "&", $assoc['subject']);
 $title = $assoc['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
