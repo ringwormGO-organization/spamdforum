@@ -16,14 +16,14 @@ if (isset($_SESSION['auth'])) {
 if (!isset($_POST['login'])) {
 	goto html;
 }
-if (!empty($_POST['email'])) {
+if ($_POST['email']) {
 	$email = $_POST['email'];
 } else {
 	$email = FALSE;
 	$msg .= $loginphp['msg']['err_email'];
 }
 
-if (!empty($_POST['password'])) {
+if ($_POST['password']) {
 	$password = $_POST['password'];
 
 } else {
@@ -47,8 +47,6 @@ if (!password_verify($password, $uinfo['password'])) {
 $_SESSION['auth'] = $uinfo['password'];
 header("Location: $protocol://$server/index.php");
 exit;
-mysqli_free_result($result);
-mysqli_close($dbc);
 ?>
 <?php
 	html:

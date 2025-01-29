@@ -73,7 +73,6 @@ if (isset($_POST['register'])) {
 	} else {
 		$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
 	}
-	mysqli_close($dbc);
 }
 ?>
 <?php                                 
