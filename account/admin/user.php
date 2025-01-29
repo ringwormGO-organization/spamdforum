@@ -95,7 +95,6 @@ if (isset($_POST['delete'])) {
 		echo '</table>';
 		echo "<div style=\"text-align: center;\"><input type=\"submit\" name=\"delete\" value=\"{$usertablephp['input']['delete']}\"></div>";
 		echo '</form>';
-		mysqli_free_result($result);
 	} else {
 		echo "<p>{$usertablephp['user_num_msg'][1]}</p>";
 	}

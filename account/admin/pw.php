@@ -93,12 +93,10 @@ if ($num > 0) {
 	echo '</table>';
 	echo "<div style=\"text-align:center;\"><input type=\"submit\" name=\"update_power\" value=\"{$pwphp['input']['update_power']}\"></div>";
 	echo '</form>';
-	mysqli_free_result($result);
 } else {
 	echo "<p>{$pwphp['user_num_msg'][1]}</p>";
 }
 
-mysqli_close($dbc);
 ?>
 
 <?php
