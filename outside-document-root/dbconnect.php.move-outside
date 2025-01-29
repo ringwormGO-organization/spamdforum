@@ -28,21 +28,7 @@ email_exists($email, $dbc)
 	}
 }
 
-function escape_data($data, $trim=TRUE) {
-	global $dbc;
-
-	if ($trim=FALSE) {
-		return htmlspecialchars($data);
-	} else 
-
-	return htmlspecialchars(trim($data));
-}
-
-function export_data($data, $trim=TRUE) {
-	if ($trim=FALSE) {
-		return htmlspecialchars(stripslashes($data));
-	} else 
-
-	return htmlspecialchars(stripslashes(trim($data)));
+function export_data($data) {
+	return htmlspecialchars($data);
 }
 ?>
