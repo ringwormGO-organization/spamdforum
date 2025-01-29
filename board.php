@@ -79,7 +79,7 @@ if (!empty($_POST['subject']) && strlen($_POST['subject']) < 256 &&
 	$subject = FALSE;
 	$msg .= "Chu de tin nhan khong hop le.\n";
 }
-if (!empty($_POST['body']) && strlen($_POST['body']) < 32768 &&
+if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
     preg_match($good_chars, $_POST['body'])) {
 	$body = $_POST['body'];
 } else {
@@ -117,7 +117,6 @@ if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
 } else {
 	$msg .= "May chu hien dang gap truc trac. Xin loi vi su co nay.\n";
 }
-mysqli_close($dbc);
 ?>
 <?php
 html:
