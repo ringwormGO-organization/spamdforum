@@ -17,7 +17,6 @@ if (isset($_POST['delete'])) {
 		goto stop;
 	}
 	foreach ($_POST['delete_email'] as $key => $email) {
-		$email = escape_data($email);
 		$query = "SELECT powerlevel FROM $table WHERE email=?";
 		$result = mysqli_execute_query($dbc, $query, [$email]);
 		if (mysqli_num_rows($result) < 1) {

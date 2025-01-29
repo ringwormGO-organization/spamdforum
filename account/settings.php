@@ -14,7 +14,7 @@ if (isset($_POST['update_info'])) {
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 	$msg = NULL;
 	if (! (!empty($_POST['auth']) &&
-	    password_verify(escape_data($_POST['auth']), $_SESSION['auth']))) {
+	    password_verify($_POST['auth'], $_SESSION['auth']))) {
 		$msg .= "Mat khau hien tai khong dung. \n";
 		goto stop;
 	}
@@ -24,7 +24,7 @@ if (isset($_POST['update_info'])) {
 			$msg .= $settingsphp['msg']['err_name'];
 			goto stop;
 		}
-		$name = escape_data($_POST['name']);
+		$name = $_POST['name'];
 		$query = "UPDATE $table SET name=? WHERE password='$auth'";
 		if (mysqli_execute_query($dbc, $query, [$name])) {
 			$msg .= "Ten cua ban da duoc thay doi. \n";
@@ -40,8 +40,7 @@ if (isset($_POST['update_info'])) {
 		    $_POST['password'])) {
 			$msg .= $settingsphp['msg']['err_password'];
 		}
-		$password = secure_hash(escape_data($_POST['password']),
-					PASSWORD_BCRYPT);
+		$password = secure_hash($_POST['password'], PASSWORD_BCRYPT);
 		$query = "UPDATE $table SET password=? WHERE password='$auth'";
 		if (mysqli_execute_query($dbc, $query, [$password])) {
 			$_SESSION['auth'] = $password;

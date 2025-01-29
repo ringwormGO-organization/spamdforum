@@ -17,8 +17,7 @@ if (! (isset($_POST['update_power']) && isset($_POST['powerlevel']))) {
 $need_msg = TRUE;
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 foreach($_POST['powerlevel'] as $email => $powerlevel) {
-	$email = escape_data($email);
-	$powerlevel = intval(escape_data($powerlevel));
+	$powerlevel = intval($powerlevel);
 	if (! ($powerlevel <= $mypwlvl)) {
 		$msg .= $pwphp['msg']['err_priv_unmet'];
 		goto html;

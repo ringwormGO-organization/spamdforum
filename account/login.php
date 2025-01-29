@@ -17,14 +17,14 @@ if (!isset($_POST['login'])) {
 	goto html;
 }
 if (!empty($_POST['email'])) {
-	$email = escape_data($_POST['email']);
+	$email = $_POST['email'];
 } else {
 	$email = FALSE;
 	$msg .= $loginphp['msg']['err_email'];
 }
 
 if (!empty($_POST['password'])) {
-	$password = escape_data($_POST['password']);
+	$password = $_POST['password'];
 
 } else {
 	$password = FALSE;
