@@ -22,6 +22,8 @@ if ($assoc['r_pwlvl'] > 0 && !isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/account/login.php");
 	exit;
 }
+$author = get_user_info("WHERE email=?", "name, powerlevel",
+			[$assoc['from_addr']]);
 foreach ($assoc as $k => $value) {
 	$assoc[$k] = export_data($value);
 }
@@ -37,29 +39,25 @@ $urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,6}"
 . "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?";
 
 $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
-	      str_replace("&amp;", "&", $assoc['body'])), false);
-
-$author = get_user_info("WHERE email=?", "name, powerlevel",
-			[$assoc['from_addr']]);
+	      $assoc['body']), false);
 ?>
 <?php
-$assoc['subject'] = str_replace("&amp;", "&", $assoc['subject']);
 $title = $assoc['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
 {
 ?>
 <h1><?=$assoc['subject']; ?></h1>
+<?php
+if ($assoc['relate_to'] != 0) {
+	echo "<p><a href=\"$protocol://$server/view.php?id={$assoc['relate_to']}\">(Tin nhan truoc)</a></p>";
+}
+?>
 <p><?php echo "Boi " . 
 "<a href=\"$protocol://$server/profiles.php?email={$assoc['from_addr']}\">" .
 "{$author['name']}</a> " .
 "&lt;<a href=\"mailto:{$assoc['from_addr']}\">{$assoc['from_addr']}</a>&gt; ";
 ?></p>
-<?php
-if ($assoc['relate_to'] != 0) {
-	echo "<p><a href=\"$protocol://$server/view.php?id={$assoc['relate_to']}\">Tin nhan truoc</a></p>";
-}
-?>
 <pre><a href="<?php echo "$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['last_edit'];?></a></pre>
 <?php
 if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
