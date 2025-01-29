@@ -76,9 +76,12 @@ $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>Tra loi ($rmsg_count)</h3>";
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
+		foreach ($rmsg as $k => $value) {
+			$rmsg[$k] = export_data($value);
+		}
 		echo "<h4>{$rmsg['subject']}</h4>";
 		echo "<p>Boi {$rmsg['from_addr']}<br></p>";
-		echo "<p>{$rmsg['body']}</p>";
+		echo "<p>" . nl2br($rmsg['body'], false) . "</p>";
 		echo "<pre><a href=\"$protocol://$server/view.php?" .
 		     "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a>
 
