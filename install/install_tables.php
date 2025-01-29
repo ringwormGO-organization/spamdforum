@@ -61,8 +61,7 @@ KEY (subject),
 KEY (from_addr),
 KEY (to_addr),
 KEY (r_pwlvl),
-KEY (w_pwlvl),
-KEY (x_pwlvl)
+KEY (w_pwlvl)
 ) ENGINE={$_POST['engine']}";
 
 $adminaccount = "INSERT INTO $table (name, email, password, powerlevel, " .
