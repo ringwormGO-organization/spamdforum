@@ -11,11 +11,14 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 				     . "name, powerlevel", [$auth]);
 		if ($uinfo) {
 			foreach ($uinfo as $key => $value) {
-				$_SESSION[$key] = export_data($value);
+				$_SESSION[$key] = $value;
 				$_SESSION['ready'] = TRUE;
 			}
+		} else {
+			goto logout;
 		}
 	} else {
+		logout:
 		$_SESSION = array();
 		$_SESSION['powerlevel'] = 0;
 		global $anonymous_access, $anonymous_page;
