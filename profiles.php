@@ -10,30 +10,29 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 <?php
 if (!empty($_GET['email'])) {
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
-	$email = escape_data($_GET['email']);
-	$query = "SELECT user_id, name, powerlevel,
-		reg_date, last_visit FROM forum_user WHERE email=?";
-	$result = mysqli_execute_query($dbc, $query, [$email]);
-	if (mysqli_num_rows($result) < 1) {
+	$email = $_GET['email'];
+	$uinfo = get_user_info("WHERE email=?", "user_id, name, powerlevel, "
+			     . "reg_date, last_visit", [$email]);
+	if (!$uinfo) {
 		echo "<h3>{$profilesphp['err_not_found']}</h3>";
 		goto stop;
 	}
-	$uinfo = mysqli_fetch_row($result);
 	foreach ($uinfo as $key => $value) {
 		$uinfo[$key] = export_data($value);
 	}
-	if ($uinfo[2] >= 0) {
+	if ($uinfo['powerlevel'] >= 0) {
 		echo "<h2><a href=\"$protocol://$server/profiles.php" .
-		    "?email=$email\">$uinfo[1]</a> ($uinfo[2]) " .
-		    "&lt;<a href=\"mailto:$email\">$email</a>&gt;</h2>";
+		    "?email=$email\">{$uinfo['name']}</a> "
+		  . "({$uinfo['powerlevel']}) "
+		  . "&lt;<a href=\"mailto:$email\">$email</a>&gt;</h2>";
 	} else {
 		echo "<h2><del><a href=\"$protocol://$server/" .
-		    "profiles.php?email=$email\">$uinfo[1]</a>" .
-		    "</del> ($uinfo[2]) &lt;<a href=\"mailto:$email\">" .
+		    "profiles.php?email=$email\">{$uinfo['powerlevel']}</a>" .
+		    "</del> ({$uinfo['name']}) &lt;<a href=\"mailto:$email\">" .
 		    "$email</a>&gt;</h2>";
 	}
-	echo "<h3>{$profilesphp['reg_date']}: {$uinfo[3]}</h3>";
-	echo "<p>{$profilesphp['last_visit']}: {$uinfo[4]}</p>";
+	echo "<h3>{$profilesphp['reg_date']}: {$uinfo['reg_date']}</h3>";
+	echo "<p>{$profilesphp['last_visit']}: {$uinfo['last_visit']}</p>";
 }
 ?>
 <?php
