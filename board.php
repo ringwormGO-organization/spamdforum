@@ -67,21 +67,21 @@ if ($rid != 0) {
 $good_chars = "/[\x20-\x7F\x{00C0}-\x{1EF9}]/iu";
 /* Alphanumeric plus Vietnamese characters plus some other character idk */
 if (!empty($_POST['to'])) {
-	$to = escape_data($_POST['to']);
+	$to = $_POST['to'];
 } else {
 	$to = FALSE;
 	$msg .= "Nhap vao chu de hoac email nguoi dung!\n";
 }
 if (!empty($_POST['subject']) && strlen($_POST['subject']) < 256 &&
     preg_match($good_chars, $_POST['subject'])) {
-	$subject = escape_data($_POST['subject']);
+	$subject = trim($_POST['subject']);
 } else {
 	$subject = FALSE;
 	$msg .= "Chu de tin nhan khong hop le.\n";
 }
 if (!empty($_POST['body']) && strlen($_POST['body']) < 32768 &&
     preg_match($good_chars, $_POST['body'])) {
-	$body = escape_data($_POST['body']);
+	$body = $_POST['body'];
 } else {
 	$body = FALSE;
 	$msg .= "Tin nhan khong hop le.\n";
