@@ -40,16 +40,16 @@ if (isset($_POST['register'])) {
 	$msg = NULL;
 	$name = $email = $password = false;
 
-	if (!($name = valid_name($_POST['name']))) {
+	if (($name = valid_name($_POST['name'])) == false) {
 		$msg .= $registerphp['msg']['err_name'];
 	}
 
-	if (!($email = valid_email($_POST['email']))) {
+	if (($email = valid_email($_POST['email'])) == false) {
 		$msg .= $registerphp['msg']['err_email'];
 	}
 
 	if ($_POST['password'] == $_POST['verify']) {
-		if (!($passwd = valid_passwd($_POST['password']))) {
+		if (($passwd = valid_passwd($_POST['password'])) == false) {
 			$msg .= $registerphp['msg']['err_password'];
 		}
 	} else {
