@@ -73,8 +73,9 @@ if (!mysqli_query($dbc, $msgquery))
 	die("error while creating msg table: " . mysqli_error($dbc));
 $pwhash = password_hash($_POST['admin_password'], PASSWORD_BCRYPT,
     ['cost' => 13]);
+$user_ip = inet_pton($_SERVER['REMOTE_ADDR']);
 if (!mysqli_execute_query($dbc, $adminaccount, ["Admin", $_POST['admin_email'],
-    $pwhash, 100, $_SERVER['REMOTE_ADDR']]))
+    $pwhash, 100, $user_ip]))
 	die("error while creating admin user: " . mysqli_error($dbc));
 die('the operation completed successfully, please delete this file and everything else on the install directory');
 ?>

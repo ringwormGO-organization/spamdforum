@@ -1,6 +1,15 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+function newuser($dbc, $uinfo) {
+	global $table;
+	$query = "INSERT INTO $table (name, email, password, powerlevel, "
+		."reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), "
+		."NOW(), ?)";
+
+	return mysqli_execute_query($dbc, $query, $uinfo);
+}
+
 function valid_name($name) {
 	$pattern = "/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,127}$/iu";
 	if (preg_match($pattern, $name)) {
@@ -16,7 +25,7 @@ function valid_email($email) {
 
 	return false;
 }
-function valid_passwd($passwd) { {
+function valid_passwd($passwd) {
 	if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $passwd)) {
 		return $passwd;
 	}
@@ -62,8 +71,8 @@ if (isset($_POST['register'])) {
 		goto html;
 	}
 	$password = secure_hash($passwd, PASSWORD_BCRYPT);
-	$query = "INSERT INTO $table (name, email, password, powerlevel, reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), NOW(), ?)";
-	if (mysqli_execute_query($dbc, $query, [$name, $email, $password, 0, $_SERVER['REMOTE_ADDR']])) {
+	$user_ip = inet_pton($_SERVER['REMOTE_ADDR']);
+	if (newuser($dbc, [$name, $email, $password, 0, $user_ip])) {
 		$_SESSION['auth'] = $password;
 		header("Location: $protocol://$server/index.php");
 		exit();
