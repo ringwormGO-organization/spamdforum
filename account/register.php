@@ -1,16 +1,14 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-function valid_name($name)
-{
+function valid_name($name) {
 	$pattern = "/^([\x20-\x7E\x{00C0}-\x{1EF9}]*){4,127}$/iu";
 	if (preg_match($pattern, $name)) {
 		return $name;
 	}
 	return false;
 }
-function valid_email($email)
-{
+function valid_email($email) {
 	if ((filter_var(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL),
 	    FILTER_VALIDATE_EMAIL) && (strlen($email) < 127))) { 
 		return $email;
@@ -18,8 +16,7 @@ function valid_email($email)
 
 	return false;
 }
-function valid_passwd($passwd)
-{
+function valid_passwd($passwd) { {
 	if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $passwd)) {
 		return $passwd;
 	}
