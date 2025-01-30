@@ -29,6 +29,6 @@ if (!in_array($_SERVER['SCRIPT_NAME'], $skip_scripts)) {
 		$auth = &$_SESSION['auth'];
 	}
 	security_validateupdateinfo($dbc, $auth);
-	security_authlastvisit($dbc, $auth, $_SERVER['REMOTE_ADDR']);
+	security_authlastvisit($dbc, $auth, inet_pton($_SERVER['REMOTE_ADDR']));
 }
 ?>
