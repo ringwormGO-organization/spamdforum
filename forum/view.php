@@ -7,7 +7,7 @@ if (!isset($id))
 	exit;
 $result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable WHERE msg_id=?", [$id]);
 if (mysqli_num_rows($result) != 1) {
-	header("Location: $protocol://$server/index.php");
+	header("Location: $protocol://$server/forum/");
 	exit;
 }
 $assoc = mysqli_fetch_assoc($result);
@@ -45,7 +45,8 @@ if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
 <h1><?=$assoc['subject']; ?></h1>
 <?php
 if ($assoc['relate_to'] != 0) {
-	echo "<p><a href=\"$protocol://$server/view.php?id={$assoc['relate_to']}\">(Tin nhan truoc)</a></p>";
+	echo "<p><a href=\"$protocol://$server/forum/index.php?id="
+	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>";
 }
 ?>
 <p><?php echo "Boi " . 
@@ -54,13 +55,6 @@ if ($assoc['relate_to'] != 0) {
 "&lt;<a href=\"mailto:{$assoc['from_addr']}\">{$assoc['from_addr']}</a>&gt; ";
 ?></p>
 <pre><a href="<?php echo "$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['last_edit'];?></a></pre>
-<?php
-if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
-echo "
-<p><a href=\"$protocol://$server/board.php?relate_to=$id\">Viet tra loi</a></p>
-";
-}
-?>
 <p><br><?=$body;?></p>
 <hr>
 <?php
@@ -69,6 +63,10 @@ $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>Tra loi ($rmsg_count)</h3>";
+if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
+	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
+	   . "Viet tra loi</a></p>";
+}
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
 		foreach ($rmsg as $k => $value) {
@@ -77,7 +75,7 @@ if ($rmsg_count > 0) {
 		echo "<h4>{$rmsg['subject']}</h4>";
 		echo "<p>Boi {$rmsg['from_addr']}<br></p>";
 		echo "<p>" . nl2br($rmsg['body'], false) . "</p>";
-		echo "<pre><a href=\"$protocol://$server/view.php?" .
+		echo "<pre><a href=\"$protocol://$server/forum/index.php?" .
 		     "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a>
 
 </pre>";
