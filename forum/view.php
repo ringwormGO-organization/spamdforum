@@ -1,15 +1,10 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
 <?php
-if (empty($_GET['id'])) {
-	header("Location: $protocol://$server/index.php");
+if (!isset($id))
 	exit;
-}
-$id = $_GET['id'];
 $result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable WHERE msg_id=?", [$id]);
 if (mysqli_num_rows($result) != 1) {
 	header("Location: $protocol://$server/index.php");

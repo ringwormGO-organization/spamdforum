@@ -107,7 +107,7 @@ if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
 			 $r_pwlvl, $w_pwlvl])) {
 	/* Redirect to the new msg if success */
 	$id = mysqli_insert_id($dbc);
-	header("Location: $protocol://$server/view.php?id=$id");
+	header("Location: $protocol://$server/forum/index.php?id=$id");
 	exit;
 } else {
 	$msg .= "May chu hien dang gap truc trac. Xin loi vi su co nay.\n";
