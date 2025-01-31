@@ -22,7 +22,6 @@ if (!empty($anonymous_page)) {
 }
 
 if (!in_array($_SERVER['SCRIPT_NAME'], $skip_scripts)) {
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/security.php");
 	$auth = NULL;
 	if (isset($_SESSION['auth'])) {

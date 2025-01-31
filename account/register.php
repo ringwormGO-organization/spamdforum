@@ -41,7 +41,6 @@ if (!$registration_status) {
 }
 
 if (isset($_POST['register'])) {
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 	include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 	$msg = NULL;
 	$name = $email = $password = false;

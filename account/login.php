@@ -5,7 +5,6 @@
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
 <?php
-require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 $msg = NULL;
 include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 if (isset($_SESSION['auth'])) {

@@ -9,7 +9,6 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
 if (!empty($_GET['email'])) {
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 	$email = $_GET['email'];
 	$uinfo = get_user_info("WHERE email=?", "user_id, name, powerlevel, "
 			     . "reg_date, last_visit", [$email]);
