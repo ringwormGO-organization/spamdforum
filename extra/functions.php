@@ -8,6 +8,12 @@ function get_user_info($cond, $fields, $arr) {
 	$uinfo = mysqli_fetch_assoc(mysqli_execute_query($dbc, $query, $arr));
 	return $uinfo;
 }
+function get_msg_info($cond, $fields, $arr) {
+	global $dbc, $msgtable;
+	$query = "SELECT " . $fields . " FROM $msgtable " . $cond;
+	$msginfo = mysqli_fetch_assoc(mysqli_execute_query($dbc, $query, $arr));
+	return $msginfo;
+}
 function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	switch ($algo) {
 	case PASSWORD_ARGON2ID:

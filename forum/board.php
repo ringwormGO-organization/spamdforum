@@ -47,14 +47,12 @@ unset($limit_query);
 mysqli_free_result($result);
 
 if ($rid != 0) {
-	$find_r = mysqli_execute_query($dbc, "SELECT w_pwlvl " .
-		  "FROM $msgtable WHERE msg_id=$rid");
-	if (mysqli_num_rows($find_r) != 1) {
+	$reply_msg = get_msg_info("WHERE msg_id=?", "w_pwlvl", [$rid]);
+	if (!$reply_msg) {
 		$msg .= "Khong tim thay bai viet ban dang de cap!\n";
 		goto html;
 	}
-	$r_info = mysqli_fetch_assoc($find_r);
-	if ($r_info['w_pwlvl'] > $_SESSION['powerlevel']) {
+	if ($reply_msg['w_pwlvl'] > $_SESSION['powerlevel']) {
 		$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
 		goto html;
 	}
@@ -123,12 +121,11 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 $rr_pwlvl = -1;
 $rw_pwlvl = 0;
 if ($rid) {
-	$q = "SELECT to_addr, r_pwlvl, w_pwlvl FROM $msgtable WHERE msg_id=?";
-	$r_result = mysqli_execute_query($dbc, $q, [$rid]);
-	if (mysqli_num_rows($r_result) != 1) {
+	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
+			  . "w_pwlvl", [$rid]);
+	if (!$rmsg) {
 		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
 	} else {
-		$rmsg = mysqli_fetch_assoc($r_result);
 		$to = export_data($rmsg['to_addr']);
 		$rr_pwlvl = $rmsg['r_pwlvl'];
 		$rw_pwlvl = $rmsg['w_pwlvl'];
