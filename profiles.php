@@ -27,8 +27,8 @@ if (!empty($_GET['email'])) {
 		  . "&lt;<a href=\"mailto:$email\">$email</a>&gt;</h2>";
 	} else {
 		echo "<h2><del><a href=\"$protocol://$server/" .
-		    "profiles.php?email=$email\">{$uinfo['powerlevel']}</a>" .
-		    "</del> ({$uinfo['name']}) &lt;<a href=\"mailto:$email\">" .
+		    "profiles.php?email=$email\">{$uinfo['name']}</a>" .
+		    "</del> ({$uinfo['powerlevel']}) &lt;<a href=\"mailto:$email\">" .
 		    "$email</a>&gt;</h2>";
 	}
 	echo "<h3>{$profilesphp['reg_date']}: {$uinfo['reg_date']}</h3>";
