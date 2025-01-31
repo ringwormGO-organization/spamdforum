@@ -44,14 +44,33 @@ if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
 <?php
 if ($assoc['relate_to'] != 0) {
 	echo "<p><a href=\"$protocol://$server/forum/index.php?id="
-	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>";
+	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>\n";
 }
 ?>
-<p><?php echo "Boi " . 
-"<a href=\"$protocol://$server/profiles.php?email={$assoc['from_addr']}\">" .
-"{$author['name']}</a> " .
-"&lt;<a href=\"mailto:{$assoc['from_addr']}\">{$assoc['from_addr']}</a>&gt; ";
-?></p>
+<p><?php echo "{$assoc['votes']}| ";
+$q = "SELECT amount FROM $votetable WHERE msg_id=? AND author=?";
+$myuid = $_SESSION['user_id'];
+$myvote = mysqli_fetch_row(mysqli_execute_query($dbc, $q, [$id, $myuid]));
+if (!isset($myvote[0]) || $myvote[0] == 0) {
+	echo "<a href=\"/forum/vote.php?id=$id&&amount=1\">+1 </a>\n";
+	echo "<a href=\"/forum/vote.php?id=$id&&amount=-1\">-1</a>\n";
+} else {
+	if ($myvote[0] == 1) {
+		echo "<a href=\"/forum/vote.php?id=$id&&amount=0\">+0 </a>\n";
+		echo "<a href=\"/forum/vote.php?id=$id&&amount=-1\">-1</a>\n";
+	} else {
+		echo "<a href=\"/forum/vote.php?id=$id&&amount=1\">+1 </a>\n";
+		echo "<a href=\"/forum/vote.php?id=$id&&amount=0\">-0</a>\n";
+	}
+}
+if (isset($author['name']))
+	echo "Boi <a href=\"/profiles.php?email={$assoc['from_addr']}\">"
+	   . "{$author['name']}</a>\n";
+else
+	echo "<a href=\"mailto:{$assoc['from_addr']}\">"
+	   . "{$assoc['from_addr']}</a>\n";
+?>
+</p>
 <pre><a href="<?php echo "$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['last_edit'];?></a></pre>
 <p><br><?=$body;?></p>
 <hr>
@@ -60,7 +79,7 @@ $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
 	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
-echo "<h3>Tra loi ($rmsg_count)</h3>";
+echo "<h3>$rmsg_count nhan xet</h3>";
 if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
 	   . "Viet tra loi</a></p>";
