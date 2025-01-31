@@ -20,13 +20,13 @@ echo "<table width=\"100%\">
 <tr>
 ";
 if (isset($_SESSION['auth'])) {
-	echo "<td style=\"width: 10%;\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td>
+	echo "<td style=\"width: 10%;\"><a href=\"/index.php\">$indexphp_link_index</a></td>
 	<td><a href=\"$protocol://$server/forum/board.php\">Viet tin nhan</a></td>
-	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/index.php\">$indexphp_link_account</a></td>";
+	<td style=\"text-align: right;\"><a href=\"/account/index.php\">$indexphp_link_account</a></td>";
 } else {
-	echo "<td style=\"width: 84%;\"><a href=\"$protocol://$server/index.php\">$indexphp_link_index</a></td>
-	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/login.php\">Dang nhap </a></td>
-	<td style=\"text-align: right;\"><a href=\"$protocol://$server/account/register.php\"> Dang ky </a></td>
+	echo "<td style=\"width: 84%;\"><a href=\"/index.php\">$indexphp_link_index</a></td>
+	<td style=\"text-align: right;\"><a href=\"/account/login.php\">Dang nhap </a></td>
+	<td style=\"text-align: right;\"><a href=\"/account/register.php\"> Dang ky </a></td>
 	";
 }
 echo "
