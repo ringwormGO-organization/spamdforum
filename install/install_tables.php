@@ -31,7 +31,7 @@ if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 
 $userquery = "CREATE TABLE forum_user (
 user_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-name VARCHAR(127) NOT NULL,
+name VARCHAR(127),
 email VARCHAR(127) NOT NULL,
 password VARCHAR(255) NOT NULL,
 powerlevel TINYINT NOT NULL DEFAULT 0,
@@ -52,17 +52,29 @@ subject VARCHAR(255) NOT NULL,
 body MEDIUMTEXT NOT NULL,
 from_addr VARCHAR(127) NOT NULL,
 to_addr VARCHAR(127) NOT NULL,
+votes MEDIUMINT NOT NULL DEFAULT 0,
 r_pwlvl TINYINT NOT NULL,
 w_pwlvl TINYINT NOT NULL,
 last_edit TIMESTAMP NOT NULL,
+created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (msg_id),
 KEY (relate_to),
 KEY (subject),
 KEY (from_addr),
 KEY (to_addr),
 KEY (r_pwlvl),
-KEY (w_pwlvl)
+KEY (w_pwlvl),
+KEY (created_at)
 ) ENGINE={$_POST['engine']}";
+
+$votequery = "CREATE TABLE forum_votes (
+msg_id INT UNSIGNED NOT NULL,
+author MEDIUMINT UNSIGNED NOT NULL,
+amount TINYINT NOT NULL,
+KEY (msg_id),
+KEY (author),
+KEY (amount)
+) engine={$_POST['engine']}";
 
 $adminaccount = "INSERT INTO $table (name, email, password, powerlevel, " .
     "reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), " .
@@ -71,6 +83,8 @@ if (!mysqli_query($dbc, $userquery))
 	die("error while creating user table: " . mysqli_error($dbc));
 if (!mysqli_query($dbc, $msgquery))
 	die("error while creating msg table: " . mysqli_error($dbc));
+if (!mysqli_query($dbc, $votequery))
+	die("error while creating vote table: " . mysqli_error($dbc));
 $pwhash = password_hash($_POST['admin_password'], PASSWORD_BCRYPT,
     ['cost' => 13]);
 $user_ip = inet_pton($_SERVER['REMOTE_ADDR']);
