@@ -5,13 +5,11 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 <?php
 if (!isset($id))
 	exit;
-$result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable WHERE msg_id=?", [$id]);
-if (mysqli_num_rows($result) != 1) {
+$assoc = get_msg_info("WHERE msg_id=?", "*", [$id]);
+if (!$assoc) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
-$assoc = mysqli_fetch_assoc($result);
-mysqli_free_result($result);
 if ($assoc['r_pwlvl'] > 0 && !isset($_SESSION['auth'])) {
 	/* unreadable for "normal" also unreadable for anonymous users */
 	header("Location: $protocol://$server/account/login.php");
