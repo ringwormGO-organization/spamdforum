@@ -7,6 +7,7 @@ if (!isset($_SESSION['auth'])) {
 }
 $msg = NULL;
 $noform = FALSE;
+$to = '';
 $rid = 0;
 if (!empty($_GET['relate_to'])) {
 	$rid = intval($_GET['relate_to']);
@@ -67,7 +68,7 @@ if (!empty($_POST['to'])) {
 	$to = FALSE;
 	$msg .= "Nhap vao chu de hoac email nguoi dung!\n";
 }
-if (!empty($_POST['subject']) && strlen($_POST['subject']) < 256 &&
+if (!empty($_POST['subject']) && mb_strlen($_POST['subject']) < 255 &&
     preg_match($good_chars, $_POST['subject'])) {
 	$subject = trim($_POST['subject']);
 } else {
@@ -119,7 +120,6 @@ $title = "Viet tin nhan";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
-$rto_addr = '';
 $rr_pwlvl = -1;
 $rw_pwlvl = 0;
 if ($rid) {
@@ -129,7 +129,7 @@ if ($rid) {
 		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
 	} else {
 		$rmsg = mysqli_fetch_assoc($r_result);
-		$rto_addr = export_data($rmsg['to_addr']);
+		$to = export_data($rmsg['to_addr']);
 		$rr_pwlvl = $rmsg['r_pwlvl'];
 		$rw_pwlvl = $rmsg['w_pwlvl'];
 	}
@@ -149,11 +149,13 @@ if (!$noform) {
 <tr>
 	<td><b>To:</b></td>
 	<td><input type="text" name="to" size="64" maxlength="128"
-	    value="<?=$rto_addr; ?>"></td>
+	    value="<?=export_data($to); ?>"></td>
 </tr>
 <tr>
 	<td><b>Subject:</b></td>
-	<td><input type="text" name="subject" size="64" maxlength="255"></td>
+	<td><input type="text" name="subject" size="64" maxlength="255"
+	    value="<?php if (!empty($_POST['subject']))
+		   echo export_data($_POST['subject']); ?>"></td>
 </tr>
 <tr>
 	<td><b>R/W level:</b></td>
@@ -167,7 +169,12 @@ if (!$noform) {
 	<td><input type="text" name="relate_id" size="15" value="<?=$rid; ?>"></td>
 </tr>
 </table>
-<p><br><textarea id="body" name="body" rows="30" cols="90"></textarea></p>
+<p><br><textarea id="body" name="body" rows="30" cols="90">
+<?php
+if (!empty($_POST['body']))
+	echo export_data($_POST['body']);
+?>
+</textarea></p>
 <p><input type="submit" name="send" value="Gui!"></p>
 </form>
 </fieldset>
