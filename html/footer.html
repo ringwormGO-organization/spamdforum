@@ -1,3 +1,2 @@
-<hr>
 </body>
 </html>
