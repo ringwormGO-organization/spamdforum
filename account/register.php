@@ -56,9 +56,11 @@ if (isset($_POST['register'])) {
 
 	if ($_POST['password'] == $_POST['verify']) {
 		if (($passwd = valid_passwd($_POST['password'])) == false) {
+			$passwd = FALSE;
 			$msg .= $registerphp['msg']['err_password'];
 		}
 	} else {
+		$passwd = FALSE;
 		$msg .= $registerphp['msg']['err_password_mismatch'];
 	}
 
