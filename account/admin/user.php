@@ -24,7 +24,7 @@ if (isset($_POST['delete'])) {
 			goto stop;
 		}
 		$assoc = mysqli_fetch_assoc($result);
-		if ($assoc['powerlevel'] <= $mypwlvl) {
+		if ($assoc['powerlevel'] >= $mypwlvl) {
 			$msg .= $usertablephp['msg']['err_priv_unmet'];
 			goto stop;
 		}
