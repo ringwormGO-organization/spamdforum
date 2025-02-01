@@ -10,11 +10,6 @@ if (!$assoc) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
-if ($assoc['r_pwlvl'] > 0 && !isset($_SESSION['auth'])) {
-	/* unreadable for "normal" also unreadable for anonymous users */
-	header("Location: $protocol://$server/account/login.php");
-	exit;
-}
 $author = get_user_info("WHERE email=?", "name, powerlevel",
 			[$assoc['from_addr']]);
 foreach ($assoc as $k => $value) {
