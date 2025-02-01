@@ -25,7 +25,8 @@ if (!isset($_POST['send'])) {
 }
 
 /* Spam fighting framework! */
-$timecond = "last_edit > SUBDATE(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)";
+$now = date("Y-m-d H:i:s");
+$timecond = "last_edit > SUBDATE('$now', INTERVAL 1 HOUR)";
 /* Count msg that have the current related_id the user sent in an hour */
 $rq = "SELECT COUNT(*) FROM $msgtable WHERE from_addr='{$_SESSION['email']}' ".
       "AND relate_to=? AND $timecond";
