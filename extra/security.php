@@ -12,7 +12,6 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		if ($uinfo) {
 			foreach ($uinfo as $key => $value) {
 				$_SESSION[$key] = $value;
-				$_SESSION['ready'] = TRUE;
 			}
 		} else {
 			goto logout;
