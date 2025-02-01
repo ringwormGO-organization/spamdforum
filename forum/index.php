@@ -32,7 +32,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 	echo "<h3><a href=\"$protocol://$server/forum/index.php?id=".
 		"{$curmsg['msg_id']}\">{$curmsg['subject']}</a></h3>\n";
 	echo "<pre>{$curmsg['created_at']} tu {$curmsg['from_addr']}\n\n\n"
-	   . "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet</b></pre>\n<hr>";
+	   . "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet</pre>\n<hr>";
 }
 
 ?>
