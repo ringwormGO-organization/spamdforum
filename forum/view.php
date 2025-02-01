@@ -42,7 +42,7 @@ if ($assoc['relate_to'] != 0) {
 	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>\n";
 }
 ?>
-<p><?php echo "{$assoc['votes']} | ";
+<p><?php echo "{$assoc['votes']} | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) {
 $q = "SELECT amount FROM $votetable WHERE msg_id=? AND author=?";
 $myuid = $_SESSION['user_id'];
@@ -77,10 +77,10 @@ $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
 	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
-echo "<h3>$rmsg_count nhan xet</h3>";
+echo "<h3>$rmsg_count nhan xet</h3>\n";
 if ($auth && $assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
-	   . "Viet nhan xet</a></p>";
+	   . "Viet nhan xet</a></p>\n";
 }
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
@@ -97,10 +97,10 @@ if ($rmsg_count > 0) {
 			echo "<a href=\"mailto:{$rmsg['from_addr']}\">"
 			   . "{$rmsg['from_addr']}</a>: ";
 		}
-		echo "{$rmsg['subject']}</h4>";
-		echo "<p>" . nl2br($rmsg['body'], false) . "</p>";
+		echo "{$rmsg['subject']}</h4>\n";
+		echo "<p>" . nl2br($rmsg['body'], false) . "</p>\n";
 		echo "<pre><a href=\"$protocol://$server/forum/index.php?"
-		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>";
+		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>\n";
 	}
 }
 ?>
