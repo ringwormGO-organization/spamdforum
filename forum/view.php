@@ -105,7 +105,7 @@ if ($rmsg_count > 0) {
 		echo "{$rmsg['subject']}</h4>";
 		echo "<p>" . nl2br($rmsg['body'], false) . "</p>";
 		echo "<pre><a href=\"$protocol://$server/forum/index.php?"
-		   . "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a></pre>";
+		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>";
 	}
 }
 ?>
