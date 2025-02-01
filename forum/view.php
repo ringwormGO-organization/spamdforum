@@ -71,7 +71,7 @@ else
 	   . "{$assoc['from_addr']}</a>\n";
 ?>
 </p>
-<pre><a href="<?php echo "$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['last_edit'];?></a></pre>
+<pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['created_at'];?></a></pre>
 <p><br><?=$body;?></p>
 <hr>
 <?php
