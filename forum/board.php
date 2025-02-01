@@ -7,6 +7,11 @@ if (!isset($_SESSION['auth'])) {
 }
 $msg = NULL;
 $noform = FALSE;
+if ($_SESSION['powerlevel'] < 0) {
+	$noform = TRUE;
+	$msg .= "Ban hien khong co quyen viet bai.\n";
+	goto html;
+}
 $to = '';
 $rid = 0;
 if (!empty($_GET['relate_to'])) {
