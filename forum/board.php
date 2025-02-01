@@ -107,8 +107,9 @@ if (! ($to && $subject && $body)) {
 }
 $from = $_SESSION['email'];
 $now = date("Y-m-d H:i:s");
-$query = "INSERT INTO $msgtable (relate_to, subject, body, from_addr, to_addr, "
-	. "r_pwlvl, w_pwlvl, last_edit) VALUES (?, ?, ?, ?, ?, ?, ?, '$now')";
+$query = "INSERT INTO $msgtable (relate_to, subject, body, from_addr, "
+	. "to_addr, r_pwlvl, w_pwlvl, last_edit, created_at) VALUES "
+	. "(?, ?, ?, ?, ?, ?, ?, '$now', '$now')";
 if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
 			 $r_pwlvl, $w_pwlvl])) {
 	/* Redirect to the new msg if success */
