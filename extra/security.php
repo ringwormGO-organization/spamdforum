@@ -35,7 +35,8 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 function security_authlastvisit($dbc, $auth, $ip) {
 	// insert last visit into database
 	global $table;
-	$query = "UPDATE $table SET last_visit=NOW(), last_ip='$ip' WHERE password = '$auth'";
+	$now = date("Y-m-d H:i:s");
+	$query = "UPDATE $table SET last_visit='$now', last_ip='$ip' WHERE password = '$auth'";
 	$result = mysqli_query($dbc, $query);
 	if ($result) {
 		return true;

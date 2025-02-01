@@ -3,9 +3,10 @@
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 function newuser($dbc, $uinfo) {
 	global $table;
+	$now = date("Y-m-d H:i:s");
 	$query = "INSERT INTO $table (name, email, password, powerlevel, "
-		."reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), "
-		."NOW(), ?)";
+		."reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, '$now', "
+		."'$now', ?)";
 
 	return mysqli_execute_query($dbc, $query, $uinfo);
 }
