@@ -47,7 +47,8 @@ if ($assoc['relate_to'] != 0) {
 	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>\n";
 }
 ?>
-<p><?php echo "{$assoc['votes']}| ";
+<p><?php echo "{$assoc['votes']} | ";
+if ($auth && $_SESSION['powerlevel'] >= 0) {
 $q = "SELECT amount FROM $votetable WHERE msg_id=? AND author=?";
 $myuid = $_SESSION['user_id'];
 $myvote = mysqli_fetch_row(mysqli_execute_query($dbc, $q, [$id, $myuid]));
@@ -63,6 +64,7 @@ if (!isset($myvote[0]) || $myvote[0] == 0) {
 		echo "<a href=\"/forum/vote.php?id=$id&&amount=0\">-0</a>\n";
 	}
 }
+}
 if (isset($author['name']))
 	echo "Boi <a href=\"/profiles.php?email={$assoc['from_addr']}\">"
 	   . "{$author['name']}</a>\n";
@@ -71,8 +73,9 @@ else
 	   . "{$assoc['from_addr']}</a>\n";
 ?>
 </p>
-<pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}"; ?>"><?=$assoc['created_at'];?></a></pre>
-<p><br><?=$body;?></p>
+<pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}";
+	   ?>"><?=$assoc['created_at'];?></a></pre>
+<p><?=$body;?></p>
 <hr>
 <?php
 $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
@@ -80,22 +83,29 @@ $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>$rmsg_count nhan xet</h3>";
-if ($assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
+if ($auth && $assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
-	   . "Viet tra loi</a></p>";
+	   . "Viet nhan xet</a></p>";
 }
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
+		$author = get_user_info("WHERE email=?", "name",
+			  [$rmsg['from_addr']]);
 		foreach ($rmsg as $k => $value) {
 			$rmsg[$k] = export_data($value);
 		}
-		echo "<h4>{$rmsg['subject']}</h4>";
-		echo "<p>Boi {$rmsg['from_addr']}<br></p>";
+		echo "<h4>";
+		if (!empty($author['name'])) {
+			echo "<a href=\"/profiles.php?email="
+			   . "{$rmsg['from_addr']}\">{$author['name']}</a>: ";
+		} else {
+			echo "<a href=\"mailto:{$rmsg['from_addr']}\">"
+			   . "{$rmsg['from_addr']}</a>: ";
+		}
+		echo "{$rmsg['subject']}</h4>";
 		echo "<p>" . nl2br($rmsg['body'], false) . "</p>";
-		echo "<pre><a href=\"$protocol://$server/forum/index.php?" .
-		     "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a>
-
-</pre>";
+		echo "<pre><a href=\"$protocol://$server/forum/index.php?"
+		   . "id={$rmsg['msg_id']}\">{$rmsg['last_edit']}</a></pre>";
 	}
 }
 ?>
