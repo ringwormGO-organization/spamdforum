@@ -9,6 +9,8 @@ if (!empty($_GET['id']) && isset($_GET['amount'])) {
 		goto end;
 	if ($amount > 1 || $amount < -1)
 		goto end;
+	if (!$auth || $_SESSION['powerlevel'] < 0)
+		goto end;
 	$target = get_msg_info("WHERE msg_id=?", "r_pwlvl, votes", [$id]);
 	if ($target['r_pwlvl'] > $_SESSION['powerlevel'])
 		goto end;
