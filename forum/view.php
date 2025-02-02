@@ -5,15 +5,14 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 <?php
 if (!isset($id))
 	exit;
-$assoc = get_msg_info("WHERE msg_id=?", "*", [$id]);
-if (!$assoc) {
+$msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
+			"*", [$id]);
+if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
-$author = get_user_info("WHERE email=?", "name, powerlevel",
-			[$assoc['from_addr']]);
-foreach ($assoc as $k => $value) {
-	$assoc[$k] = export_data($value);
+foreach ($msginfo as $k => $value) {
+	$msginfo[$k] = export_data($value);
 }
 /*
  * Groups are separated extensively so admins can config how they want
@@ -27,23 +26,23 @@ $urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){2,6}"
 . "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?";
 
 $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
-	      $assoc['body']), false);
+	      $msginfo['body']), false);
 ?>
 <?php
-$title = $assoc['subject'];
+$title = $msginfo['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
-if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'] ||
-    $assoc['from_addr'] == $_SESSION['email'])
+if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
+    $msginfo['from_addr'] == $_SESSION['email'])
 {
 ?>
-<h1><?=$assoc['subject']; ?></h1>
+<h1><?=$msginfo['subject']; ?></h1>
 <?php
-if ($assoc['relate_to'] != 0) {
+if ($msginfo['relate_to'] != 0) {
 	echo "<p><a href=\"$protocol://$server/forum/index.php?id="
-	   . "{$assoc['relate_to']}\">(Tin nhan truoc)</a></p>\n";
+	   . "{$msginfo['relate_to']}\">(Tin nhan truoc)</a></p>\n";
 }
 ?>
-<p><?php echo "{$assoc['votes']} | \n";
+<p><?php echo "{$msginfo['votes']} | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) {
 $q = "SELECT amount FROM $votetable WHERE msg_id=? AND author=?";
 $myuid = $_SESSION['user_id'];
@@ -61,30 +60,30 @@ if (!isset($myvote[0]) || $myvote[0] == 0) {
 	}
 }
 }
-if (isset($author['name']))
-	echo "Boi <a href=\"/profiles.php?email={$assoc['from_addr']}\">"
-	   . "{$author['name']}</a>\n";
+if (isset($msginfo['name']))
+	echo "Boi <a href=\"/profiles.php?email={$msginfo['from_addr']}\">"
+	   . "{$msginfo['name']}</a>\n";
 else
-	echo "<a href=\"mailto:{$assoc['from_addr']}\">"
-	   . "{$assoc['from_addr']}</a>\n";
+	echo "<a href=\"mailto:{$msginfo['from_addr']}\">"
+	   . "{$msginfo['from_addr']}</a>\n";
 ?>
 </p>
 <?php
-if ($assoc['from_addr'] == $_SESSION['email'] || $_SESSION['powerlevel'] >= 50)
-	echo "<p><a href=\"/forum/board.php?editid={$assoc['msg_id']}\">"
+if ($msginfo['from_addr'] == $_SESSION['email'] || $_SESSION['powerlevel'] >= 50)
+	echo "<p><a href=\"/forum/board.php?editid={$msginfo['msg_id']}\">"
 	   . "Chinh sua</a></p>\n";
 ?>
 <pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}";
-	   ?>"><?=$assoc['created_at'];?></a></pre>
+	   ?>"><?=$msginfo['created_at'];?></a></pre>
 <p><?=$body;?></p>
 <hr>
 <?php
 $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
 	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
-	     . "AND to_addr='{$assoc['to_addr']}' ORDER BY last_edit DESC", [$id]);
+	     . "AND to_addr='{$msginfo['to_addr']}' ORDER BY last_edit DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>$rmsg_count nhan xet</h3>\n";
-if ($auth && $assoc['w_pwlvl'] <= $_SESSION['powerlevel']) {
+if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
 	   . "Viet nhan xet</a></p>\n";
 }
