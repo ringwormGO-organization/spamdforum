@@ -34,7 +34,12 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 	echo "<h3><a href=\"$protocol://$server/forum/index.php?id=".
 		"{$curmsg['msg_id']}\">{$curmsg['subject']}</a></h3>\n";
 	echo "<pre>{$curmsg['created_at']} tu {$curmsg['from_addr']}\n\n\n"
-	   . "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet</pre>\n<hr>\n\n";
+	   . "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet";
+	if ($curmsg['r_pwlvl'] > 0)
+		echo " (r={$curmsg['r_pwlvl']})";
+	if ($curmsg['w_pwlvl'] > 0)
+		echo " (w={$curmsg['w_pwlvl']})";
+	echo "</pre>\n<hr>\n\n";
 }
 
 ?>
