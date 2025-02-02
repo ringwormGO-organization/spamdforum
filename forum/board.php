@@ -55,9 +55,11 @@ if ($rid != 0) {
 			$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
 			goto html;
 		} else {
-			$to_addr = $rmsg['to_addr'];
-			$r_pwlvl = $rmsg['r_pwlvl'];
-			$w_pwlvl = $rmsg['w_pwlvl'];
+			if (!isset($emsg)) {
+				$to_addr = $rmsg['to_addr'];
+				$r_pwlvl = $rmsg['r_pwlvl'];
+				$w_pwlvl = $rmsg['w_pwlvl'];
+			}
 		}
 	}
 }
@@ -131,17 +133,6 @@ if (isset($_POST['w_pwlvl'])) {
 if (! ($to_addr && $subject && $body)) {
 	$msg .= "Hay thu lai.\n";
 	goto html;
-}
-if ($rid) {
-	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
-			   . "w_pwlvl", [$rid]);
-	if (!$rmsg) {
-		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
-	} else {
-		$to_addr = $rmsg['to_addr'];
-		$r_pwlvl = $rmsg['r_pwlvl'];
-		$w_pwlvl = $rmsg['w_pwlvl'];
-	}
 }
 if (isset($emsg)) {
 	$col = '';
