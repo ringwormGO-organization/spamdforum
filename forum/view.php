@@ -32,7 +32,8 @@ $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 <?php
 $title = $assoc['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
-if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'])
+if ($assoc['r_pwlvl'] <= $_SESSION['powerlevel'] ||
+    $assoc['from_addr'] == $_SESSION['email'])
 {
 ?>
 <h1><?=$assoc['subject']; ?></h1>
