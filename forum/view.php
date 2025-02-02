@@ -69,7 +69,7 @@ else
 ?>
 </p>
 <?php
-if ($assoc['from_addr'] == $_SESSION['email'])
+if ($assoc['from_addr'] == $_SESSION['email'] || $_SESSION['powerlevel'] >= 50)
 	echo "<p><a href=\"/forum/board.php?editid={$assoc['msg_id']}\">"
 	   . "Chinh sua</a></p>\n";
 ?>

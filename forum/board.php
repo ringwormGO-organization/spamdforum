@@ -22,12 +22,18 @@ $rid = &$relate_to;
 
 if (!empty($_GET['editid'])) {
 	$eid = intval($_GET['editid']);
-	$emsg = get_msg_info("WHERE msg_id=? AND from_addr=?", "*",
-			    [$eid, $_SESSION['email']]);
+	$emsg = get_msg_info("WHERE msg_id=?", "*", [$eid]);
 	if (!$emsg) {
-		$msg .= "Khong tim thay bai viet hoac day khong phai "
-		    .   "bai viet cua ban.\n";
+		$msg .= "Khong tim thay bai viet!\n";
 		goto html;
+	}
+	$is_mod = FALSE;
+	if ($emsg['from_addr'] != $_SESSION['email']) {
+		if ($_SESSION['powerlevel'] < 50) {
+			$msg .= "Bai viet nay khong phai cua ban!\n";
+			goto html;
+		}
+		$is_mod = TRUE;
 	}
 	foreach ($emsg as $k => $value) {
 		$$k = $value;
@@ -137,7 +143,6 @@ if ($rid) {
 		$w_pwlvl = $rmsg['w_pwlvl'];
 	}
 }
-$from_addr = $_SESSION['email'];
 if (isset($emsg)) {
 	$col = '';
 	$changed = array();
@@ -152,6 +157,11 @@ if (isset($emsg)) {
 		header("Location: $protocol://$server/forum/index.php?id=$eid");
 		exit;
 	}
+	if ($is_mod && (strstr($col, "body") || strstr($col, "subject"))) {
+		$msg .= "Quyen cao chuc trong cung khong duoc phep sua bai "
+		    . "nguoi khac tuy tien!\n";
+		goto html;
+	}
 	$col = substr($col, 0, -1);
 	if (editmsg($dbc, $eid, $col, $changed)) {
 		header("Location: $protocol://$server/forum/index.php?id=$eid");
@@ -162,6 +172,7 @@ if (isset($emsg)) {
 		goto html;
 	}
 }
+$from_addr = $_SESSION['email'];
 if (($id = newmsg($dbc, [$rid, $subject, $body, $from_addr, $to_addr,
 			$r_pwlvl, $w_pwlvl])) != FALSE) {
 	header("Location: $protocol://$server/forum/index.php?id=$id");
