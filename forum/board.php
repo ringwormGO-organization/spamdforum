@@ -1,6 +1,7 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+require_once("inc/board_inc.php");
 if (!isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/account/login.php");
 	exit;
@@ -12,14 +13,49 @@ if ($_SESSION['powerlevel'] < 0) {
 	$msg .= "Ban hien khong co quyen viet bai.\n";
 	goto html;
 }
-$to = '';
-$rid = 0;
-if (!empty($_GET['relate_to'])) {
-	$rid = intval($_GET['relate_to']);
+
+$to_addr = $subject = $body = '';
+$r_pwlvl = -1;
+$w_pwlvl = 0;
+$relate_to = 0;
+$rid = &$relate_to;
+
+if (!empty($_GET['editid'])) {
+	$eid = intval($_GET['editid']);
+	$emsg = get_msg_info("WHERE msg_id=? AND from_addr=?", "*",
+			    [$eid, $_SESSION['email']]);
+	if (!$emsg) {
+		$msg .= "Khong tim thay bai viet hoac day khong phai "
+		    .   "bai viet cua ban.\n";
+		goto html;
+	}
+	foreach ($emsg as $k => $value) {
+		$$k = $value;
+	}
 }
-if (!empty($_POST['relate_id'])) {
-	$rid = intval($_POST['relate_id']);
+if (isset($_GET['relate_to']))
+	$relate_to = intval($_GET['relate_to']);
+if (isset($_POST['relate_to']))
+	$relate_to = intval($_POST['relate_to']);
+
+if ($rid != 0) {
+	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
+			   . "w_pwlvl", [$rid]);
+	if (!$rmsg) {
+		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
+		goto html;
+	} else {
+		if ($rmsg['w_pwlvl'] > $_SESSION['powerlevel']) {
+			$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
+			goto html;
+		} else {
+			$to_addr = $rmsg['to_addr'];
+			$r_pwlvl = $rmsg['r_pwlvl'];
+			$w_pwlvl = $rmsg['w_pwlvl'];
+		}
+	}
 }
+
 if (!isset($_POST['send'])) {
 	goto html;
 }
@@ -41,7 +77,7 @@ $result = mysqli_execute_query($dbc, $limit_query, [$rid]);
 $msg_count = mysqli_fetch_all($result, MYSQLI_NUM);
 if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 	/*
-	 * User is restricted to 4 msg with the same relate_id
+	 * User is restricted to 4 msg with the same relate_to
 	 * and 40 msg per hour.
 	 */
 	$msg .= "Ban dang gui qua nhieu bai viet so voi muc quy dinh.\n";
@@ -52,43 +88,28 @@ if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 unset($limit_query);
 mysqli_free_result($result);
 
-if ($rid != 0) {
-	$reply_msg = get_msg_info("WHERE msg_id=?", "w_pwlvl", [$rid]);
-	if (!$reply_msg) {
-		$msg .= "Khong tim thay bai viet ban dang de cap!\n";
-		goto html;
-	}
-	if ($reply_msg['w_pwlvl'] > $_SESSION['powerlevel']) {
-		$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
-		goto html;
-	}
-}
-
 $good_chars = "/[\x20-\x7F\x{00C0}-\x{1EF9}]/iu";
 /* Alphanumeric plus Vietnamese characters plus some other character idk */
 if (!empty($_POST['to'])) {
-	$to = $_POST['to'];
+	$to_addr = $_POST['to'];
 } else {
-	$to = FALSE;
-	$msg .= "Nhap vao chu de hoac email nguoi dung!\n";
+	$to_addr = FALSE;
+	$msg .= "Nhap vao chu de thao luan hoac email nguoi dung!\n";
 }
 if (!empty($_POST['subject']) && mb_strlen($_POST['subject']) < 255 &&
     preg_match($good_chars, $_POST['subject'])) {
 	$subject = trim($_POST['subject']);
 } else {
-	$subject = FALSE;
+	$subject = !empty($_POST['subject']) ? $_POST['subject'] : FALSE;
 	$msg .= "Chu de tin nhan khong hop le.\n";
 }
 if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
     preg_match($good_chars, $_POST['body'])) {
 	$body = $_POST['body'];
 } else {
-	$body = FALSE;
+	$body = !empty($_POST['body']) ? $_POST['body'] : FALSE;
 	$msg .= "Tin nhan khong hop le.\n";
 }
-/* "Muted" users can view any msg, but not write */
-$r_pwlvl = -1;
-$w_pwlvl = 0;
 if (!empty($_POST['r_pwlvl'])) {
 	if (($r_pwlvl = intval($_POST['r_pwlvl'])) > $_SESSION['powerlevel']) {
 		/* Disallow creating msgs that the author can't even access */
@@ -101,19 +122,48 @@ if (!empty($_POST['w_pwlvl'])) {
 		$w_pwlvl = $_SESSION['powerlevel'];
 	}
 }
-if (! ($to && $subject && $body)) {
+if (! ($to_addr && $subject && $body)) {
 	$msg .= "Hay thu lai.\n";
 	goto html;
 }
-$from = $_SESSION['email'];
-$now = date("Y-m-d H:i:s");
-$query = "INSERT INTO $msgtable (relate_to, subject, body, from_addr, "
-	. "to_addr, r_pwlvl, w_pwlvl, last_edit, created_at) VALUES "
-	. "(?, ?, ?, ?, ?, ?, ?, '$now', '$now')";
-if (mysqli_execute_query($dbc, $query, [$rid, $subject, $body, $from, $to,
-			 $r_pwlvl, $w_pwlvl])) {
-	/* Redirect to the new msg if success */
-	$id = mysqli_insert_id($dbc);
+if ($rid) {
+	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
+			   . "w_pwlvl", [$rid]);
+	if (!$rmsg) {
+		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
+	} else {
+		$to_addr = $rmsg['to_addr'];
+		$r_pwlvl = $rmsg['r_pwlvl'];
+		$w_pwlvl = $rmsg['w_pwlvl'];
+	}
+}
+$from_addr = $_SESSION['email'];
+if (isset($emsg)) {
+	$col = '';
+	$changed = array();
+	foreach ($emsg as $k => $value) {
+		if ($$k != $value) {
+			/* Only update what is changed */
+			$col .= "$k=?,";
+			$changed[] = $$k;
+		}
+	}
+	if (empty($col)) {
+		header("Location: $protocol://$server/forum/index.php?id=$eid");
+		exit;
+	}
+	$col = substr($col, 0, -1);
+	if (editmsg($dbc, $eid, $col, $changed)) {
+		header("Location: $protocol://$server/forum/index.php?id=$eid");
+		exit;
+	} else {
+		$msg .= "May chu hien dang gap truc trac. Xin loi vi "
+		    . "su co nay.\n";
+		goto html;
+	}
+}
+if (($id = newmsg($dbc, [$rid, $subject, $body, $from_addr, $to_addr,
+			$r_pwlvl, $w_pwlvl])) != FALSE) {
 	header("Location: $protocol://$server/forum/index.php?id=$id");
 	exit;
 } else {
@@ -126,21 +176,6 @@ $title = "Viet tin nhan";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
-$rr_pwlvl = -1;
-$rw_pwlvl = 0;
-if ($rid) {
-	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
-			  . "w_pwlvl", [$rid]);
-	if (!$rmsg) {
-		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
-	} else {
-		$to = export_data($rmsg['to_addr']);
-		$rr_pwlvl = $rmsg['r_pwlvl'];
-		$rw_pwlvl = $rmsg['w_pwlvl'];
-	}
-}
-?>
-<?php
 if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">$msg</p>";
@@ -149,36 +184,32 @@ if (!$noform) {
 ?>
 <fieldset>
 <legend><b>Viet tin nhan</b></legend>
-<form name="newmsg" action="<?=$_SERVER['PHP_SELF']; ?>" method="POST">
+<form name="newmsg" action="<?=$_SERVER['REQUEST_URI']; ?>" method="POST">
 <table style="border-width:0; width:100%;">
 <tr>
 	<td><b>To:</b></td>
 	<td><input type="text" name="to" size="64" maxlength="128"
-	    value="<?=export_data($to); ?>"></td>
+	    value="<?=export_data($to_addr); ?>"></td>
 </tr>
 <tr>
 	<td><b>Subject:</b></td>
 	<td><input type="text" name="subject" size="64" maxlength="255"
-	    value="<?php if (!empty($_POST['subject']))
-		   echo export_data($_POST['subject']); ?>"></td>
+	    value="<?=export_data($subject); ?>"></td>
 </tr>
 <tr>
 	<td><b>R/W level:</b></td>
 	<td><input type="text" name="r_pwlvl" size="3" maxlength="3"
-	     value="<?=$rr_pwlvl;?>">
+	     value="<?=$r_pwlvl;?>">
 	<input type="text" name="w_pwlvl" size="3" maxlength="3"
-	 value="<?=$rw_pwlvl;?>"></td>
+	 value="<?=$w_pwlvl;?>"></td>
 </tr>
 <tr>
 	<td><b>Relate to:</b></td>
-	<td><input type="text" name="relate_id" size="15" value="<?=$rid; ?>"></td>
+	<td><input type="text" name="relate_to" size="15" value="<?=$rid; ?>"></td>
 </tr>
 </table>
 <p><br><textarea id="body" name="body" rows="30" cols="90">
-<?php
-if (!empty($_POST['body']))
-	echo export_data($_POST['body']);
-?>
+<?=export_data($body); ?>
 </textarea></p>
 <p><input type="submit" name="send" value="Gui!"></p>
 </form>
