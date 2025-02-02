@@ -78,9 +78,10 @@ if ($msginfo['from_addr'] == $_SESSION['email'] || $_SESSION['powerlevel'] >= 50
 <p><?=$body;?></p>
 <hr>
 <?php
-$rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
+$rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable, $table "
 	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
-	     . "AND to_addr='{$msginfo['to_addr']}' ORDER BY last_edit DESC", [$id]);
+	     . "AND to_addr='{$msginfo['to_addr']}' AND "
+	     . "$table.email=$msgtable.from_addr ORDER BY votes DESC", [$id]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 echo "<h3>$rmsg_count nhan xet</h3>\n";
 if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
@@ -89,15 +90,13 @@ if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
 }
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
-		$author = get_user_info("WHERE email=?", "name",
-			  [$rmsg['from_addr']]);
 		foreach ($rmsg as $k => $value) {
 			$rmsg[$k] = export_data($value);
 		}
 		echo "<h4>";
-		if (!empty($author['name'])) {
+		if (!empty($rmsg['name'])) {
 			echo "<a href=\"/profiles.php?email="
-			   . "{$rmsg['from_addr']}\">{$author['name']}</a>: ";
+			   . "{$rmsg['from_addr']}\">{$rmsg['name']}</a>: ";
 		} else {
 			echo "<a href=\"mailto:{$rmsg['from_addr']}\">"
 			   . "{$rmsg['from_addr']}</a>: ";
