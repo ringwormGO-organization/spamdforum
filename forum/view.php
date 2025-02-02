@@ -68,6 +68,11 @@ else
 	   . "{$assoc['from_addr']}</a>\n";
 ?>
 </p>
+<?php
+if ($assoc['from_addr'] == $_SESSION['email'])
+	echo "<p><a href=\"/forum/board.php?editid={$assoc['msg_id']}\">"
+	   . "Chinh sua</a></p>\n";
+?>
 <pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}";
 	   ?>"><?=$assoc['created_at'];?></a></pre>
 <p><?=$body;?></p>
