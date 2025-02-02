@@ -9,8 +9,8 @@ function get_user_info($cond, $fields, $arr) {
 	return $uinfo;
 }
 function get_msg_info($cond, $fields, $arr) {
-	global $dbc, $msgtable;
-	$query = "SELECT " . $fields . " FROM $msgtable " . $cond;
+	global $dbc, $msgtable, $table;
+	$query = "SELECT " . $fields . " FROM $table, $msgtable " . $cond;
 	$msginfo = mysqli_fetch_assoc(mysqli_execute_query($dbc, $query, $arr));
 	return $msginfo;
 }
