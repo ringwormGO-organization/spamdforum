@@ -20,6 +20,7 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		logout:
 		$_SESSION = array();
 		$_SESSION['powerlevel'] = 0;
+		$_SESSION['email'] = '';
 		global $anonymous_access, $anonymous_page;
 		if ($anonymous_access == false) {
 			if (empty($anonymous_page)) {
