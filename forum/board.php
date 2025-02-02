@@ -116,13 +116,13 @@ if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
 	$body = !empty($_POST['body']) ? $_POST['body'] : FALSE;
 	$msg .= "Tin nhan khong hop le.\n";
 }
-if (!empty($_POST['r_pwlvl'])) {
+if (isset($_POST['r_pwlvl'])) {
 	if (($r_pwlvl = intval($_POST['r_pwlvl'])) > $_SESSION['powerlevel']) {
 		/* Disallow creating msgs that the author can't even access */
 		$r_pwlvl = $_SESSION['powerlevel'];
 	}
 }
-if (!empty($_POST['w_pwlvl'])) {
+if (isset($_POST['w_pwlvl'])) {
 	if (($w_pwlvl = intval($_POST['w_pwlvl'])) > $_SESSION['powerlevel']) {
 		/* As well as msgs that author can't write to. */
 		$w_pwlvl = $_SESSION['powerlevel'];
@@ -146,6 +146,10 @@ if ($rid) {
 if (isset($emsg)) {
 	$col = '';
 	$changed = array();
+	if ($emsg['r_pwlvl'] > $_SESSION['powerlevel']) {
+		$msg .= "Ban khong duoc phep chinh sua bai viet nay.\n";
+		goto html;
+	}
 	foreach ($emsg as $k => $value) {
 		if ($$k != $value) {
 			/* Only update what is changed */
