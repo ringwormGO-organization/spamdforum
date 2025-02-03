@@ -44,7 +44,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		echo "<a href=\"mailto:{$curmsg['from_addr']}\">"
 		   . "{$curmsg['from_addr']}</a>\n\n\n";
 	}
-	echo "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet\n";
+	echo "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet";
 	if ($curmsg['r_pwlvl'] > 0)
 		echo " (r={$curmsg['r_pwlvl']})";
 	if ($curmsg['w_pwlvl'] > 0)
