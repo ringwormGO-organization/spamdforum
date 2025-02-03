@@ -28,6 +28,7 @@ $dbc = mysqli_init();
 if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 	die("Khong the thiet lap ket noi den co so du lieu!");
 }
+mysqli_set_charset($dbc, "utf8mb4");
 
 $userquery = "CREATE TABLE forum_user (
 user_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -43,7 +44,7 @@ UNIQUE KEY (email),
 KEY (password),
 KEY (powerlevel),
 KEY (reg_date)
-) ENGINE={$_POST['engine']}";
+) ENGINE={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
 
 $msgquery = "CREATE TABLE forum_msg (
 msg_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -65,7 +66,7 @@ KEY (to_addr),
 KEY (r_pwlvl),
 KEY (w_pwlvl),
 KEY (created_at)
-) ENGINE={$_POST['engine']}";
+) ENGINE={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
 
 $votequery = "CREATE TABLE forum_votes (
 msg_id INT UNSIGNED NOT NULL,
@@ -74,7 +75,7 @@ amount TINYINT NOT NULL,
 KEY (msg_id),
 KEY (author),
 KEY (amount)
-) engine={$_POST['engine']}";
+) engine={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
 
 $adminaccount = "INSERT INTO $table (name, email, password, powerlevel, " .
     "reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), " .

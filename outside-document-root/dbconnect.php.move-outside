@@ -13,6 +13,8 @@ if (!mysqli_real_connect($dbc, DB_HOST, DB_ID, DB_PW, DB_NAME)) {
 	die("Khong the thiet lap ket noi den co so du lieu!");
 }
 
+mysqli_set_charset($dbc, "utf8mb4");
+
 function 
 email_exists($email, $dbc) 
 {
