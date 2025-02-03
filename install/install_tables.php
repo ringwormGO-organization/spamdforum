@@ -48,7 +48,7 @@ KEY (reg_date)
 
 $msgquery = "CREATE TABLE forum_msg (
 msg_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-relate_to INT NOT NULL,
+relate_to INT UNSIGNED NOT NULL,
 subject VARCHAR(255) NOT NULL,
 body MEDIUMTEXT NOT NULL,
 from_addr VARCHAR(127) NOT NULL,
