@@ -18,9 +18,9 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
 echo "<h1>Cac bai viet</h1>\n";
-$result = mysqli_query($dbc, "SELECT * FROM $msgtable WHERE relate_to=0 AND "
-	. "r_pwlvl<={$_SESSION['powerlevel']} AND votes > -5 ORDER BY "
-	. "votes DESC, created_AT DESC");
+$result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable "
+	    . "WHERE relate_to=0 AND r_pwlvl<=? AND votes > -5 ORDER BY "
+	    . "votes DESC, created_at DESC", [$_SESSION['powerlevel']]);
 if (!$result)
 	goto footer;
 while ($curmsg = mysqli_fetch_assoc($result)) {
