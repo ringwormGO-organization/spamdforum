@@ -96,26 +96,30 @@ if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 unset($limit_query);
 mysqli_free_result($result);
 
-$good_chars = "/[\x20-\x7F\x{00C0}-\x{1EF9}]/iu";
+$good_chars = "/^([\x20-\x7E\x{00C0}-\x{1EF9}]*)$/ium";
 /* Alphanumeric plus Vietnamese characters plus some other character idk */
+$ok = TRUE;
 if (!empty($_POST['to'])) {
 	$to_addr = $_POST['to'];
 } else {
-	$to_addr = FALSE;
+	$to_addr = !empty($_POST['to']) ? $_POST['to'] : NULL;
+	$ok = FALSE;
 	$msg .= "Nhap vao chu de thao luan hoac email nguoi dung!\n";
 }
-if (!empty($_POST['subject']) && mb_strlen($_POST['subject']) < 255 &&
+if (!empty($_POST['subject']) && strlen($_POST['subject']) < 255 &&
     preg_match($good_chars, $_POST['subject'])) {
 	$subject = trim($_POST['subject']);
 } else {
-	$subject = !empty($_POST['subject']) ? $_POST['subject'] : FALSE;
+	$subject = !empty($_POST['subject']) ? $_POST['subject'] : NULL;
+	$ok = FALSE;
 	$msg .= "Chu de tin nhan khong hop le.\n";
 }
 if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
     preg_match($good_chars, $_POST['body'])) {
 	$body = $_POST['body'];
 } else {
-	$body = !empty($_POST['body']) ? $_POST['body'] : FALSE;
+	$body = !empty($_POST['body']) ? $_POST['body'] : NULL;
+	$ok = FALSE;
 	$msg .= "Tin nhan khong hop le.\n";
 }
 if (isset($_POST['r_pwlvl'])) {
@@ -130,7 +134,7 @@ if (isset($_POST['w_pwlvl'])) {
 		$w_pwlvl = $_SESSION['powerlevel'];
 	}
 }
-if (! ($to_addr && $subject && $body)) {
+if ($ok == FALSE) {
 	$msg .= "Hay thu lai.\n";
 	goto html;
 }
