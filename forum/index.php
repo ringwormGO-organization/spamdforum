@@ -1,5 +1,6 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
+require("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 if (empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/') {
 	if (!empty($_GET['id'])) {
 		$id = intval($_GET['id']);
@@ -13,11 +14,11 @@ if (empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/') {
 include("{$_SERVER['DOCUMENT_ROOT']}/forum/view.php");
 exit;
 listmsg:
-$title = "Cac bai viet";
+$title = $words['msg_list'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
-echo "<h1>Cac bai viet</h1>\n";
+echo "<h1>{$words['msg_list']}</h1>\n";
 $result = mysqli_execute_query($dbc, "SELECT msg_id, subject, from_addr, "
 	    . "r_pwlvl, w_pwlvl, votes, created_at, name FROM $msgtable, "
 	    . "$table WHERE relate_to=0 AND r_pwlvl<=? AND votes > -5 "
@@ -36,7 +37,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		[$cid, $_SESSION['powerlevel']]));
 	echo "<h3><a href=\"$protocol://$server/forum/index.php?id=".
 		"{$curmsg['msg_id']}\">{$curmsg['subject']}</a></h3>\n";
-	echo "<pre>{$curmsg['created_at']} tu ";
+	echo "<pre>{$curmsg['created_at']} {$words['from']} ";
 	if ($curmsg['name']) {
 		echo "<a href=\"/profiles.php?email={$curmsg['from_addr']}\">"
 		   . "{$curmsg['name']}</a>\n\n\n";
@@ -44,7 +45,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		echo "<a href=\"mailto:{$curmsg['from_addr']}\">"
 		   . "{$curmsg['from_addr']}</a>\n\n\n";
 	}
-	echo "<b>{$curmsg['votes']}</b>  $ncmt[0] nhan xet";
+	echo "<b>{$curmsg['votes']}</b>  $ncmt[0] {$words['comment']}";
 	if ($curmsg['r_pwlvl'] > 0)
 		echo " (r={$curmsg['r_pwlvl']})";
 	if ($curmsg['w_pwlvl'] > 0)
