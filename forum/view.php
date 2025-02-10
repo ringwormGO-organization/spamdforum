@@ -1,8 +1,7 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-?>
-<?php
+
 if (!isset($id))
 	exit;
 $msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
@@ -29,7 +28,7 @@ $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 	      $msginfo['body']), false);
 ?>
 <?php
-$title = $msginfo['subject'];
+$words['page_title'] = $msginfo['subject'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
     $msginfo['from_addr'] == $_SESSION['email'])
@@ -39,7 +38,7 @@ if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
 <?php
 if ($msginfo['relate_to'] != 0) {
 	echo "<p><a href=\"$protocol://$server/forum/index.php?id="
-	   . "{$msginfo['relate_to']}\">(Tin nhan truoc)</a></p>\n";
+	   . "{$msginfo['relate_to']}\">({$words['previous_msg']})</a></p>\n";
 }
 ?>
 <p><?php
@@ -57,7 +56,7 @@ else
 if ($msginfo['from_addr'] == $_SESSION['email'] ||
     $_SESSION['powerlevel'] >= 50) {
 	echo "<p><a href=\"/forum/board.php?editid={$msginfo['msg_id']}\">"
-	   . "Chinh sua</a></p>\n";
+	   . "{$words['edit']}</a></p>\n";
 }
 echo "<p><b>{$msginfo['votes']}</b> | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) { /* open brace 1 */
@@ -90,9 +89,9 @@ $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable, $table "
 $rmsg_count = mysqli_num_rows($rmsg_result);
 if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
-	   . "Viet nhan xet</a></p>\n";
+	   . "{$words['write_comment']}</a></p>\n";
 }
-echo "<h3>$rmsg_count nhan xet</h3>\n";
+echo "<h3>$rmsg_count {$words['comment']}</h3>\n";
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
 		foreach ($rmsg as $k => $value) {
@@ -116,7 +115,7 @@ if ($rmsg_count > 0) {
 ?>
 <?php
 } else {
-	echo "<h3>Ban khong co quyen truy cap vao noi dung nay.</h3>";
+	echo "<h3>{$words['err_perm']}</h3>";
 }
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
