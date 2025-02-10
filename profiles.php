@@ -13,7 +13,7 @@ if (!empty($_GET['email'])) {
 	$uinfo = get_user_info("WHERE email=?", "user_id, name, powerlevel, "
 			     . "reg_date, last_visit", [$email]);
 	if (!$uinfo) {
-		echo "<h3>{$profilesphp['err_not_found']}</h3>";
+		echo "<h3>{$words['err_not_found']}</h3>";
 		goto stop;
 	}
 	foreach ($uinfo as $key => $value) {
@@ -30,8 +30,8 @@ if (!empty($_GET['email'])) {
 		    "</del> ({$uinfo['powerlevel']}) &lt;<a href=\"mailto:$email\">" .
 		    "$email</a>&gt;</h2>";
 	}
-	echo "<h3>{$profilesphp['reg_date']}: {$uinfo['reg_date']}</h3>";
-	echo "<p>{$profilesphp['last_visit']}: {$uinfo['last_visit']}</p>";
+	echo "<h3>{$words['reg_date']}: {$uinfo['reg_date']}</h3>";
+	echo "<p>{$words['last_visit']}: {$uinfo['last_visit']}</p>";
 }
 ?>
 <?php
