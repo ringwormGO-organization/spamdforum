@@ -16,4 +16,5 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/../dbconnect.php");
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/variables.php");
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/functions.php");
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config_access.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
 ?>
