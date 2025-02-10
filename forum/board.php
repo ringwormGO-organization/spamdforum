@@ -10,7 +10,7 @@ $msg = NULL;
 $noform = FALSE;
 if ($_SESSION['powerlevel'] < 0) {
 	$noform = TRUE;
-	$msg .= "Ban hien khong co quyen viet bai.\n";
+	$msg .= $words['not_allowed'];
 	goto html;
 }
 
@@ -24,13 +24,13 @@ if (!empty($_GET['editid'])) {
 	$eid = intval($_GET['editid']);
 	$emsg = get_msg_info("WHERE msg_id=?", "*", [$eid]);
 	if (!$emsg) {
-		$msg .= "Khong tim thay bai viet!\n";
+		$msg .= $words['emsg_not_found'];
 		goto html;
 	}
 	$is_mod = FALSE;
 	if ($emsg['from_addr'] != $_SESSION['email']) {
 		if ($_SESSION['powerlevel'] < 50) {
-			$msg .= "Bai viet nay khong phai cua ban!\n";
+			$msg = $words['emsg_not_yours'];
 			goto html;
 		}
 		$is_mod = TRUE;
@@ -48,11 +48,11 @@ if ($rid != 0) {
 	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
 			   . "w_pwlvl", [$rid]);
 	if (!$rmsg) {
-		$msg .= "Bai viet ban dang vao khong the duoc tim thay!";
+		$msg .= $words['invalid_relate_to'];
 		goto html;
 	} else {
 		if ($rmsg['w_pwlvl'] > $_SESSION['powerlevel']) {
-			$msg .= "Ban khong co quyen dang vao bai viet nay.\n";
+			$msg .= $words['w_pwlvl_err'];
 			goto html;
 		} else {
 			if (!isset($emsg)) {
@@ -88,7 +88,7 @@ if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 	 * User is restricted to 4 msg with the same relate_to
 	 * and 40 msg per hour.
 	 */
-	$msg .= "Ban dang gui qua nhieu bai viet so voi muc quy dinh.\n";
+	$msg .= $words['too_many_msg'];
 	$noform = TRUE;
 	/* Log or send mail code */
 	goto html;
@@ -102,25 +102,25 @@ $ok = TRUE;
 if (!empty($_POST['to'])) {
 	$to_addr = $_POST['to'];
 } else {
-	$to_addr = !empty($_POST['to']) ? $_POST['to'] : NULL;
+	$to_addr = !empty($_POST['to']) ? $_POST['to'] : '';
 	$ok = FALSE;
-	$msg .= "Nhap vao chu de thao luan hoac email nguoi dung!\n";
+	$msg .= $words['invalid_to_addr'];
 }
 if (!empty($_POST['subject']) && strlen($_POST['subject']) < 255 &&
     preg_match($good_chars, $_POST['subject'])) {
 	$subject = trim($_POST['subject']);
 } else {
-	$subject = !empty($_POST['subject']) ? $_POST['subject'] : NULL;
+	$subject = !empty($_POST['subject']) ? $_POST['subject'] : '';
 	$ok = FALSE;
-	$msg .= "Chu de tin nhan khong hop le.\n";
+	$msg .= $words['invalid_subject'];
 }
 if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
     preg_match($good_chars, $_POST['body'])) {
 	$body = $_POST['body'];
 } else {
-	$body = !empty($_POST['body']) ? $_POST['body'] : NULL;
+	$body = !empty($_POST['body']) ? $_POST['body'] : '';
 	$ok = FALSE;
-	$msg .= "Tin nhan khong hop le.\n";
+	$msg .= $words['invalid_msg'];
 }
 if (isset($_POST['r_pwlvl'])) {
 	if (($r_pwlvl = intval($_POST['r_pwlvl'])) > $_SESSION['powerlevel']) {
@@ -135,14 +135,14 @@ if (isset($_POST['w_pwlvl'])) {
 	}
 }
 if ($ok == FALSE) {
-	$msg .= "Hay thu lai.\n";
+	$msg .= $words['try_again'];
 	goto html;
 }
 if (isset($emsg)) {
 	$col = '';
 	$changed = array();
 	if ($emsg['r_pwlvl'] > $_SESSION['powerlevel']) {
-		$msg .= "Ban khong duoc phep chinh sua bai viet nay.\n";
+		$msg .= $words['not_allowed_to_edit'];
 		goto html;
 	}
 	foreach ($emsg as $k => $value) {
@@ -157,8 +157,7 @@ if (isset($emsg)) {
 		exit;
 	}
 	if ($is_mod && (strstr($col, "body") || strstr($col, "subject"))) {
-		$msg .= "Quyen cao chuc trong cung khong duoc phep sua bai "
-		    . "nguoi khac tuy tien!\n";
+		$msg .= $words['content_edit_disallowed'];
 		goto html;
 	}
 	$col = substr($col, 0, -1);
@@ -166,8 +165,7 @@ if (isset($emsg)) {
 		header("Location: $protocol://$server/forum/index.php?id=$eid");
 		exit;
 	} else {
-		$msg .= "May chu hien dang gap truc trac. Xin loi vi "
-		    . "su co nay.\n";
+		$msg .= $words['server_err'];
 		goto html;
 	}
 }
@@ -182,7 +180,6 @@ if (($id = newmsg($dbc, [$rid, $subject, $body, $from_addr, $to_addr,
 ?>
 <?php
 html:
-$title = "Viet tin nhan";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
@@ -193,28 +190,28 @@ if (isset($msg)) {
 if (!$noform) {
 ?>
 <fieldset>
-<legend><b>Viet tin nhan</b></legend>
+<legend><b><?=$words['write_msg'];?></b></legend>
 <form name="newmsg" action="<?=$_SERVER['REQUEST_URI']; ?>" method="POST">
 <table style="border-width:0; width:100%;">
 <tr>
-	<td><b>To:</b></td>
+	<td><b><?=$words['form_input']['to'];?>:</b></td>
 	<td><input type="text" name="to" size="64" maxlength="128"
 	    value="<?=export_data($to_addr); ?>"></td>
 </tr>
 <tr>
-	<td><b>Subject:</b></td>
+	<td><b><?=$words['form_input']['subject'];?>:</b></td>
 	<td><input type="text" name="subject" size="64" maxlength="255"
 	    value="<?=export_data($subject); ?>"></td>
 </tr>
 <tr>
-	<td><b>R/W level:</b></td>
+	<td><b><?=$words['form_input']['rwlvl'];?>:</b></td>
 	<td><input type="text" name="r_pwlvl" size="3" maxlength="3"
 	     value="<?=$r_pwlvl;?>">
 	<input type="text" name="w_pwlvl" size="3" maxlength="3"
 	 value="<?=$w_pwlvl;?>"></td>
 </tr>
 <tr>
-	<td><b>Relate to:</b></td>
+	<td><b><?=$words['form_input']['relate_to'];?>:</b></td>
 	<td><input type="text" name="relate_to" size="15" value="<?=$rid; ?>"></td>
 </tr>
 </table>
