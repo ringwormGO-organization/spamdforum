@@ -47,29 +47,29 @@ if (isset($_POST['register'])) {
 	$name = $email = $password = false;
 
 	if (($name = valid_name($_POST['name'])) == false) {
-		$msg .= $registerphp['msg']['err_name'];
+		$msg .= $words['msg']['err_name'];
 	}
 
 	if (($email = valid_email($_POST['email'])) == false) {
-		$msg .= $registerphp['msg']['err_email'];
+		$msg .= $words['msg']['err_email'];
 	}
 
 	if ($_POST['password'] == $_POST['verify']) {
 		if (($passwd = valid_passwd($_POST['password'])) == false) {
 			$passwd = FALSE;
-			$msg .= $registerphp['msg']['err_password'];
+			$msg .= $words['msg']['err_password'];
 		}
 	} else {
 		$passwd = FALSE;
-		$msg .= $registerphp['msg']['err_password_mismatch'];
+		$msg .= $words['msg']['err_password_mismatch'];
 	}
 
 	if (! ($name && $email && $passwd)) {
-		$msg .= $registerphp['msg']['err_tryagain'];
+		$msg .= $words['msg']['err_tryagain'];
 		goto html;
 	}
 	if (email_exists($email, $dbc)) {
-		$msg .= $registerphp['msg']['err_email_existed'];
+		$msg .= $words['msg']['err_email_existed'];
 		goto html;
 	}
 	$password = secure_hash($passwd, PASSWORD_BCRYPT);
@@ -79,7 +79,7 @@ if (isset($_POST['register'])) {
 		header("Location: $protocol://$server/index.php");
 		exit();
 	} else {
-		$msg .= $registerphp['msg']['err_server'] . mysqli_error($dbc);
+		$msg .= $words['msg']['err_server'] . mysqli_error($dbc);
 	}
 }
 ?>
@@ -87,40 +87,40 @@ if (isset($_POST['register'])) {
 html:
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>                                                                      
-<h1><?=$registerphp['h1_title']; ?></h1>
-<h2><?=$registerphp['h2_info']; ?></h2>
+<h1><?=$words['h1_title']; ?></h1>
+<h2><?=$words['h2_info']; ?></h2>
 <?php
 if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">{$msg}</p>";
 }
 if (!$registration_status) {
-	echo "<h2>{$registerphp['reg_disabled']}</h2>";
+	echo "<h2>{$words['reg_disabled']}</h2>";
 } else {
 ?>
 <form name="register" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 <fieldset>
-<legend><b>Nhap vao thong tin cua ban</b></legend>
-<table style="text-align: center; margin-left:auto; margin-right:auto; 
-              border-width:0; width:100%;">
+<legend><b><?=$words['form_input']['legend'];?></b></legend>
+<table style="text-align: center; margin-left:auto; margin-right:auto;
+border-width:0; width:100%;">
 <tr>
-	<th style="width:30%;"><?php echo $registerphp['form_input']['name']; ?>:</th> 
+	<th style="width:30%;"><?php echo $words['form_input']['name']; ?>:</th>
 	<td><input id="name" type="text" name="name" size="64" maxlength="127" value="<?php if(isset($_POST['name'])) {echo export_data($_POST['name']);} ?>"></td>
 </tr>
-<tr>	
-	<th style="width:30%;"><?php echo $registerphp['form_input']['email']; ?>:</th> 
+<tr>
+	<th style="width:30%;"><?php echo $words['form_input']['email']; ?>:</th>
 	<td><input id="email" type="text" name="email" size="64" maxlength="127" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?php echo $registerphp['form_input']['password']; ?>:</th> 
+	<th style="width:30%;"><?php echo $words['form_input']['password']; ?>:</th>
 	<td><input id="password" type="password" name="password" size="64" maxlength="64"></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?php echo $registerphp['form_input']['verify']; ?>:</th> 
+	<th style="width:30%;"><?php echo $words['form_input']['verify']; ?>:</th>
 	<td><input id="verify" type="password" name="verify" size="64" maxlength="64"></td>
 </tr>
 <tr>
-	<td style="width:30%;"><input id="register" type="submit" name="register" value="<?php echo $registerphp['form_input']['register']; ?>!"></td>
+	<td style="width:30%;"><input id="register" type="submit" name="register" value="<?php echo $words['form_input']['register']; ?>!"></td>
 </tr>
 </table>
 </fieldset>
