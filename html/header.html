@@ -1,14 +1,10 @@
-<?php
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo $title; ?></title>
+	<title><?php echo $words['page_title']; ?></title>
 	<style type="text/css">* {cursor: url(/html/cursor.png), auto;}</style>
 	<link rel="stylesheet" type="text/css" href="/html/style.css">
 </head>
@@ -20,13 +16,14 @@ echo "<table width=\"100%\">
 <tr>
 ";
 if (isset($_SESSION['auth'])) {
-	echo "<td style=\"width: 10%;\"><a href=\"/index.php\">$indexphp_link_index</a></td>
-	<td><a href=\"$protocol://$server/forum/board.php\">Viet tin nhan</a></td>
-	<td style=\"text-align: right;\"><a href=\"/account/index.php\">$indexphp_link_account</a></td>";
+	echo "<td style=\"width: 10%;\"><a href=\"/index.php\">{$common['link']['index']}</a></td>
+	<td><a href=\"$protocol://$server/forum/board.php\">{$common['link']['board']}</a></td>
+	<td style=\"text-align: right;\"><a href=\"/account/index.php\">{$common['link']['account']}</a></td>";
 } else {
-	echo "<td style=\"width: 84%;\"><a href=\"/index.php\">$indexphp_link_index</a></td>
-	<td style=\"text-align: right;\"><a href=\"/account/login.php\">Dang nhap </a></td>
-	<td style=\"text-align: right;\"><a href=\"/account/register.php\"> Dang ky </a></td>
+	echo "<td style=\"width: 84%;\"><a href=\"/index.php\">{$common['link'][
+'index']}</a></td>
+	<td style=\"text-align: right;\"><a href=\"/account/login.php\">{$common['link']['index']} </a></td>
+	<td style=\"text-align: right;\"><a href=\"/account/register.php\"> {$common['link']['register']}</a></td>
 	";
 }
 echo "
