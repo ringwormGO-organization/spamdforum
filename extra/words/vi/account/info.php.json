@@ -1,0 +1,22 @@
+{
+	"page_title": "Thông tin tài khoản",
+	"h1_title": "Thông tin tài khoản",
+	"logout": "Đăng xuất",
+	"profile": "Hồ sơ",
+	"msg":
+	{
+		"err_auth": "Mật khẩu hiện tại không đúng.\n",
+		"err_name": "Nhập vào tên hợp lệ!\n",
+		"err_password": "Nhập vào mật khẩu hợp lệ!\n",
+		"err_password_mismatch": "Mật khẩu không khớp với phần xác nhận!\n"
+	},
+	"form_input":
+	{
+		"auth": "Mật khẩu hiện tại",
+		"name": "Tên",
+		"email": "Thư điện tử",
+		"password": "Mật khẩu",
+		"verify": "Xác nhận",
+		"update_info": "Cập nhật thông tin"
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"page_title": "Đăng ký tài khoản",
+	"h1_title": "Đăng ký tài khoản",
+	"h2_info": "Đăng ký tài khoản để có nhiều quyền truy cập hơn vào các tính năng của website",
+	"reg_disabled": "Trang này hiện không cho phép đăng ký.",
+	"msg":
+	{
+		"err_name": "Nhập vào tên hợp lệ!\n",
+		"err_email": "Nhập vào địa chỉ thư điện tử hợp lệ!\n",
+		"err_password": "Mật khẩu không khớp với phần xác nhận!\n",
+		"err_email_existed": "Địa chỉ thư điện tử đã được đăng ký.\n",
+		"err_server": "<h3>Bạn không thể đăng ký do một lỗi hệ thống. Chúng tôi xin lỗi vì sự cố này.</h3>\n",
+		"err_tryagain": "Hãy thử lại."
+	},
+	"form_input":
+	{
+		"legend": "Nhập vào thông tin của bạn",
+		"name": "Tên",
+		"email": "Thư điện tử",
+		"password": "Mật khẩu",
+		"verify": "Xác nhận",
+		"register": "Đăng ký!"
+	}
+}

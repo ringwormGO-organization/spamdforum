@@ -1,0 +1,24 @@
+{
+	"page_title": "Viết bài",
+	"not_allowed": "Bạn hiện không có quyền viết bài.\n",
+	"emsg_not_found": "Không tìm thấy bài viết!\n",
+	"emsg_not_yours": "Bài viết này không phải của bạn!\n",
+	"invalid_relate_to": "Bài viết mà bạn đang nhận xét không thể được tìm thấy!\n",
+	"w_pwlvl_err": "Bạn không có quyền đăng nhận xét vào bài viết này.\n",
+	"too_many_msg": "Bạn đang gửi quá nhiều bài viết so với quy định.\n",
+	"invalid_to_addr": "Nhập vào chủ đề thảo luận hoặc địa chỉ thư điện tử người dùng!\n",
+	"invalid_subject": "Tiêu đề không hợp lệ.\n",
+	"invalid_msg": "Nội dung không hợp lệ.\n",
+	"try_again": "Hãy thử lại.\n",
+	"not_allowed_to_edit": "Bạn không được phép chỉnh sửa bài này.\n",
+	"content_edit_disallowed": "Không được chỉnh sửa bài người khác tuỳ tiện!\n",
+	"server_err": "Máy chủ hiện đang gặp trục trặc. Xin lỗi vì sự cố này.\n",
+	"write_msg": "Viết bài",
+	"form_input":
+	{
+		"to": "Đến",
+		"subject": "Tiêu đề",
+		"rwlvl": "Quyền đọc/viết",
+		"relate_to": "Đăng vào"
+	}
+}

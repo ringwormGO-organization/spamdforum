@@ -1,0 +1,31 @@
+{
+	"page_title": "Quản lý người dùng",
+	"h1_title": "Quản lý người dùng",
+	"p_red_notice": "Lưu ý: Thao tác xóa người dùng là KHÔNG THỂ HOÀN TÁC!",
+	"msg":
+	{
+		"added_to_list": "Thêm vào danh sách xóa:",
+		"delete_request": "Yêu cầu xóa:",
+		"delete_failed": "Chưa xóa được:",
+		"err_priv_unmet": "Mức quyền của bạn là chưa đủ để thực hiện tác vụ này.\n",
+		"err_nopriv": "Mức quyền của bạn không cho phép thực hiện tác vụ này!\n",
+		"err_not_found": "Không tìm thấy người dùng!\n"
+	},
+	"user_num_msg":
+	[
+		"Số người dùng đã đăng ký:",
+		"Hiện chưa có người dùng nào đăng ký."
+	],
+	"th_usertable":
+	{
+		"id": "ID",
+		"name": "Tên",
+		"email": "Thư điện tử",
+		"reg_date": "Ngày đăng ký",
+		"last_visit": "Truy cập lần cuối"
+	},
+	"input":
+	{
+		"delete": "Xóa người dùng"
+	}
+}

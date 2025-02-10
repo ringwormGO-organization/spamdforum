@@ -1,0 +1,26 @@
+{
+	"page_title": "Quản lý quyền hạn",
+	"h1_title": "Quản lý quyền hạn",
+	"msg":
+	{
+		"err_priv_unmet": "Mức quyền của bạn là chưa đủ để thực hiện tác vụ này.\n",
+		"err_not_found": "Không tìm thấy người dùng.\n",
+		"update_success": "Đã cập nhật mức quyền của %s từ %d thành %d",
+		"update_failed": "Không thể cập nhật vai trò của %s từ %d thành %d\n"
+	},
+	"input":
+	{
+		"update_power": "Cập nhật quyền hạn"
+	},
+	"th_pwlvltable":
+	{
+		"id": "ID",
+		"email": "Thư điện tử",
+		"powerlevel": "Mức quyền"
+	},
+	"user_num_msg":
+	[
+		"Có %d người có mức quyền đặc biệt (!= 0)",
+		"Hiện chưa có người dùng nào có mức quyền đặc biệt (!= 0)"
+	]
+}

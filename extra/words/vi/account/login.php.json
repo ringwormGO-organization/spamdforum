@@ -1,0 +1,20 @@
+{
+	"page_title": "Đăng nhập tài khoản",
+	"h1_title": "Đăng nhập tài khoản",
+	"h2_info": "Đăng nhập vào tài khoản của bạn",
+	"cred_prompt": "Nhập vào thông tin đăng nhập",
+	"msg":
+	{
+		"err_email": "Nhập vào địa chỉ thư điện tử của bạn!\n",
+		"err_password": "Nhập vào mật khẩu của bạn!\n",
+		"err_no_email": "Địa chỉ thư điện tử không có trong CSDL!\n",
+		"err_wrong_auth": "Mật khẩu sai.\n",
+		"err_tryagain": "Hãy thử lại.\n"
+	},
+	"form_input":
+	{
+		"email": "Địa chỉ thư điện tử",
+		"password": "Mật khẩu",
+		"login": "Đăng nhập"
+	}
+}
