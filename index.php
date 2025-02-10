@@ -1,8 +1,5 @@
 <?php
-/* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
-$title = "Trang chu";
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
