@@ -21,4 +21,14 @@ function editmsg($dbc, $msg_id, $changed_col, $msg_arr) {
 		return FALSE;
 	}
 }
+function replacebadchars($data) {
+	$data = str_replace("\r", "", $data);
+	$data = str_replace("“", "\"", $data);
+	$data = str_replace("”", "\"", $data);
+	$data = str_replace("…", "...", $data);
+	$data = str_replace("–", "-", $data);
+	$data = str_replace("‘", "'", $data);
+	$data = str_replace("’", "'", $data);
+	return $data;
+}
 ?>

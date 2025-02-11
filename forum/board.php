@@ -115,10 +115,10 @@ if (!empty($_POST['subject']) && strlen($_POST['subject']) < 255 &&
 	$msg .= $words['invalid_subject'];
 }
 if (!empty($_POST['body']) && mb_strlen($_POST['body']) < 65536 &&
-    preg_match($good_chars, $_POST['body'])) {
-	$body = $_POST['body'];
+    preg_match($good_chars, replacebadchars($_POST['body']))) {
+	$body = replacebadchars($_POST['body']);
 } else {
-	$body = !empty($_POST['body']) ? $_POST['body'] : '';
+	$body = !empty($_POST['body']) ? replacebadchars($_POST['body']) : '';
 	$ok = FALSE;
 	$msg .= $words['invalid_msg'];
 }
