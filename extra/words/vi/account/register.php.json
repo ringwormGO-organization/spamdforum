@@ -7,7 +7,8 @@
 	{
 		"err_name": "Nhập vào tên hợp lệ!\n",
 		"err_email": "Nhập vào địa chỉ thư điện tử hợp lệ!\n",
-		"err_password": "Mật khẩu không khớp với phần xác nhận!\n",
+		"err_password": "Nhập vào mật khẩu hợp lệ!\n",
+		"err_password_mismatch": "Mật khẩu không khớp với phần xác nhận!\n",
 		"err_email_existed": "Địa chỉ thư điện tử đã được đăng ký.\n",
 		"err_server": "<h3>Bạn không thể đăng ký do một lỗi hệ thống. Chúng tôi xin lỗi vì sự cố này.</h3>\n",
 		"err_tryagain": "Hãy thử lại."
