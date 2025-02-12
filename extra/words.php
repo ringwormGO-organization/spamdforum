@@ -9,7 +9,7 @@ if (!isset($_COOKIE['spamdforum_lang'])) {
 }
 $common_fn = "{$_SERVER['DOCUMENT_ROOT']}/extra/words/$f_lang/common.json";
 $fn = "{$_SERVER['DOCUMENT_ROOT']}/extra/words/$f_lang{$_SERVER['SCRIPT_NAME']}.json";
-$words = json_decode(file_get_contents($fn), true);
+$words = json_decode(@file_get_contents($fn), true);
 $common = json_decode(file_get_contents($common_fn), true);
 if ($_SERVER['SCRIPT_NAME'] == '/forum/index.php') {
 	$view = "{$_SERVER['DOCUMENT_ROOT']}/extra/words/$f_lang/forum/view.php.json";
