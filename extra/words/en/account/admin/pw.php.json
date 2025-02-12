@@ -1,0 +1,26 @@
+{
+	"page_title": "Powerlevel management",
+	"h1_title": "Powerlevel management",
+	"msg":
+	{
+		"err_priv_unmet": "Your powerlevel is not sufficient to perform this operation.\n",
+		"err_not_found": "Cannot find user.\n",
+		"update_success": "Updated powerlevel of %s from %d to %d",
+		"update_failed": "Cannot update powerlevel of %s from %d to %d\n",
+	},
+	"input":
+	{
+		"update_power": "Update powerlevel"
+	},
+	"th_pwlvltable":
+	{
+		"id": "ID",
+		"email": "E-mail address",
+		"powerlevel": "Powerlevel"
+	},
+	"user_num_msg":
+	[
+		"There are %d users with special powerlevel (!= 0)",
+		"There are no user with special powerlevel (!= 0)"
+	]
+}

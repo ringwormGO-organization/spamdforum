@@ -1,0 +1,22 @@
+{
+	"page_title": "Account information",
+	"h1_title": "Account information",
+	"logout": "Logout",
+	"profile": "Your profile",
+	"msg":
+	{
+		"err_auth": "Wrong password.\n",
+		"err_name": "Enter a valid name!\n",
+		"err_password": "Enter a valid password!\n",
+		"err_password_mismatch": "Passwords do not match!\n"
+	},
+	"form_input":
+	{
+		"auth": "Current password",
+		"name": "Name",
+		"email": "E-mail address",
+		"password": "New password",
+		"verify": "Again",
+		"update_info": "Update account info!"
+	}
+}

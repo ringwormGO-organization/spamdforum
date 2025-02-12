@@ -1,0 +1,10 @@
+{
+	"link":
+	{
+		"index": "Home",
+		"settings": "Settings",
+		"board": "Write a msg",
+		"login": "Login",
+		"register": "Register"
+	}
+}

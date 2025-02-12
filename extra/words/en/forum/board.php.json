@@ -1,0 +1,24 @@
+{
+	"page_title": "Write a message",
+	"not_allowed": "You do not have the permission to write.\n",
+	"emsg_not_found": "Message not found!\n",
+	"emsg_not_yours": "The message you are editing is not yours!\n",
+	"invalid_relate_to": "The message you are commenting cannot be found!\n",
+	"w_pwlvl_err": "You are not allowed to write comments to this message.\n",
+	"too_many_msg": "You are writing too many message.\n",
+	"invalid_to_addr": "Enter a valid topic or user email address!\n",
+	"invalid_subject": "Your title is not valid.\n",
+	"invalid_msg": "The body of your message is not valid.\n",
+	"try_again": "Please try again.\n",
+	"not_allowed_to_edit": "You are not allowed to edit this message.\n",
+	"content_edit_disallowed": "You are not allowed to edit the content of other's message!\n",
+	"server_err": "The server encountered an error. Sorry for the inconvenience.\n",
+	"write_msg": "Write a message",
+	"form_input":
+	{
+		"to": "To",
+		"subject": "Subject",
+		"rwlvl": "R/W levels",
+		"relate_to": "Relate to"
+	}
+}

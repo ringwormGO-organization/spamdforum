@@ -1,0 +1,31 @@
+{
+	"page_title": "User management",
+	"h1_title": "User management",
+	"p_red_notice": "Attention: Deleting an user is IRREVERSIBLE!",
+	"msg":
+	{
+		"added_to_list": "Added to delete list:",
+		"delete_request": "Deleted:",
+		"delete_failed": "Not deleted:",
+		"err_priv_unmet": "Your powerlevel is not sufficient to perform this operation.\n",
+		"err_nopriv": "Your powerlevel does not permit you to perform this operation!\n",
+		"err_not_found": "Cannot find user!\n"
+	},
+	"user_num_msg":
+	[
+		"Number of registered user:",
+		"No one have registered."
+	],
+	"th_usertable":
+	{
+		"id": "ID",
+		"name": "Name",
+		"email": "E-mail address",
+		"reg_date": "Registration date",
+		"last_visit": "Last visit"
+	},
+	"input":
+	{
+		"delete": "Delete user"
+	}
+}
