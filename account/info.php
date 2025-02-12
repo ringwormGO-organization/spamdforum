@@ -23,7 +23,7 @@ if (isset($_POST['update_info'])) {
 		$name = $_POST['name'];
 		$query = "UPDATE $table SET name=? WHERE password='$auth'";
 		if (mysqli_execute_query($dbc, $query, [$name])) {
-			$msg .= "Ten cua ban da duoc thay doi. \n";
+			$msg .= $words['msg']['name_changed'];
 		}
 	}
 	if (!empty($_POST['password']) &&
@@ -40,14 +40,14 @@ if (isset($_POST['update_info'])) {
 		$query = "UPDATE $table SET password=? WHERE password='$auth'";
 		if (mysqli_execute_query($dbc, $query, [$password])) {
 			$_SESSION['auth'] = $password;
-			$msg .= "Mat khau cua ban da duoc thay doi. \n";
+			$msg .= $words['msg']['password_changed'];
 		}
 	}
 }
 ?>
 <?php                                 
-	stop:
-	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+stop:
+include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$words['h1_title']; ?></h1>
 <p><a href="<?="$protocol://$server/account/logout.php";?>">
