@@ -98,29 +98,29 @@ if (!$registration_status) {
 	echo "<h2>{$words['reg_disabled']}</h2>";
 } else {
 ?>
-<form name="register" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+<form name="register" action="<?=$_SERVER['PHP_SELF'];?>" method="POST">
 <fieldset>
 <legend><b><?=$words['form_input']['legend'];?></b></legend>
 <table style="text-align: center; margin-left:auto; margin-right:auto;
 border-width:0; width:100%;">
 <tr>
-	<th style="width:30%;"><?php echo $words['form_input']['name']; ?>:</th>
+	<th style="width:30%;"><?=$words['form_input']['name'];?>:</th>
 	<td><input id="name" type="text" name="name" size="64" maxlength="127" value="<?php if(isset($_POST['name'])) {echo export_data($_POST['name']);} ?>"></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?php echo $words['form_input']['email']; ?>:</th>
+	<th style="width:30%;"><?=$words['form_input']['email'];?>:</th>
 	<td><input id="email" type="text" name="email" size="64" maxlength="127" value="<?php if(isset($_POST['email'])) {echo export_data($_POST['email']);} ?>"></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?php echo $words['form_input']['password']; ?>:</th>
+	<th style="width:30%;"><?=$words['form_input']['password'];?>:</th>
 	<td><input id="password" type="password" name="password" size="64" maxlength="64"></td>
 </tr>
 <tr>
-	<th style="width:30%;"><?php echo $words['form_input']['verify']; ?>:</th>
+	<th style="width:30%;"><?=$words['form_input']['verify'];?>:</th>
 	<td><input id="verify" type="password" name="verify" size="64" maxlength="64"></td>
 </tr>
 <tr>
-	<td style="width:30%;"><input id="register" type="submit" name="register" value="<?php echo $words['form_input']['register']; ?>!"></td>
+	<td style="width:30%;"><input id="register" type="submit" name="register" value="<?=$words['form_input']['register'];?>"></td>
 </tr>
 </table>
 </fieldset>

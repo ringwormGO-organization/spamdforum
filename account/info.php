@@ -50,7 +50,7 @@ if (isset($_POST['update_info'])) {
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$words['h1_title']; ?></h1>
-<p><a href="<?php echo "$protocol://$server/account/logout.php"; ?>">
+<p><a href="<?="$protocol://$server/account/logout.php";?>">
 <?=$words['logout'];?></a></p>
 <?php
 if (isset($msg)) {
@@ -63,7 +63,7 @@ if (isset($msg)) {
 	$query = "SELECT email, name FROM $table WHERE password=?";
 	$uinfo = get_user_info("WHERE password=?", "*", [$auth]);
 ?>
-<form name="infophp" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+<form name="infophp" action="<?=$_SERVER['PHP_SELF'];?>" method="POST">
 <fieldset>
 <?php echo "<legend><a href=\"$protocol://$server/profiles.php?email={$_SESSION['email']}\">{$words['profile']}</a></legend>"; ?>
 <table style="text-align: center; margin-left:auto; margin-right:auto; border-width:0; width:100%;">
@@ -88,7 +88,7 @@ if (isset($msg)) {
 	<td><label for="verify"><input id="verify" type="password" name="verify" size="64" maxlength="64"></label></td>
 </tr>
 <tr>
-	<td style="width:30%;"><label for="register"><input id="register" type="submit" name="update_info" value="<?php echo $words['form_input']['update_info']; ?>!"></label></td>
+	<td style="width:30%;"><label for="register"><input id="register" type="submit" name="update_info" value="<?=$words['form_input']['update_info'];?>"></label></td>
 </tr>
 </table>
 </fieldset>
