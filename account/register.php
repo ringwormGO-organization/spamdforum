@@ -27,7 +27,7 @@ function valid_email($email) {
 	return false;
 }
 function valid_passwd($passwd) {
-	if (preg_match("/^[[:alnum:]$#@%^.]{14,64}$/", $passwd)) {
+	if (preg_match("/^[\x20-\x7E]{14,64}$/", $passwd)) {
 		return $passwd;
 	}
 	return false;
