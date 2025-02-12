@@ -1,4 +1,6 @@
 <?php
+$charset = 'utf8mb4';
+$collation = 'utf8mb4_unicode_520_ci';
 if (!isset($_POST['create'])) {
 	goto html;
 }
@@ -44,7 +46,7 @@ UNIQUE KEY (email),
 KEY (password),
 KEY (powerlevel),
 KEY (reg_date)
-) ENGINE={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
+) ENGINE={$_POST['engine']} DEFAULT CHARSET=$charset COLLATE=$collation";
 
 $msgquery = "CREATE TABLE forum_msg (
 msg_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -66,7 +68,7 @@ KEY (to_addr),
 KEY (r_pwlvl),
 KEY (w_pwlvl),
 KEY (created_at)
-) ENGINE={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
+) ENGINE={$_POST['engine']} DEFAULT CHARSET=$charset COLLATE=$collation";
 
 $votequery = "CREATE TABLE forum_votes (
 msg_id INT UNSIGNED NOT NULL,
@@ -75,7 +77,7 @@ amount TINYINT NOT NULL,
 KEY (msg_id),
 KEY (author),
 KEY (amount)
-) engine={$_POST['engine']} DEFAULT CHARSET=utf8mb4";
+) engine={$_POST['engine']} DEFAULT CHARSET=$charset COLLATE=$collation";
 
 $adminaccount = "INSERT INTO $table (name, email, password, powerlevel, " .
     "reg_date, last_visit, last_ip) VALUES (?, ?, ?, ?, NOW(), " .
