@@ -38,7 +38,7 @@ if (isset($_POST['delete'])) {
 		$query = "DELETE FROM $table WHERE email IN ($placeholder_email) LIMIT $target_num";
 		$result = mysqli_execute_query($dbc, $query, $delete_list);
 		$delete_num = $target_num - mysqli_affected_rows($dbc);
-		$msg .= "{$words['msg']['delete_request']} $target_num, {$usertablephp['msg']['delete_failed']}: $delete_num";
+		$msg .= "{$words['msg']['delete_request']} $target_num, {$words['msg']['delete_failed']}: $delete_num";
 	}
 }
 
