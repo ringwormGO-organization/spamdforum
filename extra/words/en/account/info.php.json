@@ -8,7 +8,9 @@
 		"err_auth": "Wrong password.\n",
 		"err_name": "Enter a valid name!\n",
 		"err_password": "Enter a valid password!\n",
-		"err_password_mismatch": "Passwords do not match!\n"
+		"err_password_mismatch": "Passwords do not match!\n",
+		"name_changed": "Your name has been changed.\n",
+		"password_changed": "Your password has been changed.\n"
 	},
 	"form_input":
 	{
