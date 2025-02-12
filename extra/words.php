@@ -1,9 +1,9 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 if (!isset($_COOKIE['spamdforum_lang'])) {
-	setcookie('spamdforum_lang', 'vi', time()+2592000, '/', '', $secure,
+	setcookie('spamdforum_lang', 'en', time()+2592000, '/', '', $secure,
 		    false);
-	$f_lang = 'vi';
+	$f_lang = 'en';
 } else {
 	$f_lang = $_COOKIE['spamdforum_lang'];
 }
