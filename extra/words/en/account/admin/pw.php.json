@@ -6,7 +6,7 @@
 		"err_priv_unmet": "Your powerlevel is not sufficient to perform this operation.\n",
 		"err_not_found": "Cannot find user.\n",
 		"update_success": "Updated powerlevel of %s from %d to %d",
-		"update_failed": "Cannot update powerlevel of %s from %d to %d\n",
+		"update_failed": "Cannot update powerlevel of %s from %d to %d\n"
 	},
 	"input":
 	{
