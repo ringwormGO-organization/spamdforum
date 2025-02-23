@@ -1,7 +1,8 @@
-spamdforum - PHP & MySQL/MariaDB simple & sane forum for the World Wide Web.
-Currently alpha, forum isn't worked yet; just an account system.
-Future: BCHS? (BSD, C, httpd, SQLite). PHP version will be compat & maintained,
-because people will want to host it on PHP & MySQL hosting provider.
+spamdforum - a PHP & MySQL/MariaDB simple & sane forum for the World Wide Web.
+By developers, for developers.
+spamdforum is currently beta, the account system is almost complete,
+and the forum is usable.
+A test instance of spamdforum: https://spamdforum.infy.uk
 
 git: https://repo.or.cz/spamdforum.git
 mirrored at codeberg: https://codeberg.org/ringwormGO/spamdforum.git
@@ -10,33 +11,32 @@ mailing list: spamdforum@googlegroups.com
 Contributions:
 o You may send patches to the mailing list. I prefer inline patches,
   but attachments are accepted.
-o You may create a mob.YOURNAME fork at repo.or.cz and request me to pull.
+o You may create a fork at repo.or.cz and request me to pull.
 o You may fork the project at codeberg and open a pull request.
 
-spamdforum is currently ALPHA stage!
+spamdforum is currently at BETA stage!
 
-Account system is almost completed.
+Account system is almost completed. forum is usable.
+The forum support enabling clickable hyperlinks and voting.
 TODO:
-o Code checking for inconsistent use of spaces, convert them to tab
 o Code quality improvement.
+o Make things more modular, store code in multiple files
+o ini file for forum configuration. Currently, to config the forum,
+   we have to edit the config.php file. editing ini is considered `safer'
+   and more friendly to the user. Also, the admin needs to be able to
+   set the powerlevel needed to do action such as edit others' msg,
+   change user powerlevel, `mute' users, etc
+o basic json editor to edit language files
+o user authentication on /account/admin
 o pw.php: If you have an idea about reusing the "update powerlevel"
-  checks for adding powered user, please contribute
-o Replace the use of "echo" to "printf", because using a function to get
-  the message is dumb.
-o LANGUAGE! There isn't words_en.php!!!
-o Configuration in the JSON format: We are currently using PHP scripts to
-  store configuration. JSON configuration allows having web interface for
-  configuration, which most web applications need.
-  And it is much safer than using a PHP script!!!
-o What is the maximum privileges?
-o Scripts to install database and tables
+   checks for adding powered user, please contribute
+o rewrite html, especially header.html
 
 Forum designing isn't open right now. Will implement it soon.
 Threads (article, ...) = posts (comments) = msg. Stored in the same table.
 Inspired by email and IM. A "post" is a msg with the relate_id of another
-msg.
+msg (called a `comment')
 - How a thread should be identified?
-  o relate_id=id (a msg with id=800 and relate_id=800)
-  o relate_id=0
+   o relate_id=0
 Should we have markdown support? maybe no, it suck. Asterisks, underscores
-broke the whole text.
+broke the whole text. Also, not on spamdforum.
