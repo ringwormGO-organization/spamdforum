@@ -41,6 +41,7 @@ if (!password_verify($password, $uinfo['password'])) {
 	goto html;
 }
 $_SESSION['auth'] = $uinfo['password'];
+$_SESSION['session_last_ip'] = inet_pton($_SERVER['REMOTE_ADDR']);
 header("Location: $protocol://$server/index.php");
 exit;
 ?>
