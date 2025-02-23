@@ -19,10 +19,12 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
 echo "<h1>{$words['msg_list']}</h1>\n";
-$result = mysqli_execute_query($dbc, "SELECT msg_id, subject, from_addr, "
-	    . "r_pwlvl, w_pwlvl, votes, created_at, name FROM $msgtable, "
-	    . "$table WHERE relate_to=0 AND r_pwlvl<=? AND votes > -5 "
-	    . "AND $msgtable.from_addr=$table.email "
+$result = mysqli_execute_query($dbc, "SELECT fm.msg_id, fm.subject, "
+	    . "fm.from_addr, fm.r_pwlvl, fm.w_pwlvl, fm.votes, fm.created_at, "
+	    . "name, COUNT(fm2.msg_id) AS ncmt FROM $table, $msgtable AS fm "
+	    . "LEFT JOIN $msgtable fm2 ON fm2.relate_to=fm.msg_id "
+	    . "WHERE fm.relate_to=0 AND fm.r_pwlvl<=? AND fm.votes>-5 "
+	    . "AND fm.from_addr=$table.email GROUP BY fm.msg_id "
 	    . "ORDER BY votes DESC, created_at DESC",
 	    [$_SESSION['powerlevel']]);
 if (!$result)
@@ -30,11 +32,6 @@ if (!$result)
 while ($curmsg = mysqli_fetch_assoc($result)) {
 	foreach ($curmsg as $k => $value)
 		$curmsg[$k] = export_data($value);
-	$cid = $curmsg['msg_id'];
-	$ncmt_q = "SELECT COUNT(*) FROM forum_msg WHERE relate_to=? "
-		. "AND r_pwlvl<=?";
-	$ncmt = mysqli_fetch_row(mysqli_execute_query($dbc, $ncmt_q,
-		[$cid, $_SESSION['powerlevel']]));
 	echo "<h3><a href=\"$protocol://$server/forum/index.php?id=".
 		"{$curmsg['msg_id']}\">{$curmsg['subject']}</a></h3>\n";
 	echo "<pre>{$curmsg['created_at']} {$words['from']} ";
@@ -45,7 +42,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		echo "<a href=\"mailto:{$curmsg['from_addr']}\">"
 		   . "{$curmsg['from_addr']}</a>\n\n\n";
 	}
-	echo "<b>{$curmsg['votes']}</b>  $ncmt[0] {$words['comment']}";
+	echo "<b>{$curmsg['votes']}</b>  {$curmsg['ncmt']} {$words['comment']}";
 	if ($curmsg['r_pwlvl'] > 0)
 		echo " (r={$curmsg['r_pwlvl']})";
 	if ($curmsg['w_pwlvl'] > 0)
