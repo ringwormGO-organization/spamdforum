@@ -16,10 +16,13 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 				$_SESSION[$key] = $value;
 			}
 		} else {
+			$_SESSION = array();
 			goto logout;
 		}
 	} else {
 		logout:
+		global $auth;
+		$auth = NULL;
 		session_commit();
 		setcookie(session_name(), '', time()-300, '/', 0);
 		session_id(session_create_id());
