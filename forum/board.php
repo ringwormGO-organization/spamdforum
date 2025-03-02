@@ -218,7 +218,8 @@ if (!$noform) {
 <p><br><textarea id="body" name="body" rows="30" cols="90">
 <?=export_data($body); ?>
 </textarea></p>
-<p><input type="submit" name="send" value="Gui!"></p>
+<p><input type="submit" name="send"
+value="<?=$words['form_input']['send'];?>"></p>
 </form>
 </fieldset>
 <?php

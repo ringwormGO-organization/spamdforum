@@ -19,6 +19,7 @@
 		"to": "To",
 		"subject": "Subject",
 		"rwlvl": "R/W levels",
-		"relate_to": "Relate to"
+		"relate_to": "Relate to",
+		"send": "Send!"
 	}
 }
