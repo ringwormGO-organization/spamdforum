@@ -28,11 +28,11 @@ $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 	      $msginfo['body']), false);
 ?>
 <?php
-$words['page_title'] = $msginfo['subject'];
-include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
     $msginfo['from_addr'] == $_SESSION['email'])
 {
+	$words['page_title'] = $msginfo['subject'];
+	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$msginfo['subject']; ?></h1>
 <?php
@@ -115,6 +115,8 @@ if ($rmsg_count > 0) {
 ?>
 <?php
 } else {
+	$words['page_title'] = $words['err_perm'];
+	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 	echo "<h3>{$words['err_perm']}</h3>";
 }
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
