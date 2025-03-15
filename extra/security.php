@@ -7,8 +7,12 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 	global $server, $protocol, $table;
 	// this function checks if the $_SESSION['auth'] matches the PASSWORD in the database table.
 	if (isset($auth)) {
-		if ($_SESSION['session_last_ip'] != inet_pton($_SERVER['REMOTE_ADDR']))
-			goto logout;
+		if ($_SESSION['session_last_ip'] != inet_pton($_SERVER['REMOTE_ADDR'])) {
+			session_commit();
+			setcookie(session_name(), '', time()-300, '/', 0);
+			session_id(session_create_id());
+			goto redirect;
+		}
 		$uinfo = get_user_info("WHERE password=?", "user_id, email, "
 				     . "name, powerlevel", [$auth]);
 		if ($uinfo) {
@@ -23,9 +27,10 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		logout:
 		global $auth;
 		$auth = NULL;
-		session_commit();
-		setcookie(session_name(), '', time()-300, '/', 0);
-		session_id(session_create_id());
+		$_SESSION = array();
+		session_destroy();
+
+		redirect:
 		session_start();
 		$_SESSION['powerlevel'] = 0;
 		$_SESSION['email'] = '';
