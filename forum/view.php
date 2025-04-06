@@ -107,7 +107,8 @@ if ($rmsg_count > 0) {
 			   . "{$rmsg['from_addr']}</a>: ";
 		}
 		echo "{$rmsg['subject']}</h4>\n";
-		echo "<p>" . nl2br($rmsg['body'], false) . "\n</p>\n";
+		echo "<p>" . nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
+			$rmsg['body']), false) . "\n</p>\n";
 		echo "<p><b>{$rmsg['votes']}</b></p>\n";
 		echo "<pre><a href=\"$protocol://$server/forum/index.php?"
 		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>\n";
