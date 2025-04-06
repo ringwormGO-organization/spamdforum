@@ -1,21 +1,32 @@
 a:link {
 	text-decoration: none;
+	color: rgb(0,102,204)
+}
+
+a:visited {
+	color: rgb(0,102,204)
 }
 
 a:hover {
 	text-decoration: underline;
+	color:  rgb(100,135,220)
 }
 
 a:active {
 	text-decoration: line-through;
-	color: blue;
+	color: black;
 }
 
 body {
-	background-color: #eeeeee;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #FFFFEA;
 }
 
 td {
 	word-break: break-all;
 	white-space: initial;
+}
+
+hr {
+	border: 1px solid #428a42;
 }
