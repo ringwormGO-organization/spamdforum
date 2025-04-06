@@ -20,13 +20,20 @@ include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 <?php
 $start = hrtime(true);
 echo "<h1>{$words['msg_list']}</h1>\n";
+$orderby = "created_at DESC, votes DESC";
+if (!empty($_GET['sortby'])) {
+	if ($_GET['sortby'] == 'new')
+		$orderby = "created_at DESC, votes DESC";
+	else if ($_GET['sortby'] == 'top')
+		$orderby = "votes DESC, created_at DESC";
+}
 $result = mysqli_execute_query($dbc, "SELECT fm.msg_id, fm.subject, "
 	    . "fm.from_addr, fm.r_pwlvl, fm.w_pwlvl, fm.votes, fm.created_at, "
 	    . "name, COUNT(fm2.msg_id) AS ncmt FROM $table, $msgtable AS fm "
 	    . "LEFT JOIN $msgtable fm2 ON fm2.relate_to=fm.msg_id "
 	    . "WHERE fm.relate_to=0 AND fm.r_pwlvl<=? AND fm.votes>-5 "
 	    . "AND fm.from_addr=$table.email GROUP BY fm.msg_id "
-	    . "ORDER BY votes DESC, created_at DESC",
+	    . "ORDER BY $orderby",
 	    [$_SESSION['powerlevel']]);
 if (!$result)
 	goto footer;
