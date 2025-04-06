@@ -18,6 +18,7 @@ $title = $words['msg_list'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <?php
+$start = hrtime(true);
 echo "<h1>{$words['msg_list']}</h1>\n";
 $result = mysqli_execute_query($dbc, "SELECT fm.msg_id, fm.subject, "
 	    . "fm.from_addr, fm.r_pwlvl, fm.w_pwlvl, fm.votes, fm.created_at, "
@@ -49,7 +50,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		echo " (w={$curmsg['w_pwlvl']})";
 	echo "</pre>\n<hr>\n\n";
 }
-
+echo "<p>" . hrtime(true) - $start . "</p>\n";
 ?>
 <?php
 footer:

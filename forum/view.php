@@ -4,6 +4,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 
 if (!isset($id))
 	exit;
+$start = hrtime(true);
 $msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
 			"*", [$id]);
 if (!$msginfo) {
@@ -119,5 +120,6 @@ if ($rmsg_count > 0) {
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 	echo "<h3>{$words['err_perm']}</h3>";
 }
+echo "<p>" . hrtime(true) - $start . "</p>\n";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
