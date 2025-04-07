@@ -2,5 +2,7 @@
 	"page_title": "Các bài viết",
 	"msg_list" : "Các bài viết",
 	"comment" : "nhận xét",
-	"from": "từ"
+	"from": "từ",
+	"sortby_new": "MỚI",
+	"sortby_top": "NỔI BẬT NHẤT"
 }
