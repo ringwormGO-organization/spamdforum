@@ -5,17 +5,21 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 if (!isset($id))
 	exit;
 $start = hrtime(true);
-if ($auth)
-	$msginfo = get_msg_info("LEFT JOIN $votetable ON $votetable.author=? "
+if ($auth) {
+	$uid = $_SESSION['user_id'];
+	$msginfo = get_msg_info("LEFT JOIN $votetable ON $votetable.msg_id=? "
+	. "AND $votetable.author=? "
 	. "WHERE $msgtable.msg_id=? AND $table.email=$msgtable.from_addr",
-	"*", [$_SESSION['user_id'],$id]);
-else
+	"*", [$id, $uid,$id]);
+} else {
 	$msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
 			"*", [$id]);
+}
 if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
+//print_r($msginfo);
 foreach ($msginfo as $k => $value) {
 	$msginfo[$k] = export_data($value);
 }
