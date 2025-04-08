@@ -5,7 +5,12 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 if (!isset($id))
 	exit;
 $start = hrtime(true);
-$msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
+if ($auth)
+	$msginfo = get_msg_info("LEFT JOIN $votetable ON $votetable.author=? "
+	. "WHERE $msgtable.msg_id=? AND $table.email=$msgtable.from_addr",
+	"*", [$_SESSION['user_id'],$id]);
+else
+	$msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
 			"*", [$id]);
 if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
@@ -61,14 +66,12 @@ if ($msginfo['from_addr'] == $_SESSION['email'] ||
 }
 echo "<p><b>{$msginfo['votes']}</b> | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) {
-	$q = "SELECT amount FROM $votetable WHERE msg_id=? AND author=?";
-	$myuid = $_SESSION['user_id'];
-	$myvote = mysqli_fetch_row(mysqli_execute_query($dbc, $q, [$id, $myuid]));
-	if (!isset($myvote[0]) || $myvote[0] == 0) {
+	$myvote = $msginfo['amount'];
+	if (!isset($myvote) || $myvote == 0) {
 		echo "<a href=\"/forum/vote.php?id=$id&amount=1\">+1 </a>\n";
 		echo "<a href=\"/forum/vote.php?id=$id&amount=-1\">-1</a>\n";
 	} else {
-		if ($myvote[0] == 1) {
+		if ($myvote == 1) {
 			echo "<a href=\"/forum/vote.php?id=$id&amount=0\">+0 </a>\n";
 			echo "<a href=\"/forum/vote.php?id=$id&amount=-1\">-1</a>\n";
 		} else {
