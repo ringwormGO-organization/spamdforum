@@ -31,6 +31,8 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		session_destroy();
 
 		redirect:
+		global $auth;
+		$auth = NULL;
 		session_start();
 		$_SESSION['powerlevel'] = 0;
 		$_SESSION['email'] = '';
