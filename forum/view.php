@@ -71,7 +71,7 @@ if ($msginfo['from_addr'] == $_SESSION['email'] ||
 echo "<p><b>{$msginfo['votes']}</b> | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) {
 	$myvote = $msginfo['amount'];
-	if (!isset($myvote) || $myvote == 0) {
+	if (!$myvote || $myvote == 0) {
 		echo "<a href=\"/forum/vote.php?id=$id&amount=1\">+1 </a>\n";
 		echo "<a href=\"/forum/vote.php?id=$id&amount=-1\">-1</a>\n";
 	} else {
