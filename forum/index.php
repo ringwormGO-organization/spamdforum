@@ -29,10 +29,11 @@ if (!empty($_GET['sortby'])) {
 }
 $result = mysqli_execute_query($dbc, "SELECT fm.msg_id, fm.subject, "
 	    . "fm.from_addr, fm.r_pwlvl, fm.w_pwlvl, fm.votes, fm.created_at, "
-	    . "name, COUNT(fm2.msg_id) AS ncmt FROM $table, $msgtable AS fm "
+	    . "name, COUNT(fm2.msg_id) AS ncmt FROM $msgtable AS fm "
+	    . "LEFT JOIN $table ON fm.from_addr=$table.email "
 	    . "LEFT JOIN $msgtable fm2 ON fm2.relate_to=fm.msg_id "
 	    . "WHERE fm.relate_to=0 AND fm.r_pwlvl<=? AND fm.votes>-5 "
-	    . "AND fm.from_addr=$table.email GROUP BY fm.msg_id "
+	    . "GROUP BY fm.msg_id "
 	    . "ORDER BY $orderby",
 	    [$_SESSION['powerlevel']]);
 if (!$result)
