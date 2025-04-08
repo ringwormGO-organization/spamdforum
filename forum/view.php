@@ -11,8 +11,9 @@ if ($auth) {
 	. "LEFT JOIN $votetable ON $votetable.msg_id=? AND $votetable.author=? "
 	. "WHERE $msgtable.msg_id=?", "*", [$id, $uid,$id]);
 } else {
-	$msginfo = get_msg_info("LEFT JOIN $table ON msg_id=? AND "
-			. "$table.email=$msgtable.from_addr", "*", [$id]);
+	$msginfo = get_msg_info("LEFT JOIN $table ON $table.email=$msgtable.from_addr "
+			. "WHERE msg_id=?"
+			. "", "*", [$id]);
 }
 if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
