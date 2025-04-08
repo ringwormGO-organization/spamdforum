@@ -10,7 +10,7 @@ function get_user_info($cond, $fields, $arr) {
 }
 function get_msg_info($cond, $fields, $arr) {
 	global $dbc, $msgtable, $table;
-	$query = "SELECT " . $fields . " FROM $msgtable, $table " . $cond;
+	$query = "SELECT " . $fields . " FROM $msgtable " . $cond;
 	$msginfo = mysqli_fetch_assoc(mysqli_execute_query($dbc, $query, $arr));
 	return $msginfo;
 }
