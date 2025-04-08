@@ -7,19 +7,17 @@ if (!isset($id))
 $start = hrtime(true);
 if ($auth) {
 	$uid = $_SESSION['user_id'];
-	$msginfo = get_msg_info("LEFT JOIN $votetable ON $votetable.msg_id=? "
-	. "AND $votetable.author=? "
-	. "WHERE $msgtable.msg_id=? AND $table.email=$msgtable.from_addr",
-	"*", [$id, $uid,$id]);
+	$msginfo = get_msg_info("LEFT JOIN $table ON $table.email=$msgtable.from_addr "
+	. "LEFT JOIN $votetable ON $votetable.msg_id=? AND $votetable.author=? "
+	. "WHERE $msgtable.msg_id=?", "*", [$id, $uid,$id]);
 } else {
-	$msginfo = get_msg_info("WHERE msg_id=? AND $table.email=$msgtable.from_addr",
-			"*", [$id]);
+	$msginfo = get_msg_info("LEFT JOIN $table ON msg_id=? AND "
+			. "$table.email=$msgtable.from_addr", "*", [$id]);
 }
 if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
-//print_r($msginfo);
 foreach ($msginfo as $k => $value) {
 	$msginfo[$k] = export_data($value);
 }
@@ -65,13 +63,13 @@ else
 <?php
 if ($msginfo['from_addr'] == $_SESSION['email'] ||
     $_SESSION['powerlevel'] >= 50) {
-	echo "<p><a href=\"/forum/board.php?editid={$msginfo['msg_id']}\">"
+	echo "<p><a href=\"/forum/board.php?editid=$id\">"
 	   . "{$words['edit']}</a></p>\n";
 }
 echo "<p><b>{$msginfo['votes']}</b> | \n";
 if ($auth && $_SESSION['powerlevel'] >= 0) {
 	$myvote = $msginfo['amount'];
-	if (!$myvote || $myvote == 0) {
+	if (!$myvote) {
 		echo "<a href=\"/forum/vote.php?id=$id&amount=1\">+1 </a>\n";
 		echo "<a href=\"/forum/vote.php?id=$id&amount=-1\">-1</a>\n";
 	} else {
