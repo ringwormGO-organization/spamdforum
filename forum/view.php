@@ -83,9 +83,10 @@ if ($auth && $_SESSION['powerlevel'] >= 0) {
 	   ?>"><?=$msginfo['created_at'];?></a></pre>
 <hr>
 <?php
-$rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable, $table "
-	     . "WHERE relate_to=? AND r_pwlvl <= '{$_SESSION['powerlevel']}' "
-	     . "AND $table.email=$msgtable.from_addr ORDER BY votes DESC", [$id]);
+$rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable LEFT JOIN "
+	     . "$table ON $table.email=$msgtable.from_addr WHERE relate_to=? "
+	     . "AND r_pwlvl<=? ORDER BY votes DESC",
+		[$id, $_SESSION['powerlevel']]);
 $rmsg_count = mysqli_num_rows($rmsg_result);
 if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
 	echo "<p><a href=\"$protocol://$server/forum/board.php?relate_to=$id\">"
