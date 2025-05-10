@@ -3,6 +3,7 @@
 	"msg_list" : "Message lists",
 	"comment" : "comments",
 	"from": "from",
+	"adjust_content": "Adjust",
 	"sortby_new": "NEW",
 	"sortby_top": "TOP ALL TIME"
 }
