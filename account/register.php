@@ -76,6 +76,7 @@ if (isset($_POST['register'])) {
 	$user_ip = inet_pton($_SERVER['REMOTE_ADDR']);
 	if (newuser($dbc, [$name, $email, $password, 0, $user_ip])) {
 		$_SESSION['auth'] = $password;
+		$_SESSION['session_last_ip'] = inet_pton($_SERVER['REMOTE_ADDR']);
 		header("Location: $protocol://$server/index.php");
 		exit();
 	} else {
