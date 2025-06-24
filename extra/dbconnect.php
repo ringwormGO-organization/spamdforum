@@ -20,7 +20,7 @@ email_exists($email, $dbc)
 {
 	global $table;
 	$query = "SELECT user_id FROM $table WHERE email=?";
-	$result = @mysqli_execute_query($dbc, $query, [$email]);
+	$result = mysqli_execute_query($dbc, $query, [$email]);
 
 	if (mysqli_num_rows($result) == 0) {
 		return FALSE;
