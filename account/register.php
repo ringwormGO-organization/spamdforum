@@ -1,6 +1,5 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 function newuser($dbc, $uinfo) {
 	global $table;
 	$now = date("Y-m-d H:i:s");
@@ -37,12 +36,11 @@ if (isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/index.php");
 	exit();
 }
-if (!$registration_status) {
-	goto html;
-}
 
 if (isset($_POST['register'])) {
-	include_once("{$_SERVER['DOCUMENT_ROOT']}/extra/words.php");
+	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+	if(!$registration_status)
+		goto html;
 	$msg = NULL;
 	$name = $email = $password = false;
 
@@ -86,6 +84,8 @@ if (isset($_POST['register'])) {
 ?>
 <?php                                 
 html:
+$need_db = false;
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>                                                                      
 <h1><?=$words['h1_title']; ?></h1>
