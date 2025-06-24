@@ -1,6 +1,5 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 ?>
 <?php
 $msg = NULL;
@@ -9,20 +8,19 @@ if (isset($_SESSION['auth'])) {
 	exit();
 }
 
-if (!isset($_POST['login'])) {
+if (!isset($_POST['login']))
 	goto html;
-}
-if ($_POST['email']) {
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+if ($_POST['email'])
 	$email = $_POST['email'];
-} else {
+else {
 	$email = FALSE;
 	$msg .= $words['msg']['err_email'];
 }
 
-if ($_POST['password']) {
+if ($_POST['password'])
 	$password = $_POST['password'];
-
-} else {
+else {
 	$password = FALSE;
 	$msg .= $words['msg']['err_password'];
 }
@@ -46,8 +44,10 @@ header("Location: $protocol://$server/index.php");
 exit;
 ?>
 <?php
-	html:
-        include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
+html:
+$need_db = false;
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$words['h1_title']; ?></h1>
 <h2><?=$words['h2_info']; ?></h2>
@@ -79,5 +79,5 @@ if (isset($msg)) {
 </fieldset>
 </form>
 <?php
-	include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
+include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>
