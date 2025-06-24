@@ -12,7 +12,8 @@ if ($protocol == 'https' || isset($_SERVER['HTTPS'])) {
 }
 session_set_cookie_params(['lifetime' => time() + 2592000, 'path' => '/', 'domain' => '', 'secure' => $secure, 'httponly' => true]);
 session_start();
-$need_db = true;
+if(!isset($need_db))
+	$need_db = true;
 if($need_db)
 	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/dbconnect.php");
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/variables.php");
