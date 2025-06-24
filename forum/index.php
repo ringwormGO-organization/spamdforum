@@ -13,6 +13,7 @@ if (empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/') {
 }
 include("{$_SERVER['DOCUMENT_ROOT']}/forum/view.php");
 exit;
+
 listmsg:
 $title = $words['msg_list'];
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
@@ -48,7 +49,7 @@ if (!$result)
 while ($curmsg = mysqli_fetch_assoc($result)) {
 	foreach ($curmsg as $k => $value)
 		$curmsg[$k] = export_data($value);
-	echo "<h3><a href=\"$protocol://$server/forum/index.php?id=".
+	echo "<h3><a href=\"/forum/index.php?id=".
 		"{$curmsg['msg_id']}\">{$curmsg['subject']}</a></h3>\n";
 	echo "<pre>{$curmsg['created_at']} {$words['from']} ";
 	if ($curmsg['name']) {
