@@ -34,7 +34,7 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		global $auth;
 		$auth = NULL;
 		session_start();
-		$_SESSION['powerlevel'] = 0;
+		$_SESSION['powerlevel'] = -1;
 		$_SESSION['email'] = '';
 		global $anonymous_access, $anonymous_page;
 		if ($anonymous_access == false) {
