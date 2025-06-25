@@ -5,14 +5,18 @@ and the forum is usable.
 A test instance of spamdforum: https://spamdforum.infy.uk
 
 git: https://repo.or.cz/spamdforum.git
-mirrored at codeberg: https://codeberg.org/ringwormGO/spamdforum.git
+mirrored at codeberg.org: https://codeberg.org/ringwormGO/spamdforum.git
+mirrored at github.com: https://github.com/ringwormGO-organization/spamdforum
 mailing list: spamdforum@googlegroups.com
 
 Contributions:
 o You may send patches to the mailing list. I prefer inline patches,
   but attachments are accepted.
 o You may create a fork at repo.or.cz and request me to pull.
-o You may fork the project at codeberg and open a pull request.
+o You may fork the project at codeberg.org and open a pull request.
+o You may fork the project at github.com and open a pull request.
+  github is not my main platform.
+DO NOT SEND OBJECT-ORIENTED CODE!
 
 spamdforum is currently at BETA stage!
 
@@ -21,21 +25,18 @@ The forum support enabling clickable hyperlinks and voting.
 TODO:
 o Code quality improvement.
 o Make things more modular, store code in multiple files
-o ini file for forum configuration. Currently, to config the forum,
-   we have to edit the config.php file. editing ini is considered `safer'
-   and more friendly to the user. Also, the admin needs to be able to
-   set the powerlevel needed to do action such as edit others' msg,
-   change user powerlevel, `mute' users, etc
-o basic json editor to edit language files
+o ini file for forum configuration (config.ini for forum configuration,
+  topic.ini to define ``topics''
+o CSRF token to lock users in our form
+o basic json editor to edit language files (or just redirect users to use json editors)
 o user authentication on /account/admin
 o pw.php: If you have an idea about reusing the "update powerlevel"
    checks for adding powered user, please contribute
 o rewrite html, especially header.html
 
-Forum designing isn't open right now. Will implement it soon.
 Threads (article, ...) = posts (comments) = msg. Stored in the same table.
 Inspired by email and IM. A "post" is a msg with the relate_id of another
-msg (called a `comment')
+msg (called a ``comment'')
 - How a thread should be identified?
    o relate_id=0
 Should we have markdown support? maybe no, it suck. Asterisks, underscores
