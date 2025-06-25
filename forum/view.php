@@ -19,9 +19,9 @@ if (!$msginfo) {
 	header("Location: $protocol://$server/forum/");
 	exit;
 }
-foreach ($msginfo as $k => $value) {
-	$msginfo[$k] = export_data($value);
-}
+foreach ($msginfo as $k => $value)
+	/* shut up php deprecated warning */
+	$msginfo[$k] = is_null($msginfo[$k]) ? $value : export_data($value);
 /*
  * Groups are separated extensively so admins can config how they want
  * links to displays.
@@ -101,9 +101,8 @@ if ($auth && $msginfo['w_pwlvl'] <= $_SESSION['powerlevel']) {
 echo "<h3>$rmsg_count {$words['comment']}</h3>\n";
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
-		foreach ($rmsg as $k => $value) {
+		foreach ($rmsg as $k => $value)
 			$rmsg[$k] = export_data($value);
-		}
 		echo "<h4>";
 		if (!empty($rmsg['name'])) {
 			echo "<a href=\"/profiles.php?email="
