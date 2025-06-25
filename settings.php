@@ -16,6 +16,7 @@ if (!empty($_POST['lang'])) {
 ?>
 <?php
 html:
+$need_db = false;
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html")
 ?>
