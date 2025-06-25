@@ -12,6 +12,8 @@ $registration_status = true;
 // --------- Scripts --------------------------------------------------
 
 $skip_scripts = array(
+	'/index.php',
+	'/settings.php',
 	'/account/index.php',
 	'/account/login.php',
 	'/account/register.php'
