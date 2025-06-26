@@ -18,7 +18,6 @@ $to_addr = $subject = $body = '';
 $r_pwlvl = -1;
 $w_pwlvl = 0;
 $relate_to = 0;
-$rid = &$relate_to;
 
 if (!empty($_GET['editid'])) {
 	$eid = intval($_GET['editid']);
@@ -44,9 +43,9 @@ if (isset($_GET['relate_to']))
 if (isset($_POST['relate_to']))
 	$relate_to = intval($_POST['relate_to']);
 
-if ($rid != 0) {
+if ($relate_to != 0) {
 	$rmsg = get_msg_info("WHERE msg_id=?", "to_addr, r_pwlvl, "
-			   . "w_pwlvl", [$rid]);
+			   . "w_pwlvl", [$relate_to]);
 	if (!$rmsg) {
 		$msg .= $words['invalid_relate_to'];
 		goto html;
@@ -81,7 +80,7 @@ $limit_query = $rq . " UNION ALL " . $aq;
 unset($rq);
 unset($aq);
 unset($timecond);
-$result = mysqli_execute_query($dbc, $limit_query, [$rid]);
+$result = mysqli_execute_query($dbc, $limit_query, [$relate_to]);
 $msg_count = mysqli_fetch_all($result, MYSQLI_NUM);
 if (intval($msg_count[0][0]) > 3 || intval($msg_count[1][0]) > 39) {
 	/*
@@ -170,7 +169,7 @@ if (isset($emsg)) {
 	}
 }
 $from_addr = $_SESSION['email'];
-if (($id = newmsg($dbc, [$rid, $subject, $body, $from_addr, $to_addr,
+if (($id = newmsg($dbc, [$relate_to, $subject, $body, $from_addr, $to_addr,
 			$r_pwlvl, $w_pwlvl])) != FALSE) {
 	header("Location: $protocol://$server/forum/index.php?id=$id");
 	exit;
@@ -212,7 +211,7 @@ if (!$noform) {
 </tr>
 <tr>
 	<td><b><?=$words['form_input']['relate_to'];?>:</b></td>
-	<td><input type="text" name="relate_to" size="15" value="<?=$rid; ?>"></td>
+	<td><input type="text" name="relate_to" size="15" value="<?=$relate_to; ?>"></td>
 </tr>
 </table>
 <p><br><textarea id="body" name="body" rows="30" cols="90">
