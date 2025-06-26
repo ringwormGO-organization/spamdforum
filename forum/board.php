@@ -55,6 +55,7 @@ if ($relate_to != 0) {
 			goto html;
 		} else {
 			if (!isset($emsg)) {
+				/* when not editing user msg, inherit parent's properties. */
 				$to_addr = $rmsg['to_addr'];
 				$r_pwlvl = $rmsg['r_pwlvl'];
 				$w_pwlvl = $rmsg['w_pwlvl'];
