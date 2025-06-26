@@ -1,7 +1,7 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
+$need_db = false;
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 $msg = NULL;
 if (isset($_SESSION['auth'])) {
 	header("Location: protocol://$server/index.php");
@@ -10,7 +10,7 @@ if (isset($_SESSION['auth'])) {
 
 if (!isset($_POST['login']))
 	goto html;
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/dbconnect.php");
 if ($_POST['email'])
 	$email = $_POST['email'];
 else {
@@ -45,8 +45,6 @@ exit;
 ?>
 <?php
 html:
-$need_db = false;
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>
 <h1><?=$words['h1_title']; ?></h1>
