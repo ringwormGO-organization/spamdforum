@@ -1,5 +1,7 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
+$need_db = false;
+require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 function newuser($dbc, $uinfo) {
 	global $table;
 	$now = date("Y-m-d H:i:s");
@@ -31,15 +33,14 @@ function valid_passwd($passwd) {
 	}
 	return false;
 }
-
 if (isset($_SESSION['auth'])) {
 	header("Location: $protocol://$server/index.php");
 	exit();
 }
 
 if (isset($_POST['register'])) {
-	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-	if(!$registration_status)
+	require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/dbconnect.php");
+	if(!$config['registration_status'])
 		goto html;
 	$msg = NULL;
 	$name = $email = $password = false;
@@ -84,8 +85,6 @@ if (isset($_POST['register'])) {
 ?>
 <?php                                 
 html:
-$need_db = false;
-require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
 include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 ?>                                                                      
 <h1><?=$words['h1_title']; ?></h1>
@@ -95,7 +94,7 @@ if (isset($msg)) {
 	$msg = nl2br($msg);
 	echo "<p style=\"color: red;\">{$msg}</p>";
 }
-if (!$registration_status) {
+if (!$config['registration_status']) {
 	echo "<h2>{$words['reg_disabled']}</h2>";
 } else {
 ?>

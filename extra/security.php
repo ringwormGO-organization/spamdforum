@@ -1,10 +1,8 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
-?>
-<?php
 
 function security_validateupdateinfo($dbc, $auth=NULL) {
-	global $server, $protocol, $table;
+	global $server, $protocol, $table, $config;
 	// this function checks if the $_SESSION['auth'] matches the PASSWORD in the database table.
 	if (isset($auth)) {
 		if ($_SESSION['session_last_ip'] != inet_pton($_SERVER['REMOTE_ADDR'])) {
@@ -37,11 +35,12 @@ function security_validateupdateinfo($dbc, $auth=NULL) {
 		$_SESSION['powerlevel'] = -1;
 		$_SESSION['email'] = '';
 		global $anonymous_access, $anonymous_page;
-		if ($anonymous_access == false) {
-			if (empty($anonymous_page)) {
+		if ($config['anonymous_access'] == false) {
+			if (empty($config['anonymous_page'])) {
 				header("Location: $protocol://$server/account/login.php");
 				exit;
 			}
+			$anonymous_page = $config['anonymous_page'];
 			header("Location: $protocol://$server$anonymous_page");
 			exit;
 		}
