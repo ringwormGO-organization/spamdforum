@@ -22,10 +22,9 @@ function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 		$options = ['memory_cost' => 131072, 'time_cost' => 5, 'threads' => 1];
 	default:
 		$options = ['cost' => 13];
+	}
 
 	$pwhash = password_hash($password, $algo, $options);
 	return $pwhash;
-}
-
 }
 ?>
