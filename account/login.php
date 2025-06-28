@@ -38,8 +38,7 @@ if (!password_verify($password, $uinfo['password'])) {
 	$msg .= $words['msg']['err_wrong_auth'];
 	goto html;
 }
-$_SESSION['auth'] = $uinfo['password'];
-$_SESSION['session_last_ip'] = inet_pton($_SERVER['REMOTE_ADDR']);
+init_user_session($uinfo['password']);
 header("Location: $protocol://$server/index.php");
 exit;
 ?>

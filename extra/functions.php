@@ -27,4 +27,9 @@ function secure_hash($password, $algo=PASSWORD_BCRYPT) {
 	$pwhash = password_hash($password, $algo, $options);
 	return $pwhash;
 }
+
+function init_user_session($auth) {
+	$_SESSION['auth'] = $auth;
+	$_SESSION['session_last_ip'] = inet_pton($_SERVER['REMOTE_ADDR']);
+}
 ?>
