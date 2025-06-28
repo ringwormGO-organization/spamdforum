@@ -15,8 +15,8 @@ if ($_SESSION['powerlevel'] < 0) {
 }
 
 $to_addr = $subject = $body = '';
-$r_pwlvl = -1;
-$w_pwlvl = 0;
+$r_pwlvl = $config['r_pwlvl'];
+$w_pwlvl = $config['w_pwlvl'];
 $relate_to = 0;
 
 if (!empty($_GET['editid'])) {
