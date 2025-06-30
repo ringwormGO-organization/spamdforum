@@ -27,11 +27,14 @@ foreach ($msginfo as $k => $value)
  * links to displays.
  * \\0 full url.
  * \\3 for hostname
- * \\9 for path
- * \\2 for the protocol, \\1 for protocol with ://
+ * \\4 for the domain name with a . but without com, net, etc
+ * \\7 for com, net, etc
+ * \\9 for the path (/new, /file/abc.jpg, etc, may be empty)
+ * \\2 for the protocol
+ * \\8 for the port with a : (may be empty)
  */
-$urlre = "((http{1}s?):\/\/)" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]){1,6}"
-. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?";
+$urlre = "(^| )(https?):\/\/" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]{1,6})"
+. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?( |$)";
 
 $body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
 	      $msginfo['body']), false);
