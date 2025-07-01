@@ -105,7 +105,7 @@ echo "<h3>$rmsg_count {$words['comment']}</h3>\n";
 if ($rmsg_count > 0) {
 	while ($rmsg = mysqli_fetch_assoc($rmsg_result)) {
 		foreach ($rmsg as $k => $value)
-			$rmsg[$k] = export_data($value);
+			$rmsg[$k] = is_null($value) ? $value : export_data($value);
 		echo "<h4>";
 		if (!empty($rmsg['name'])) {
 			echo "<a href=\"/profiles.php?email="
