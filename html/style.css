@@ -27,6 +27,11 @@ td {
 	white-space: initial;
 }
 
+img {
+	max-width: 65%;
+	height: auto;
+}
+
 hr {
 	border: 1px solid #428a42;
 }
