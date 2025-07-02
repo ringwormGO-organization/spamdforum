@@ -1,7 +1,7 @@
 <?php
 /* See file COPYING for permissions and conditions to use the file. */
 require_once("{$_SERVER['DOCUMENT_ROOT']}/extra/config.php");
-
+require_once("inc/view_inc.php");
 if (!isset($id))
 	exit;
 $start = hrtime(true);
@@ -22,24 +22,9 @@ if (!$msginfo) {
 foreach ($msginfo as $k => $value)
 	/* shut up php deprecated warning */
 	$msginfo[$k] = is_null($msginfo[$k]) ? $value : export_data($value);
-/*
- * Groups are separated extensively so admins can config how they want
- * links to displays.
- * \\0 full url.
- * \\3 for hostname
- * \\4 for the domain name with a . but without com, net, etc
- * \\7 for com, net, etc
- * \\9 for the path (/new, /file/abc.jpg, etc, may be empty)
- * \\2 for the protocol
- * \\8 for the port with a : (may be empty)
- */
-$urlre = "(^| )(https?):\/\/" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]{1,6})"
-. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?( |$)";
 
-$body = nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
-	      $msginfo['body']), false);
-?>
-<?php
+$body = format_body($msginfo['body']);
+
 if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
     $msginfo['from_addr'] == $_SESSION['email'])
 {
@@ -91,6 +76,7 @@ if ($auth && $_SESSION['powerlevel'] >= 0) {
 <pre><a href="<?="$protocol://$server{$_SERVER['REQUEST_URI']}";
 	   ?>"><?=$msginfo['created_at'];?></a></pre>
 <hr>
+
 <?php
 $rmsg_result = mysqli_execute_query($dbc, "SELECT * FROM $msgtable LEFT JOIN "
 	     . "$table ON $table.email=$msgtable.from_addr WHERE relate_to=? "
@@ -115,11 +101,10 @@ if ($rmsg_count > 0) {
 			   . "{$rmsg['from_addr']}</a>: ";
 		}
 		echo "{$rmsg['subject']}</h4>\n";
-		echo "<p>" . nl2br(preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>',
-			$rmsg['body']), false) . "\n</p>\n";
+		echo "<p>" . format_body($rmsg['body']) . "</p>\n";
 		echo "<p><b>{$rmsg['votes']}</b></p>\n";
 		echo "<pre><a href=\"$protocol://$server/forum/index.php?"
-		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>\n";
+		   . "id={$rmsg['msg_id']}\">{$rmsg['created_at']}</a></pre>\n\n";
 	}
 }
 ?>
