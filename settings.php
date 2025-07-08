@@ -8,9 +8,11 @@ if (!empty($_POST['lang'])) {
 	if (in_array($_POST['lang'], $langlist)) {
 		setcookie('spamdforum_lang', $_POST['lang'], time()+2592000,
 			  '/', '', false, false);
+		$_COOKIE['spamdforum_lang'] = $_POST['lang'];
 	} else {
 		setcookie('spamdforum_lang', 'vi', time()+2592000,
 			  '/', '', false, false);
+		$_COOKIE['spamdforum_lang'] = 'vi';
 	}
 }
 ?>
