@@ -1,4 +1,12 @@
 <?php
+function check_image_url($matches) {
+	global $config;
+	foreach ($config['allowed_sites'] as $k => $site)
+		if (!preg_match("/(https?:\/\/)?$site\/.+/ium", $matches[3]))
+			return $matches[0];
+	return "<img alt=\"{$matches[2]}\" src=\"{$matches[3]}\">";
+}
+
 function format_body($body) {
 	/*
 	 * Groups are separated extensively so admins can config how they want
@@ -13,12 +21,12 @@ function format_body($body) {
 	 */
 	$urlre = "(^| )(https?):\/\/" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]{1,6})"
 	. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?( |$)";
-	
+
 	$imgurl = "(^| )\!\[(.*)\]\((.+)\)( |$)";
 	$markurl = "(^| )\[(.+)\]\((.+)\)( |$)";
-	
+
 	$body = preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>', $body);
-	$body = preg_replace("/$imgurl/ium", '<img alt="\\2" src="\\3">', $body);
+	$body = preg_replace_callback("/$imgurl/ium", "check_image_url", $body);
 	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\4', $body);
 	$body = preg_replace("/^ *&gt;(.+)$/ium", "<blockquote><p>\\1</p></blockquote>", $body);
 	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body);
