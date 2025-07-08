@@ -24,12 +24,18 @@ function format_body($body) {
 
 	$imgurl = "(^| )\!\[(.*)\]\((.+)\)( |$)";
 	$markurl = "(^| )\[(.+)\]\((.+)\)( |$)";
+	$bbcolor = "\[color=([[:alnum:]#]+?)\](.+?)\[\/color\]";
 
 	$body = preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>', $body);
 	$body = preg_replace_callback("/$imgurl/ium", "check_image_url", $body);
+	/*
+	 * replace markdown links after image because two patterns just look the same
+	 * I deliberately do not support image to link/video
+	 */
 	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\4', $body);
 	$body = preg_replace("/^ *&gt;(.+)$/ium", "<blockquote><p>\\1</p></blockquote>", $body);
-	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body);
+	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body); /* 3 or more - forms a <hr> on duolingo */
+	$body = preg_replace("/$bbcolor/iu", "<span style=\"color:\\1;\">\\2</span>", $body);
 	$body = nl2br($body, false);
 	$body = preg_replace("/<br>\n *<br>\n/ium", "</p>\n<p>", $body);
 	return $body;
