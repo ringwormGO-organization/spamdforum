@@ -22,8 +22,8 @@ if (!$msginfo) {
 foreach ($msginfo as $k => $value)
 	/* shut up php deprecated warning */
 	$msginfo[$k] = is_null($msginfo[$k]) ? $value : export_data($value);
-
-$body = format_body($msginfo['body']);
+/* This is a HACK to enable ! for code formatting! */
+$body = format_body("<p>" . $msginfo['body'] . "\n</p>");
 
 if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
     $msginfo['from_addr'] == $_SESSION['email'])
@@ -41,14 +41,13 @@ if ($msginfo['relate_to'] != 0) {
 <p><?php
 if (isset($msginfo['name']))
 	echo "<a href=\"/profiles.php?email={$msginfo['from_addr']}\">"
-	   . "{$msginfo['name']}</a>\n";
+	   . "{$msginfo['name']}</a>";
 else
 	echo "<a href=\"mailto:{$msginfo['from_addr']}\">"
-	   . "{$msginfo['from_addr']}</a>\n";
+	   . "{$msginfo['from_addr']}</a>";
 ?>
 </p>
-<p><?=$body;?>
-</p>
+<?=$body;?>
 <?php
 if ($msginfo['from_addr'] == $_SESSION['email'] ||
     $_SESSION['powerlevel'] >= 50) {

@@ -8,6 +8,20 @@ function check_image_url($matches) {
 }
 
 function format_body($body) {
+	$body_arr = explode("\n\n", $body);
+	foreach ($body_arr as $k => $val) {
+		$body_arr[$k] = real_format($val);
+		error_log($body);
+	}
+	$body = implode("</p>\n<p>", $body_arr);
+	$body = preg_replace("/^<p>! (.+?)<\/p>$/ium", "<pre>\\1</pre>", $body);
+	$body = preg_replace("/^<p>! (.+?)<br>$/ium", "<pre>\\1", $body);
+	$body = preg_replace("/^! (.+?)<br>$/ium", "\\1", $body);
+	$body = preg_replace("/^! (.+?)<\/p>$/ium", "\\1</pre>", $body);
+	return $body;
+}
+
+function real_format($body) {
 	/*
 	 * Groups are separated extensively so admins can config how they want
 	 * links to displays.
@@ -37,7 +51,7 @@ function format_body($body) {
 	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body); /* 3 or more - forms a <hr> on duolingo */
 	$body = preg_replace("/$bbcolor/iu", "<span style=\"color:\\1;\">\\2</span>", $body);
 	$body = nl2br($body, false);
-	$body = preg_replace("/<br>\n *<br>\n/ium", "</p>\n<p>", $body);
+	//$body = preg_replace("/<br>\n *<br>\n/ium", "</p>\n<p>", $body);
 	return $body;
 }
 ?>
