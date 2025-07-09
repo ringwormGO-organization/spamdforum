@@ -113,6 +113,6 @@ if ($rmsg_count > 0) {
 	include("{$_SERVER['DOCUMENT_ROOT']}/html/header.html");
 	echo "<h3>{$words['err_perm']}</h3>";
 }
-echo "<p>" . hrtime(true) - $start . "</p>\n";
+echo "<p>" . (hrtime(true) - $start)/1000000 . " ms</p>\n";
 include("{$_SERVER['DOCUMENT_ROOT']}/html/footer.html");
 ?>

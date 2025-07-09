@@ -66,7 +66,7 @@ while ($curmsg = mysqli_fetch_assoc($result)) {
 		echo " (w={$curmsg['w_pwlvl']})";
 	echo "</pre>\n<hr>\n\n";
 }
-echo "<p>" . hrtime(true) - $start . "</p>\n";
+echo "<p>" . (hrtime(true) - $start)/1000000 . " ms</p>\n";
 ?>
 <?php
 footer:
