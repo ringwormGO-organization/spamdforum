@@ -9,10 +9,8 @@ function check_image_url($matches) {
 
 function format_body($body) {
 	$body_arr = explode("\n\n", $body);
-	foreach ($body_arr as $k => $val) {
+	foreach ($body_arr as $k => $val)
 		$body_arr[$k] = real_format($val);
-		error_log($body);
-	}
 	$body = implode("</p>\n<p>", $body_arr);
 	$body = preg_replace("/^<p>! (.+?)<\/p>$/ium", "<pre>\\1</pre>", $body);
 	$body = preg_replace("/^<p>! (.+?)<br>$/ium", "<pre>\\1", $body);
