@@ -2,9 +2,9 @@
 function check_image_url($matches) {
 	global $config;
 	foreach ($config['allowed_sites'] as $k => $site)
-		if (!preg_match("/(https?:\/\/)?$site\/.+/ium", $matches[3]))
-			return $matches[0];
-	return "<img alt=\"{$matches[2]}\" src=\"{$matches[3]}\">";
+		if (preg_match("/(https?:\/\/)?$site\/.+/ium", $matches[3]))
+			return "<img alt=\"{$matches[2]}\" src=\"{$matches[3]}\">";
+	return $matches[0];
 }
 
 function format_body($body) {
