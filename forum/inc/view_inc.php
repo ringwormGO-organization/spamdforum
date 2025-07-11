@@ -6,17 +6,57 @@ function check_image_url($matches) {
 			return "<img alt=\"{$matches[2]}\" src=\"{$matches[3]}\">";
 	return $matches[0];
 }
+/* save_p: save current content in $p_arr to $html */
+function save_p(&$html, &$arr, $strstart) {
+	if ($strstart == '! ')
+		$html .= "<pre>" . implode("\n", $arr) . "</pre>\n";
+	else if ($strstart == '&gt;')
+		$html .= "<blockquote><p>" . nl2br(real_format(implode("\n", $arr))) . "</p></blockquote>\n";
+	else {
+		$para = "<p>" . nl2br(real_format(implode("\n", $arr))) . "</p>\n";
+		$html .= $para;
+	}
+	$arr = array();
+}
 
 function format_body($body) {
-	$body_arr = explode("\n\n", $body);
-	foreach ($body_arr as $k => $val)
-		$body_arr[$k] = real_format($val);
-	$body = implode("</p>\n<p>", $body_arr);
-	$body = preg_replace("/^<p>! (.+?)<\/p>$/ium", "<pre>\\1</pre>", $body);
-	$body = preg_replace("/^<p>! (.+?)<br>$/ium", "<pre>\\1", $body);
-	$body = preg_replace("/^! (.+?)<br>$/ium", "\\1", $body);
-	$body = preg_replace("/^! (.+?)<\/p>$/ium", "\\1</pre>", $body);
-	return $body;
+	$html = '';
+	$arr = array();
+	$strstarts = array('! ', '&gt;');
+	$cutlen = 0;
+	$searchfor = '';
+
+	$paras = explode("\n\n", $body);
+	foreach ($paras as $para) {
+		$lines = explode("\n", $para);
+		foreach ($lines as $line) {
+			$line = ltrim($line);
+			if ($cutlen == 0) {
+				newstrstart:
+				foreach($strstarts as $search) {
+					if (str_starts_with($line, $search)) {
+						if ($searchfor != $search)
+							save_p($html, $arr, $searchfor);
+						$searchfor = $search;
+						$cutlen = strlen($search);
+						break;
+					}
+					$searchfor = '';
+					$cutlen = 0;
+				}
+			}
+			if (str_starts_with($line, $searchfor)) {
+				$arr[] = substr($line, $cutlen);
+			} else {
+				save_p($html, $arr, $searchfor);
+				$searchfor = $search;
+				$cutlen = strlen($searchfor);
+				goto newstrstart;
+			}
+		}
+		save_p($html, $arr, $searchfor);
+	}
+	return $html;
 }
 
 function real_format($body) {
@@ -31,25 +71,22 @@ function real_format($body) {
 	 * \\2 for the protocol
 	 * \\8 for the port with a : (may be empty)
 	 */
-	$urlre = "(^| )(https?):\/\/" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]{1,6})"
-	. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?( |$)";
+	$urlre = "(https?):\/\/" . "((([[:alnum:]-])+(\.))+" . "([[:alnum:]]{1,6})"
+	. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?";
 
 	$imgurl = "(^| )\!\[(.*)\]\((.+)\)( |$)";
-	$markurl = "(^| )\[(.+)\]\((.+)\)( |$)";
+	$markurl = "(^| )\[(.+)\]\(($urlre)\)( |$)";
 	$bbcolor = "\[color=([[:alnum:]#]+?)\](.+?)\[\/color\]";
 
-	$body = preg_replace("/$urlre/ium", '<a href="\\0">\\0</a>', $body);
+	$body = preg_replace("/(^| )$urlre( |$)/ium", '<a href="\\0">\\0</a>', $body);
 	$body = preg_replace_callback("/$imgurl/ium", "check_image_url", $body);
 	/*
 	 * replace markdown links after image because two patterns just look the same
 	 * I deliberately do not support image to link/video
 	 */
-	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\4', $body);
-	$body = preg_replace("/^ *&gt;(.+)$/ium", "<blockquote><p>\\1</p></blockquote>", $body);
+	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\10', $body);
 	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body); /* 3 or more - forms a <hr> on duolingo */
-	$body = preg_replace("/$bbcolor/iu", "<span style=\"color:\\1;\">\\2</span>", $body);
-	$body = nl2br($body, false);
-	//$body = preg_replace("/<br>\n *<br>\n/ium", "</p>\n<p>", $body);
+	$body = preg_replace("/$bbcolor/ius", "<span style=\"color:\\1;\">\\2</span>", $body);
 	return $body;
 }
 ?>

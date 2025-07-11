@@ -22,8 +22,7 @@ if (!$msginfo) {
 foreach ($msginfo as $k => $value)
 	/* shut up php deprecated warning */
 	$msginfo[$k] = is_null($msginfo[$k]) ? $value : export_data($value);
-/* This is a HACK to enable ! for code formatting! */
-$body = format_body("<p>" . $msginfo['body'] . "\n</p>");
+$body = format_body($msginfo['body']);
 
 if ($msginfo['r_pwlvl'] <= $_SESSION['powerlevel'] ||
     $msginfo['from_addr'] == $_SESSION['email'])
