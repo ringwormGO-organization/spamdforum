@@ -75,18 +75,18 @@ function real_format($body) {
 	. "(:[0-9]{2,5})?)" . "(\/[[:alnum:]+=%#&_.:~?@\-\/]*)?";
 
 	$imgurl = "(^| )\!\[(.*)\]\((.+)\)( |$)";
-	$markurl = "(^| )\[(.+)\]\(($urlre)\)( |$)";
+	$markurl = "(^| )\[(.+?)\]\(($urlre)?\)( |$)";
 	$bbcolor = "\[color=([[:alnum:]#]+?)\](.+?)\[\/color\]";
 
+	$body = preg_replace("/$bbcolor/ius", "<span style=\"color:\\1;\">\\2</span>", $body);
 	$body = preg_replace("/(^| )$urlre( |$)/ium", '<a href="\\0">\\0</a>', $body);
 	$body = preg_replace_callback("/$imgurl/ium", "check_image_url", $body);
 	/*
 	 * replace markdown links after image because two patterns just look the same
 	 * I deliberately do not support image to link/video
 	 */
-	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\10', $body);
+	$body = preg_replace("/$markurl/ium", '\\1<a href="\\3">\\2</a>\\12', $body);
 	$body = preg_replace("/^ *-{3,}$/ium", "<hr>", $body); /* 3 or more - forms a <hr> on duolingo */
-	$body = preg_replace("/$bbcolor/ius", "<span style=\"color:\\1;\">\\2</span>", $body);
 	return $body;
 }
 ?>
