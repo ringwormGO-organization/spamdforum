@@ -1,4 +1,5 @@
 <?php
+/* PLEASE NOTE THAT $body ALREADY GONE THROUGH htmlspecialchars() */
 function check_image_url($matches) {
 	global $config;
 	foreach ($config['allowed_sites'] as $k => $site)
@@ -26,36 +27,34 @@ function format_body($body) {
 	$cutlen = 0;
 	$searchfor = '';
 
-	$paras = explode("\n\n", $body);
-	foreach ($paras as $para) {
-		$lines = explode("\n", $para);
-		foreach ($lines as $line) {
-			$line = ltrim($line);
-			if ($cutlen == 0) {
-				newstrstart:
-				foreach($strstarts as $search) {
-					if (str_starts_with($line, $search)) {
-						if ($searchfor != $search)
-							save_p($html, $arr, $searchfor);
-						$searchfor = $search;
-						$cutlen = strlen($search);
-						break;
-					}
-					$searchfor = '';
-					$cutlen = 0;
+	$lines = explode("\n", $body);
+	foreach ($lines as $line) {
+		$line = ltrim($line);
+		if ($cutlen == 0) { /* because $searchfor='' also match <pre> and others */
+			/* newstrstart: look for new $searchfor */
+			newstrstart:
+			foreach($strstarts as $search) {
+				if (str_starts_with($line, $search)) {
+					if ($searchfor != $search)
+						/* if e.g '' != '! ' commit the paragraph and
+						 * start looking for preformatted text */
+						save_p($html, $arr, $searchfor);
+					$searchfor = $search;
+					$cutlen = strlen($search);
+					break;
 				}
-			}
-			if (str_starts_with($line, $searchfor)) {
-				$arr[] = substr($line, $cutlen);
-			} else {
-				save_p($html, $arr, $searchfor);
-				$searchfor = $search;
-				$cutlen = strlen($searchfor);
-				goto newstrstart;
+				$searchfor = '';
+				$cutlen = 0;
 			}
 		}
-		save_p($html, $arr, $searchfor);
+		if (str_starts_with($line, $searchfor)) {
+			$arr[] = substr($line, $cutlen);
+		} else {
+			save_p($html, $arr, $searchfor);
+			goto newstrstart;
+		}
 	}
+	save_p($html, $arr, $searchfor);
 	return $html;
 }
 
