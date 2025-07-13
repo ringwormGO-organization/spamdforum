@@ -1,4 +1,5 @@
 <?php
+/* PLEASE NOTE THAT $body ALREADY GONE THROUGH htmlspecialchars() */
 function check_image_url($matches) {
 	global $config;
 	foreach ($config['allowed_sites'] as $k => $site)
@@ -31,7 +32,8 @@ function format_body($body) {
 		$lines = explode("\n", $para);
 		foreach ($lines as $line) {
 			$line = ltrim($line);
-			if ($cutlen == 0) {
+			if ($cutlen == 0) { /* because $searchfor='' also match <pre> and others */
+				/* newstrstart: look for new $searchfor */
 				newstrstart:
 				foreach($strstarts as $search) {
 					if (str_starts_with($line, $search)) {
